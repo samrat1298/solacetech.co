@@ -10,12 +10,18 @@ export default {
       });
     }
 
+    if (request.method !== "POST") {
+      return new Response("Method not allowed", { status: 405 });
+    }
+
     try {
       const { messages } = await request.json();
-      
-      // Runs Llama 3.2 3B natively on Cloudflare Workers AI
-      const aiResponse = await env.AI.run("@cf/meta/llama-3.2-3b-instruct", { messages });
-      
+
+      // Run Llama 3.2 3B via Cloudflare Workers AI binding
+      const aiResponse = await env.AI.run("@cf/meta/llama-3.2-3b-instruct", {
+        messages: messages || [{ role: "user", content: "Hello" }]
+      });
+
       return new Response(JSON.stringify(aiResponse), {
         headers: {
           "content-type": "application/json",
@@ -25,7 +31,10 @@ export default {
     } catch (err) {
       return new Response(JSON.stringify({ error: err.message }), {
         status: 500,
-        headers: { "content-type": "application/json", "Access-Control-Allow-Origin": "*" }
+        headers: {
+          "content-type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
       });
     }
   }
