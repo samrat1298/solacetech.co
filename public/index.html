@@ -1,1 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolaceTech — SOLACE AI Workspace (Llama 3.2 3B)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0c0f;
+            --bg-sidebar: #0f1318;
+            --bg-card: #141921;
+            --bg-card-hover: #1b222d;
+            --bg-input: #121720;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-dimmed: #6b7280;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --sidebar-width: 260px;
+            --right-panel-width: 290px;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr var(--right-panel-width);
+            height: 100vh;
+            width: 100vw;
+        }
+
+        @media (max-width: 1024px) {
+            .app-container { grid-template-columns: var(--sidebar-width) 1fr; }
+            .right-panel { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            gap: 16px;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .logo-icon svg { width: 16px; height: 16px; fill: #fff; }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            border-radius: 12px;
+        }
+
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent); }
+        .user-name { font-size: 13px; font-weight: 600; color: var(--text-main); }
+        .user-role { font-size: 11px; color: var(--text-muted); }
+
+        .icon-btn {
+            background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 6px; transition: all 0.2s;
+        }
+        .icon-btn:hover { color: var(--text-main); background: var(--bg-card-hover); }
+
+        .search-box { position: relative; }
+        .search-input {
+            width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px 8px 34px; color: var(--text-main); font-size: 13px; outline: none;
+        }
+        .search-input:focus { border-color: var(--accent); }
+        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-dimmed); width: 14px; height: 14px; }
+
+        .nav-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dimmed); margin-bottom: 8px; font-weight: 600; }
+        .nav-list { display: flex; flex-direction: column; gap: 4px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--text-muted); text-decoration: none; cursor: pointer; transition: all 0.2s;
+        }
+        .nav-item:hover, .nav-item.active { background: var(--bg-card); color: var(--text-main); }
+        .nav-item svg { width: 16px; height: 16px; fill: currentColor; }
+
+        .chat-history-list { display: flex; flex-direction: column; gap: 2px; max-height: 200px; overflow-y: auto; }
+        .history-item { font-size: 12px; color: var(--text-muted); padding: 6px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-item:hover { background: var(--bg-card); color: var(--text-main); }
+
+        .invite-box {
+            margin-top: auto; background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 12px; text-align: center;
+        }
+        .invite-title { font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
+        .invite-desc { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+        .btn-primary { background: var(--accent); color: #000; font-weight: 600; font-size: 12px; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; width: 100%; transition: background 0.2s; }
+        .btn-primary:hover { background: var(--accent-hover); color: #fff; }
+
+        /* CENTER CHAT */
+        .main-chat-area { display: flex; flex-direction: column; background-color: var(--bg-base); position: relative; overflow: hidden; }
+        .chat-topbar {
+            display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border-color); background: rgba(10, 12, 15, 0.8); backdrop-filter: blur(10px); z-index: 10;
+        }
+        .chat-title-wrapper h1 { font-size: 15px; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .chat-title-wrapper p { font-size: 12px; color: var(--text-muted); }
+
+        .chat-messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .message-row { display: flex; flex-direction: column; gap: 6px; max-width: 800px; margin: 0 auto; width: 100%; }
+        .message-row.user { align-items: flex-end; }
+        .message-row.assistant { align-items: flex-start; }
+
+        .message-bubble {
+            background: var(--bg-card); border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 12px; font-size: 13.5px; line-height: 1.5; color: var(--text-main); max-width: 100%;
+        }
+        .message-row.user .message-bubble { background: #1b222d; border-color: rgba(255, 255, 255, 0.12); }
+
+        .preview-carousel { display: flex; gap: 12px; margin: 10px 0; overflow-x: auto; }
+        .carousel-card {
+            min-width: 140px; height: 140px; background: var(--bg-card-hover); border-radius: 10px; border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column;
+        }
+        .carousel-card.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .carousel-card img { width: 100%; height: 90px; object-fit: cover; }
+        .carousel-card-title { font-size: 11px; padding: 6px; font-weight: 500; text-align: center; }
+
+        .chat-input-container { padding: 16px 24px 20px; background: linear-gradient(180deg, rgba(10, 12, 15, 0) 0%, var(--bg-base) 40%); }
+        .chat-input-wrapper {
+            max-width: 800px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+        .chat-input-wrapper:focus-within { border-color: var(--accent); }
+
+        .tags-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag-pill {
+            background: rgba(16, 185, 129, 0.1); color: var(--accent); border: 1px solid rgba(16, 185, 129, 0.3); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; display: flex; align-items: center; gap: 6px;
+        }
+        .tag-pill button { background: none; border: none; color: var(--accent); cursor: pointer; }
+
+        .textarea-row { display: flex; align-items: flex-end; gap: 10px; }
+        .chat-textarea { flex: 1; background: none; border: none; color: var(--text-main); font-family: inherit; font-size: 13.5px; resize: none; outline: none; max-height: 120px; min-height: 24px; }
+        .send-btn {
+            background: var(--accent); color: #000; border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;
+        }
+        .send-btn:hover { background: var(--accent-hover); color: #fff; transform: scale(1.05); }
+        .send-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .disclaimer-text { text-align: center; font-size: 10.5px; color: var(--text-dimmed); margin-top: 8px; }
+        .disclaimer-text a { color: var(--text-muted); text-decoration: underline; }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            background-color: var(--bg-sidebar); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 16px; gap: 16px; overflow-y: auto;
+        }
+        .panel-header { font-size: 14px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; }
+        .model-selector-box {
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+        }
+        .model-info { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; }
+        .model-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); }
+
+        .module-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; background: var(--bg-card); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 1000; display: none;
+        }
+        .modal-card {
+            background: var(--bg-sidebar); border: 1px solid var(--border-hover); border-radius: 16px; width: 90%; max-width: 600px; padding: 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .modal-body input {
+            width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-main); font-size: 13px; outline: none; margin-top: 4px;
+        }
+        .code-snippet {
+            background: #000; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); overflow-x: auto; white-space: pre; margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area" onclick="location.reload()">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <span>SolaceTech</span>
+                </div>
+                <button class="icon-btn" title="Settings" onclick="openConfigModal()">⚙️</button>
+            </div>
+
+            <div class="user-card">
+                <div class="user-info">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="Avatar" class="user-avatar">
+                    <div>
+                        <div class="user-name">Samrat Chaudhary</div>
+                        <div class="user-role">Llama 3.2 3B Edge</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" class="search-input" placeholder="Search chats...">
+            </div>
+
+            <div class="nav-section-title">Navigation</div>
+            <div class="nav-list">
+                <a class="nav-item active" href="#">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    SOLACE AI Chat
+                </a>
+            </div>
+
+            <div class="nav-section-title">Recent Sessions</div>
+            <div class="chat-history-list">
+                <div class="history-item">Llama 3.2 3B Edge Optimization</div>
+                <div class="history-item">Cloudflare Workers Binding Guide</div>
+            </div>
+
+            <div class="invite-box">
+                <div class="invite-title">Workers AI Active</div>
+                <div class="invite-desc">Running locally on Cloudflare edge.</div>
+                <button class="btn-primary" onclick="openConfigModal()">Configure Endpoint</button>
+            </div>
+        </aside>
+
+        <!-- CENTER CHAT AREA -->
+        <main class="main-chat-area">
+            <header class="chat-topbar">
+                <div class="chat-title-wrapper">
+                    <h1>
+                        SOLACE AI 
+                        <span style="font-size:10px; background:rgba(16,185,129,0.2); color:var(--accent); padding:2px 6px; border-radius:4px;">Llama 3.2 3B</span>
+                    </h1>
+                    <p>Connected to Cloudflare Workers AI (@cf/meta/llama-3.2-3b-instruct)</p>
+                </div>
+                <button class="icon-btn" title="Settings" onclick="openConfigModal()">
+                    <svg style="width:18px;height:18px;fill:currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.02-.42 1.95-1.07 2.75z"/></svg>
+                </button>
+            </header>
+
+            <div class="chat-messages" id="chatMessagesContainer">
+                <div class="message-row assistant">
+                    <div class="message-bubble">
+                        Hello <strong>Samrat</strong>. I am your <strong>Llama 3.2 3B</strong> model running live via Cloudflare Workers AI. Type your prompt below to start chatting!
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <div class="tags-row">
+                        <div class="tag-pill">⚡ Llama 3.2 3B <button onclick="this.parentElement.remove()">×</button></div>
+                    </div>
+                    <div class="textarea-row">
+                        <textarea class="chat-textarea" id="userChatInput" placeholder="Ask Llama 3.2 3B anything..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
+                        <button class="send-btn" onclick="sendUserMessage()">
+                            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="disclaimer-text">
+                    Powered by Cloudflare Workers AI. <a href="#" onclick="openConfigModal()">Configure Worker URL</a>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT PANEL -->
+        <aside class="right-panel">
+            <div class="panel-header">
+                <span>AI Module</span>
+                <span style="font-size:11px; color:var(--accent);">Active</span>
+            </div>
+
+            <div class="model-selector-box" onclick="openConfigModal()">
+                <div class="model-info">
+                    <div class="model-dot"></div>
+                    <span id="selectedModelLabel">Llama 3.2 3B</span>
+                </div>
+            </div>
+
+            <div class="module-desc">
+                <strong>Model:</strong> <code>@cf/meta/llama-3.2-3b-instruct</code><br>
+                Lightning-fast open-weight model hosted on Cloudflare's global edge network.
+            </div>
+        </aside>
+    </div>
+
+    <!-- CONFIGURATION MODAL -->
+    <div class="modal-overlay" id="configModal">
+        <div class="modal-card">
+            <div class="panel-header">
+                <span>Cloudflare Worker Configuration</span>
+                <button class="icon-btn" onclick="closeConfigModal()">✕</button>
+            </div>
+            <div style="font-size:13px; color:var(--text-muted); display:flex; flex-direction:column; gap:10px;">
+                <p>Enter your deployed Cloudflare Worker URL below:</p>
+                <input type="text" id="cfWorkerUrlInput" placeholder="https://your-worker.your-subdomain.workers.dev">
+
+                <p><strong>Cloudflare Worker Code (`worker.js`) for Llama 3.2 3B:</strong></p>
+                <div class="code-snippet">export default {
+  async fetch(request, env) {
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*" } });
+    }
+    const { messages } = await request.json();
+    const response = await env.AI.run("@cf/meta/llama-3.2-3b-instruct", { messages });
+    return new Response(JSON.stringify(response), {
+      headers: { "content-type": "application/json", "Access-Control-Allow-Origin": "*" }
+    });
+  }
+}</div>
+
+                <div style="display:flex; gap:10px; margin-top:8px;">
+                    <button class="btn-primary" onclick="saveConfig()">Save Configuration</button>
+                    <button class="icon-btn" style="background:var(--bg-card); border:1px solid var(--border-color); padding:8px 16px; border-radius:6px; color:var(--text-main); font-weight:600; font-size:12px;" onclick="closeConfigModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let workerUrl = localStorage.getItem('solace_cf_worker_url') || '';
+        document.getElementById('cfWorkerUrlInput').value = workerUrl;
+
+        function openConfigModal() { document.getElementById('configModal').style.display = 'flex'; }
+        function closeConfigModal() { document.getElementById('configModal').style.display = 'none'; }
+
+        function saveConfig() {
+            workerUrl = document.getElementById('c
