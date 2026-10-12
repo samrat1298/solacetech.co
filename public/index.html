@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Three.js for 3D Animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
@@ -42,7 +41,6 @@
             padding: 16px;
         }
 
-        /* Outer Frame */
         .app-window {
             width: 100%;
             max-width: 1440px;
@@ -62,7 +60,7 @@
             .sidebar { display: none; }
         }
 
-        /* 1. SIDEBAR */
+        /* SIDEBAR */
         .sidebar {
             background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
@@ -73,440 +71,107 @@
             overflow-y: auto;
         }
 
-        .brand-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 8px;
-        }
+        .brand-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 8px; }
+        .brand-logo { font-size: 18px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .brand-badge { background: var(--accent-purple); color: #fff; width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
 
-        .brand-logo {
-            font-size: 18px;
-            font-weight: 800;
-            color: #0f172a;
-            letter-spacing: -0.02em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .brand-badge {
-            background: var(--accent-purple);
-            color: #fff;
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .top-actions {
-            display: flex;
-            gap: 8px;
-        }
-
+        .top-actions { display: flex; gap: 8px; }
         .btn-new-chat {
-            flex: 1;
-            background: var(--accent-purple);
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 10px 16px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+            flex: 1; background: var(--accent-purple); color: #ffffff; font-weight: 700; font-size: 13px; padding: 10px 16px; border-radius: 20px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
         }
-
         .btn-new-chat:hover { background: var(--accent-purple-hover); transform: translateY(-1px); }
 
         .btn-icon-round {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #000000;
-            color: #ffffff;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
+            width: 38px; height: 38px; border-radius: 50%; background: #000000; color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: transform 0.2s;
         }
+        .btn-icon-round:hover { transform: scale(1.05); }
 
-        .nav-section-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-dimmed);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-        }
+        .nav-section-label { font-size: 11px; font-weight: 700; color: var(--text-dimmed); display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+        .clear-all-link { color: var(--accent-purple); text-decoration: none; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .clear-all-link:hover { text-decoration: underline; }
 
-        .clear-all-link {
-            color: var(--accent-purple);
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .history-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
+        .history-group { display: flex; flex-direction: column; gap: 4px; }
         .history-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 9px 12px;
-            border-radius: 12px;
-            font-size: 12.5px;
-            font-weight: 500;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
+            display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 500; color: var(--text-main); cursor: pointer; transition: all 0.2s;
         }
-
-        .history-item:hover, .history-item.active {
-            background: var(--accent-purple-light);
-            color: var(--accent-purple);
-            font-weight: 600;
-        }
-
-        .history-item-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        .history-item-actions {
-            display: none;
-            gap: 4px;
-        }
-
+        .history-item:hover, .history-item.active { background: var(--accent-purple-light); color: var(--accent-purple); font-weight: 600; }
+        .history-item-left { display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .history-item-actions { display: none; gap: 4px; }
         .history-item:hover .history-item-actions { display: flex; }
 
-        .action-icon {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 2px;
-        }
+        .action-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px; font-size: 13px; }
+        .action-icon:hover { color: #ef4444; }
 
-        .action-icon:hover { color: var(--text-main); }
-
-        .sidebar-footer {
-            margin-top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
+        .sidebar-footer { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
         .sidebar-pill-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            padding: 10px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s;
+            display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-main); cursor: pointer; transition: all 0.2s; width: 100%;
         }
-
         .sidebar-pill-btn:hover { background: #f1f5f9; }
+        .user-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
 
-        .user-avatar-circle {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+        /* MAIN CHAT AREA */
+        .main-chat-container { display: flex; flex-direction: column; height: 100%; background: #ffffff; position: relative; overflow: hidden; }
+        .chat-messages-wrapper { flex: 1; overflow-y: auto; padding: 32px 48px; display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; }
 
-        /* 2. MAIN CHAT AREA */
-        .main-chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            background: #ffffff;
-            position: relative;
-            overflow: hidden;
-        }
+        .message-block { display: flex; flex-direction: column; gap: 8px; max-width: 900px; width: 100%; margin: 0 auto; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        .chat-messages-wrapper {
-            flex: 1;
-            overflow-y: auto;
-            padding: 32px 48px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            scroll-behavior: smooth;
-        }
+        .user-prompt-header { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
+        .user-avatar-sm { width: 24px; height: 24px; border-radius: 50%; }
 
-        /* Message Styles */
-        .message-block {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-        }
+        .ai-response-block { padding-left: 34px; font-size: 14px; line-height: 1.65; color: #334155; display: flex; flex-direction: column; gap: 12px; }
+        .ai-label { font-size: 11px; font-weight: 700; color: var(--accent-purple); display: flex; align-items: center; gap: 4px; }
 
-        .user-prompt-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13.5px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .user-avatar-sm {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-        }
-
-        .ai-response-block {
-            padding-left: 34px;
-            font-size: 14px;
-            line-height: 1.65;
-            color: #334155;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .ai-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--accent-purple);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* 3D Visual Centerpiece Canvas */
+        /* HERO 3D CARD */
         .hero-3d-card {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow-sm);
+            width: 100%; max-width: 900px; margin: 0 auto 20px; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); border: 1px solid #e2e8f0; border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm);
         }
+        .hero-3d-text h2 { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+        .hero-3d-text p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+        #threeCanvasContainer { width: 120px; height: 120px; flex-shrink: 0; }
 
-        .hero-3d-text h2 {
-            font-size: 20px;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 6px;
-        }
-
-        .hero-3d-text p {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        #threeCanvasContainer {
-            width: 120px;
-            height: 120px;
-            flex-shrink: 0;
-        }
-
-        /* Response Actions Bar */
-        .response-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 8px;
-            padding-top: 8px;
-        }
-
-        .btn-action-sm {
-            background: none;
-            border: none;
-            color: var(--text-dimmed);
-            cursor: pointer;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.2s;
-        }
-
-        .btn-action-sm:hover { color: var(--text-main); }
-
+        /* RESPONSE ACTIONS BAR */
+        .response-actions { display: flex; align-items: center; gap: 12px; margin-top: 8px; padding-top: 8px; }
+        .btn-action-sm { background: none; border: none; color: var(--text-dimmed); cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
+        .btn-action-sm:hover, .btn-action-sm.active { color: var(--accent-purple); }
         .btn-regenerate {
-            margin-left: auto;
-            border: 1px solid #e2e8f0;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11.5px;
-            font-weight: 600;
-            color: var(--text-muted);
-            background: #ffffff;
-            cursor: pointer;
-            transition: all 0.2s;
+            margin-left: auto; border: 1px solid #e2e8f0; padding: 4px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; color: var(--text-muted); background: #ffffff; cursor: pointer; transition: all 0.2s;
         }
-
         .btn-regenerate:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
 
-        /* Floating Input Bar */
-        .input-floating-container {
-            padding: 16px 48px 24px;
-            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 40%);
-        }
-
+        /* FLOATING INPUT BAR */
+        .input-floating-container { padding: 16px 48px 24px; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 40%); }
         .input-floating-bar {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--bg-input);
-            border: 1px solid #e2e8f0;
-            border-radius: 30px;
-            padding: 8px 12px 8px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: all 0.2s;
+            max-width: 800px; margin: 0 auto; background: var(--bg-input); border: 1px solid #e2e8f0; border-radius: 30px; padding: 8px 12px 8px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.2s;
         }
-
-        .input-floating-bar:focus-within {
-            background: #ffffff;
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-        }
-
-        .chat-textarea {
-            flex: 1;
-            background: none;
-            border: none;
-            outline: none;
-            font-family: inherit;
-            font-size: 13.5px;
-            color: var(--text-main);
-            resize: none;
-            max-height: 100px;
-            min-height: 24px;
-        }
-
-        .btn-send-pill {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--accent-purple);
-            color: #ffffff;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            flex-shrink: 0;
-        }
-
+        .input-floating-bar:focus-within { background: #ffffff; border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+        .chat-textarea { flex: 1; background: none; border: none; outline: none; font-family: inherit; font-size: 13.5px; color: var(--text-main); resize: none; max-height: 100px; min-height: 24px; }
+        .btn-send-pill { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple); color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; flex-shrink: 0; }
         .btn-send-pill:hover { transform: scale(1.05); background: var(--accent-purple-hover); }
 
-        /* Right Floating Upgrade Badge */
+        /* FLOATING UPGRADE BADGE */
         .upgrade-floating-badge {
-            position: absolute;
-            right: 0;
-            top: 45%;
-            transform: translateY(-50%);
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            color: #ffffff;
-            padding: 12px 6px;
-            border-radius: 12px 0 0 12px;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            box-shadow: -4px 0 15px rgba(99, 102, 241, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
+            position: absolute; right: 0; top: 45%; transform: translateY(-50%); background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #ffffff; padding: 12px 6px; border-radius: 12px 0 0 12px; writing-mode: vertical-rl; text-orientation: mixed; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; box-shadow: -4px 0 15px rgba(99, 102, 241, 0.3); transition: all 0.2s;
         }
-
         .upgrade-floating-badge:hover { padding-right: 10px; }
 
-        /* Auth Modal */
+        /* AUTH MODAL */
         .modal-backdrop {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            display: none;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100;
         }
-
-        .auth-card {
-            background: #ffffff;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            padding: 28px;
-            box-shadow: var(--shadow-md);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
+        .auth-card { background: #ffffff; border-radius: 20px; width: 90%; max-width: 400px; padding: 28px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; gap: 16px; }
         .auth-title { font-size: 18px; font-weight: 800; color: #0f172a; }
-        .auth-input {
-            width: 100%;
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            outline: none;
-        }
-
+        .auth-input { width: 100%; background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
         .auth-input:focus { border-color: var(--accent-purple); }
     </style>
 </head>
 <body>
 
     <div class="app-window">
-        <!-- 1. LEFT SIDEBAR -->
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="brand-header">
-                <div class="brand-logo" onclick="location.reload()">
+                <div class="brand-logo" onclick="startNewChat()">
                     <div class="brand-badge">S</div>
                     SOLACE AI+
                 </div>
@@ -527,40 +192,22 @@
             </div>
 
             <div class="history-group" id="chatHistoryContainer">
-                <div class="history-item active" onclick="loadChat(0)">
-                    <div class="history-item-left">
-                        <span>💬</span> Create Chatbot GPT Python
-                    </div>
-                    <div class="history-item-actions">
-                        <button class="action-icon" onclick="deleteChat(0, event)">🗑️</button>
-                    </div>
+                <div class="history-item active" onclick="switchChatTopic('Create Chatbot GPT Python', this)">
+                    <div class="history-item-left"><span>💬</span> Create Chatbot GPT Python</div>
+                    <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
                 </div>
-                <div class="history-item" onclick="loadChat(1)">
-                    <div class="history-item-left">
-                        <span>💬</span> Apply To Leave For Emergency
-                    </div>
+                <div class="history-item" onclick="switchChatTopic('Apply To Leave For Emergency', this)">
+                    <div class="history-item-left"><span>💬</span> Apply To Leave For Emergency</div>
+                    <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
                 </div>
-                <div class="history-item" onclick="loadChat(2)">
-                    <div class="history-item-left">
-                        <span>💬</span> What Is UI UX Design?
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-section-label" style="margin-top:12px;">Last 7 Days</div>
-            <div class="history-group">
-                <div class="history-item">
-                    <div class="history-item-left"><span>💬</span> Crypto Lending App Name</div>
-                </div>
-                <div class="history-item">
-                    <div class="history-item-left"><span>💬</span> Operator Grammar Types</div>
+                <div class="history-item" onclick="switchChatTopic('What Is UI UX Design?', this)">
+                    <div class="history-item-left"><span>💬</span> What Is UI UX Design?</div>
+                    <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
                 </div>
             </div>
 
             <div class="sidebar-footer">
-                <button class="sidebar-pill-btn" onclick="alert('SolaceTech Workspace Settings')">
-                    ⚙️ Settings
-                </button>
+                <button class="sidebar-pill-btn" onclick="alert('Settings modal open.')">⚙️ Settings</button>
                 <button class="sidebar-pill-btn" onclick="openAuthModal()" id="userProfileBtn">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-circle" alt="">
                     <span id="userNameDisplay">Samrat Chaudhary</span>
@@ -568,20 +215,18 @@
             </div>
         </aside>
 
-        <!-- 2. MAIN CHAT AREA -->
+        <!-- MAIN CHAT AREA -->
         <main class="main-chat-container">
             <div class="chat-messages-wrapper" id="chatMessagesWrapper">
                 
-                <!-- 3D Animated Showcase Header -->
-                <div class="hero-3d-card">
+                <div class="hero-3d-card" id="heroCard">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Powered by Cloudflare Workers AI edge intelligence.</p>
+                        <p>Powered by Cloudflare Workers AI edge intelligence & Llama 3.2 3B.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
 
-                <!-- Initial Chat Thread -->
                 <div class="message-block">
                     <div class="user-prompt-header">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-sm" alt="">
@@ -589,16 +234,17 @@
                     </div>
                     <div class="ai-response-block">
                         <div class="ai-label">SOLACE AI+ ✦</div>
-                        <p>Sure, I can help you get started with creating a chatbot using GPT in Python. Here are the basic steps you'll need to follow:</p>
-                        <ol style="padding-left: 20px; display:flex; flex-direction:column; gap:8px;">
-                            <li><strong>Install required libraries:</strong> Install <code>transformers</code> or <code>openai</code> SDK via pip.</li>
-                            <li><strong>Load the model:</strong> Use Cloudflare Workers AI edge models or Llama 3.2 3B for low latency.</li>
-                            <li><strong>Create the event loop:</strong> Build an interactive loop taking user input and returning responses.</li>
-                        </ol>
+                        <div class="response-text">
+                            Sure, I can help you get started with creating a chatbot using GPT in Python. Here are the steps:
+                            <br><br>
+                            1. <strong>Install required libraries:</strong> Run <code>pip install transformers torch</code>.<br>
+                            2. <strong>Initialize Llama / GPT Model:</strong> Load the model pipeline or connect via Cloudflare Workers AI endpoint.<br>
+                            3. <strong>Build the loop:</strong> Capture input in a loop and display generated responses.
+                        </div>
                         <div class="response-actions">
-                            <button class="btn-action-sm" onclick="copyResponse(this)">👍</button>
-                            <button class="btn-action-sm">👎</button>
-                            <button class="btn-action-sm" onclick="alert('Copied to clipboard!')">📋</button>
+                            <button class="btn-action-sm" onclick="toggleLike(this)">👍</button>
+                            <button class="btn-action-sm" onclick="toggleDislike(this)">👎</button>
+                            <button class="btn-action-sm" onclick="copyText(this)">📋 Copy</button>
                             <button class="btn-regenerate" onclick="regenerateLastResponse()">↻ Regenerate</button>
                         </div>
                     </div>
@@ -606,7 +252,7 @@
 
             </div>
 
-            <!-- Floating Input Box -->
+            <!-- FLOATING INPUT BAR -->
             <div class="input-floating-container">
                 <div class="input-floating-bar">
                     <textarea class="chat-textarea" id="userChatInput" placeholder="What's in your mind?..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
@@ -616,32 +262,32 @@
                 </div>
             </div>
 
-            <!-- Floating Right Upgrade Badge -->
-            <div class="upgrade-floating-badge" onclick="alert('SolaceTech Pro Plan Upgrade')">
+            <div class="upgrade-floating-badge" onclick="alert('Upgrading to SolaceTech Pro...')">
                 ✦ Upgrade to Pro
             </div>
         </main>
     </div>
 
-    <!-- Auth Modal -->
+    <!-- AUTH MODAL -->
     <div class="modal-backdrop" id="authModal">
         <div class="auth-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="auth-title" id="authTitle">Sign In to SolaceTech</span>
-                <button class="action-icon" onclick="closeAuthModal()">✕</button>
+                <span class="auth-title">Account Settings</span>
+                <button class="action-icon" style="color:#000;" onclick="closeAuthModal()">✕</button>
             </div>
             <input type="text" class="auth-input" id="authNameInput" placeholder="Your Name" value="Samrat Chaudhary">
             <input type="email" class="auth-input" placeholder="Email address" value="samrat@solacetech.co">
-            <input type="password" class="auth-input" placeholder="Password" value="••••••••">
-            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveAuth()">Continue</button>
+            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveAuth()">Save Changes</button>
         </div>
     </div>
 
     <script>
-        // Init 3D Animated Mesh Visuals
+        let lastUserPrompt = "";
+
+        // 3D Canvas Init
         function init3DAnimation() {
             const container = document.getElementById('threeCanvasContainer');
-            if(!container) return;
+            if(!container || container.children.length > 0) return;
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -664,7 +310,7 @@
         }
         window.addEventListener('load', init3DAnimation);
 
-        // Auth Modal
+        // Auth Modal handlers
         function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
         function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
         function saveAuth() {
@@ -676,19 +322,22 @@
             closeAuthModal();
         }
 
-        // Chat Actions
+        // Keyboard Enter Key
         function handleKeyPress(e) {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendUserMessage(); }
         }
 
+        // Send & Typewriter Response Generator
         async function sendUserMessage() {
             const input = document.getElementById('userChatInput');
             const text = input.value.trim();
             if (!text) return;
 
+            lastUserPrompt = text;
             const container = document.getElementById('chatMessagesWrapper');
             const userName = localStorage.getItem('solace_user_name') || 'Samrat Chaudhary';
 
+            // Append User Message
             container.innerHTML += `
                 <div class="message-block">
                     <div class="user-prompt-header">
@@ -697,6 +346,10 @@
                     </div>
                 </div>
             `;
+            
+            // Add to Sidebar History dynamically
+            addHistoryItem(text);
+
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
@@ -705,7 +358,7 @@
                 <div class="message-block" id="${loadingId}">
                     <div class="ai-response-block">
                         <div class="ai-label">SOLACE AI+ ✦</div>
-                        <p style="color:var(--text-muted)">Generating response from Cloudflare Edge...</p>
+                        <div class="response-text" style="color:var(--text-muted)">Generating with Llama 3.2 3B...</div>
                     </div>
                 </div>
             `;
@@ -719,27 +372,33 @@
                 });
                 const data = await res.json();
                 const reply = data.response || data.result?.response || JSON.stringify(data);
-                document.getElementById(loadingId).remove();
+                
+                const loadingElem = document.getElementById(loadingId);
+                if(loadingElem) loadingElem.remove();
 
+                const responseBlockId = 'res-' + Date.now();
                 container.innerHTML += `
                     <div class="message-block">
                         <div class="ai-response-block">
                             <div class="ai-label">SOLACE AI+ ✦</div>
-                            <p>${escapeHtml(reply).replace(/\n/g, '<br>')}</p>
+                            <div class="response-text" id="${responseBlockId}"></div>
                             <div class="response-actions">
-                                <button class="btn-action-sm">👍</button>
-                                <button class="btn-action-sm">👎</button>
-                                <button class="btn-action-sm" onclick="alert('Copied!')">📋</button>
+                                <button class="btn-action-sm" onclick="toggleLike(this)">👍</button>
+                                <button class="btn-action-sm" onclick="toggleDislike(this)">👎</button>
+                                <button class="btn-action-sm" onclick="copyText(this)">📋 Copy</button>
                                 <button class="btn-regenerate" onclick="regenerateLastResponse()">↻ Regenerate</button>
                             </div>
                         </div>
                     </div>
                 `;
+
+                typeWriterEffect(responseBlockId, reply);
             } catch(err) {
-                document.getElementById(loadingId).remove();
+                const loadingElem = document.getElementById(loadingId);
+                if(loadingElem) loadingElem.remove();
                 container.innerHTML += `
                     <div class="message-block">
-                        <div class="ai-response-block" style="color:red;">
+                        <div class="ai-response-block" style="color:#ef4444;">
                             Error: ${err.message}
                         </div>
                     </div>
@@ -748,21 +407,84 @@
             container.scrollTop = container.scrollHeight;
         }
 
+        // Animated Typewriter effect
+        function typeWriterEffect(elementId, text) {
+            const elem = document.getElementById(elementId);
+            if (!elem) return;
+            let i = 0;
+            elem.innerHTML = "";
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    elem.innerHTML += text.charAt(i) === '\n' ? '<br>' : escapeHtml(text.charAt(i));
+                    i++;
+                    const container = document.getElementById('chatMessagesWrapper');
+                    container.scrollTop = container.scrollHeight;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 12);
+        }
+
+        // Actions
+        function toggleLike(btn) { btn.classList.toggle('active'); }
+        function toggleDislike(btn) { btn.classList.toggle('active'); }
+        function copyText(btn) {
+            const block = btn.closest('.ai-response-block').querySelector('.response-text');
+            if(block) {
+                navigator.clipboard.writeText(block.innerText);
+                btn.innerText = '✓ Copied';
+                setTimeout(() => btn.innerText = '📋 Copy', 2000);
+            }
+        }
+
+        function regenerateLastResponse() {
+            if(lastUserPrompt) {
+                document.getElementById('userChatInput').value = lastUserPrompt;
+                sendUserMessage();
+            }
+        }
+
         function startNewChat() {
             document.getElementById('chatMessagesWrapper').innerHTML = `
-                <div class="hero-3d-card">
+                <div class="hero-3d-card" id="heroCard">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Powered by Cloudflare Workers AI edge intelligence.</p>
+                        <p>Powered by Cloudflare Workers AI edge intelligence & Llama 3.2 3B.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
             `;
             init3DAnimation();
+            document.getElementById('userChatInput').focus();
+        }
+
+        function addHistoryItem(title) {
+            const container = document.getElementById('chatHistoryContainer');
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.onclick = function() { switchChatTopic(title, item); };
+            item.innerHTML = `
+                <div class="history-item-left"><span>💬</span> ${escapeHtml(title)}</div>
+                <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
+            `;
+            container.prepend(item);
+        }
+
+        function switchChatTopic(title, elem) {
+            document.querySelectorAll('.history-item').forEach(i => i.classList.remove('active'));
+            elem.classList.add('active');
+            document.getElementById('userChatInput').value = title;
+            sendUserMessage();
+        }
+
+        function deleteHistoryItem(btn, event) {
+            event.stopPropagation();
+            const item = btn.closest('.history-item');
+            if(item) item.remove();
         }
 
         function clearAllChats() {
-            if(confirm('Clear conversation history?')) {
+            if(confirm('Clear all chat history?')) {
                 document.getElementById('chatHistoryContainer').innerHTML = '';
             }
         }
