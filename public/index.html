@@ -57,7 +57,8 @@
 
         @media (max-width: 868px) {
             .app-window { grid-template-columns: 1fr; }
-            .sidebar { display: none; }
+            .sidebar { position: absolute; left: -280px; top: 0; height: 100%; z-index: 50; transition: left 0.3s ease; }
+            .sidebar.open { left: 0; box-shadow: 10px 0 30px rgba(0,0,0,0.15); }
         }
 
         /* SIDEBAR */
@@ -69,6 +70,7 @@
             padding: 20px 16px;
             gap: 16px;
             overflow-y: auto;
+            width: var(--sidebar-width);
         }
 
         .brand-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 8px; }
@@ -111,7 +113,18 @@
 
         /* MAIN CHAT AREA */
         .main-chat-container { display: flex; flex-direction: column; height: 100%; background: #ffffff; position: relative; overflow: hidden; }
-        .chat-messages-wrapper { flex: 1; overflow-y: auto; padding: 32px 48px; display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; }
+        
+        .chat-topbar {
+            padding: 12px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: #ffffff;
+        }
+        .mobile-menu-btn { display: none; background: none; border: none; font-size: 20px; cursor: pointer; }
+        @media (max-width: 868px) { .mobile-menu-btn { display: block; } }
+
+        .active-model-badge {
+            background: var(--accent-purple-light); color: var(--accent-purple); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.2); cursor: pointer;
+        }
+
+        .chat-messages-wrapper { flex: 1; overflow-y: auto; padding: 24px 36px; display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; }
 
         .message-block { display: flex; flex-direction: column; gap: 8px; max-width: 900px; width: 100%; margin: 0 auto; animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -140,7 +153,7 @@
         .btn-regenerate:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
 
         /* FLOATING INPUT BAR */
-        .input-floating-container { padding: 16px 48px 24px; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 40%); }
+        .input-floating-container { padding: 16px 36px 24px; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 40%); }
         .input-floating-bar {
             max-width: 800px; margin: 0 auto; background: var(--bg-input); border: 1px solid #e2e8f0; border-radius: 30px; padding: 8px 12px 8px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.2s;
         }
@@ -155,21 +168,23 @@
         }
         .upgrade-floating-badge:hover { padding-right: 10px; }
 
-        /* AUTH MODAL */
+        /* MODAL BACKDROP & CARDS */
         .modal-backdrop {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100;
         }
-        .auth-card { background: #ffffff; border-radius: 20px; width: 90%; max-width: 400px; padding: 28px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; gap: 16px; }
-        .auth-title { font-size: 18px; font-weight: 800; color: #0f172a; }
-        .auth-input { width: 100%; background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
-        .auth-input:focus { border-color: var(--accent-purple); }
+        .modal-card { background: #ffffff; border-radius: 20px; width: 90%; max-width: 440px; padding: 28px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; gap: 16px; }
+        .modal-title { font-size: 18px; font-weight: 800; color: #0f172a; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-label { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+        .modal-input, .modal-select { width: 100%; background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; font-family: inherit; }
+        .modal-input:focus, .modal-select:focus { border-color: var(--accent-purple); }
     </style>
 </head>
 <body>
 
     <div class="app-window">
         <!-- SIDEBAR -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="appSidebar">
             <div class="brand-header">
                 <div class="brand-logo" onclick="startNewChat()">
                     <div class="brand-badge">S</div>
@@ -207,7 +222,7 @@
             </div>
 
             <div class="sidebar-footer">
-                <button class="sidebar-pill-btn" onclick="alert('Settings modal open.')">⚙️ Settings</button>
+                <button class="sidebar-pill-btn" onclick="openSettingsModal()">⚙️ Settings</button>
                 <button class="sidebar-pill-btn" onclick="openAuthModal()" id="userProfileBtn">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-circle" alt="">
                     <span id="userNameDisplay">Samrat Chaudhary</span>
@@ -217,12 +232,20 @@
 
         <!-- MAIN CHAT AREA -->
         <main class="main-chat-container">
+            <div class="chat-topbar">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                <div style="font-weight:700; font-size:14px;">SolaceTech Workspace</div>
+                <div class="active-model-badge" id="topbarModelBadge" onclick="openSettingsModal()">
+                    ⚡ Llama 3.2 3B
+                </div>
+            </div>
+
             <div class="chat-messages-wrapper" id="chatMessagesWrapper">
                 
                 <div class="hero-3d-card" id="heroCard">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Powered by Cloudflare Workers AI edge intelligence & Llama 3.2 3B.</p>
+                        <p>Powered by Cloudflare Workers AI edge intelligence.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
@@ -238,7 +261,7 @@
                             Sure, I can help you get started with creating a chatbot using GPT in Python. Here are the steps:
                             <br><br>
                             1. <strong>Install required libraries:</strong> Run <code>pip install transformers torch</code>.<br>
-                            2. <strong>Initialize Llama / GPT Model:</strong> Load the model pipeline or connect via Cloudflare Workers AI endpoint.<br>
+                            2. <strong>Initialize Model:</strong> Load the model pipeline or connect via Cloudflare Workers AI endpoint.<br>
                             3. <strong>Build the loop:</strong> Capture input in a loop and display generated responses.
                         </div>
                         <div class="response-actions">
@@ -270,21 +293,71 @@
 
     <!-- AUTH MODAL -->
     <div class="modal-backdrop" id="authModal">
-        <div class="auth-card">
+        <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="auth-title">Account Settings</span>
-                <button class="action-icon" style="color:#000;" onclick="closeAuthModal()">✕</button>
+                <span class="modal-title">Account Settings</span>
+                <button class="action-icon" style="color:#000;" onclick="closeModal('authModal')">✕</button>
             </div>
-            <input type="text" class="auth-input" id="authNameInput" placeholder="Your Name" value="Samrat Chaudhary">
-            <input type="email" class="auth-input" placeholder="Email address" value="samrat@solacetech.co">
-            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveAuth()">Save Changes</button>
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="modal-input" id="authNameInput" value="Samrat Chaudhary">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="modal-input" value="samrat@solacetech.co">
+            </div>
+            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveAuth()">Save Account</button>
+        </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal-backdrop" id="settingsModal">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="modal-title">Workspace Settings</span>
+                <button class="action-icon" style="color:#000;" onclick="closeModal('settingsModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Active AI Model</label>
+                <select class="modal-select" id="modelSelect">
+                    <option value="@cf/meta/llama-3.2-3b-instruct">Llama 3.2 3B Instruct (Default)</option>
+                    <option value="@cf/meta/llama-3.1-8b-instruct">Llama 3.1 8B Instruct</option>
+                    <option value="@cf/mistral/mistral-7b-instruct-v0.1">Mistral 7B Instruct</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">System Persona Prompt</label>
+                <textarea class="modal-input" id="systemPromptInput" rows="3" placeholder="You are SOLACE AI, a helpful software engineer assistant."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Temperature (Creativity): <span id="tempValueDisplay">0.7</span></label>
+                <input type="range" min="0" max="1" step="0.1" value="0.7" id="tempSlider" oninput="document.getElementById('tempValueDisplay').innerText = this.value">
+            </div>
+            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveSettings()">Save Configuration</button>
         </div>
     </div>
 
     <script>
         let lastUserPrompt = "";
 
-        // 3D Canvas Init
+        // Load Preferences on Start
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('solace_user_name');
+            if (savedName) {
+                document.getElementById('userNameDisplay').innerText = savedName;
+                document.getElementById('authNameInput').value = savedName;
+            }
+            const savedModel = localStorage.getItem('solace_model');
+            if (savedModel) document.getElementById('modelSelect').value = savedModel;
+            
+            const savedSystem = localStorage.getItem('solace_system_prompt');
+            if (savedSystem) document.getElementById('systemPromptInput').value = savedSystem;
+
+            updateModelBadge();
+            init3DAnimation();
+        });
+
+        // 3D Visual Mesh
         function init3DAnimation() {
             const container = document.getElementById('threeCanvasContainer');
             if(!container || container.children.length > 0) return;
@@ -308,26 +381,48 @@
             }
             animate();
         }
-        window.addEventListener('load', init3DAnimation);
 
-        // Auth Modal handlers
+        // Sidebar & Modal handlers
+        function toggleSidebar() { document.getElementById('appSidebar').classList.toggle('open'); }
         function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+        function openSettingsModal() { document.getElementById('settingsModal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
         function saveAuth() {
             const name = document.getElementById('authNameInput').value.trim();
             if(name) {
                 document.getElementById('userNameDisplay').innerText = name;
                 localStorage.setItem('solace_user_name', name);
             }
-            closeAuthModal();
+            closeModal('authModal');
         }
 
-        // Keyboard Enter Key
+        function saveSettings() {
+            const model = document.getElementById('modelSelect').value;
+            const systemPrompt = document.getElementById('systemPromptInput').value;
+            const temp = document.getElementById('tempSlider').value;
+
+            localStorage.setItem('solace_model', model);
+            localStorage.setItem('solace_system_prompt', systemPrompt);
+            localStorage.setItem('solace_temp', temp);
+
+            updateModelBadge();
+            closeModal('settingsModal');
+        }
+
+        function updateModelBadge() {
+            const modelVal = localStorage.getItem('solace_model') || '@cf/meta/llama-3.2-3b-instruct';
+            let label = "⚡ Llama 3.2 3B";
+            if (modelVal.includes("llama-3.1-8b")) label = "⚡ Llama 3.1 8B";
+            if (modelVal.includes("mistral")) label = "⚡ Mistral 7B";
+            document.getElementById('topbarModelBadge').innerText = label;
+        }
+
+        // Chat Handlers
         function handleKeyPress(e) {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendUserMessage(); }
         }
 
-        // Send & Typewriter Response Generator
         async function sendUserMessage() {
             const input = document.getElementById('userChatInput');
             const text = input.value.trim();
@@ -335,9 +430,7 @@
 
             lastUserPrompt = text;
             const container = document.getElementById('chatMessagesWrapper');
-            const userName = localStorage.getItem('solace_user_name') || 'Samrat Chaudhary';
 
-            // Append User Message
             container.innerHTML += `
                 <div class="message-block">
                     <div class="user-prompt-header">
@@ -347,9 +440,7 @@
                 </div>
             `;
             
-            // Add to Sidebar History dynamically
             addHistoryItem(text);
-
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
@@ -358,18 +449,28 @@
                 <div class="message-block" id="${loadingId}">
                     <div class="ai-response-block">
                         <div class="ai-label">SOLACE AI+ ✦</div>
-                        <div class="response-text" style="color:var(--text-muted)">Generating with Llama 3.2 3B...</div>
+                        <div class="response-text" style="color:var(--text-muted)">Generating response...</div>
                     </div>
                 </div>
             `;
             container.scrollTop = container.scrollHeight;
 
             try {
+                const systemPrompt = localStorage.getItem('solace_system_prompt') || "You are SOLACE AI, an edge intelligence AI model.";
+                const model = localStorage.getItem('solace_model') || "@cf/meta/llama-3.2-3b-instruct";
+
                 const res = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messages: [{ role: "user", content: text }] })
+                    body: JSON.stringify({ 
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: text }
+                        ],
+                        model: model
+                    })
                 });
+
                 const data = await res.json();
                 const reply = data.response || data.result?.response || JSON.stringify(data);
                 
@@ -407,7 +508,6 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // Animated Typewriter effect
         function typeWriterEffect(elementId, text) {
             const elem = document.getElementById(elementId);
             if (!elem) return;
@@ -422,10 +522,9 @@
                 } else {
                     clearInterval(interval);
                 }
-            }, 12);
+            }, 10);
         }
 
-        // Actions
         function toggleLike(btn) { btn.classList.toggle('active'); }
         function toggleDislike(btn) { btn.classList.toggle('active'); }
         function copyText(btn) {
@@ -449,7 +548,7 @@
                 <div class="hero-3d-card" id="heroCard">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Powered by Cloudflare Workers AI edge intelligence & Llama 3.2 3B.</p>
+                        <p>Powered by Cloudflare Workers AI edge intelligence.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
