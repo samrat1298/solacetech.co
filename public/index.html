@@ -1,29 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SolaceTech — SOLACE AI+ Workspace</title>
+    <title>SolaceTech — SOLACE AI+ Enterprise Workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
+            --bg-canvas: #090d16;
+            --bg-sidebar: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #0f172a;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-purple: #6366f1;
+            --accent-purple-hover: #4f46e5;
+            --accent-purple-light: rgba(99, 102, 241, 0.15);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dimmed: #64748b;
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --sidebar-width: 280px;
+        }
+
+        html.light {
             --bg-canvas: #eef2f8;
             --bg-sidebar: #ffffff;
             --bg-card: #ffffff;
             --bg-input: #f4f7fb;
             --border-color: #e2e8f0;
-            --accent-purple: #6366f1;
-            --accent-purple-hover: #4f46e5;
             --accent-purple-light: #eef2ff;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --text-dimmed: #94a3b8;
-            --shadow-sm: 0 2px 8px rgba(100, 116, 139, 0.06);
             --shadow-md: 0 10px 25px -5px rgba(100, 116, 139, 0.1);
-            --sidebar-width: 280px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,19 +50,20 @@
             align-items: center;
             justify-content: center;
             padding: 16px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .app-window {
-            width: 100%; max-width: 1440px; height: 96vh; background: #ffffff;
-            border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            width: 100%; max-width: 1440px; height: 96vh; background: var(--bg-sidebar);
+            border-radius: 24px; box-shadow: var(--shadow-md);
             display: grid; grid-template-columns: var(--sidebar-width) 1fr;
-            overflow: hidden; position: relative; border: 1px solid #e2e8f0;
+            overflow: hidden; position: relative; border: 1px solid var(--border-color);
         }
 
         @media (max-width: 868px) {
             .app-window { grid-template-columns: 1fr; }
             .sidebar { position: absolute; left: -280px; top: 0; height: 100%; z-index: 50; transition: left 0.3s ease; }
-            .sidebar.open { left: 0; box-shadow: 10px 0 30px rgba(0,0,0,0.15); }
+            .sidebar.open { left: 0; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
         }
 
         /* SIDEBAR */
@@ -60,7 +73,7 @@
         }
 
         .brand-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 8px; }
-        .brand-logo { font-size: 18px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .brand-logo { font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .brand-badge { background: var(--accent-purple); color: #fff; width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
 
         .top-actions { display: flex; gap: 8px; }
@@ -73,8 +86,8 @@
         .btn-new-chat:hover { background: var(--accent-purple-hover); }
 
         .btn-icon-round {
-            width: 38px; height: 38px; border-radius: 50%; background: #000000; color: #ffffff;
-            border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+            width: 38px; height: 38px; border-radius: 50%; background: var(--bg-card); color: var(--text-main);
+            border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
         }
 
         .nav-section-label { font-size: 11px; font-weight: 700; color: var(--text-dimmed); display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
@@ -90,17 +103,21 @@
 
         .sidebar-footer { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
         .sidebar-pill-btn {
-            display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color);
             padding: 10px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-main); cursor: pointer; width: 100%;
         }
-        .sidebar-pill-btn:hover { background: #f1f5f9; }
-        .user-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
+
+        .user-avatar-circle {
+            width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+            background: var(--accent-purple); color: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700;
+        }
 
         /* MAIN CHAT AREA */
-        .main-chat-container { display: flex; flex-direction: column; height: 100%; background: #ffffff; position: relative; overflow: hidden; }
+        .main-chat-container { display: flex; flex-direction: column; height: 100%; background: var(--bg-canvas); position: relative; overflow: hidden; }
         
-        .chat-topbar { padding: 12px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: #ffffff; }
-        .mobile-menu-btn { display: none; background: none; border: none; font-size: 20px; cursor: pointer; }
+        .chat-topbar { padding: 12px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: var(--bg-sidebar); }
+        .mobile-menu-btn { display: none; background: none; border: none; font-size: 20px; color: var(--text-main); cursor: pointer; }
         @media (max-width: 868px) { .mobile-menu-btn { display: block; } }
 
         .active-model-badge {
@@ -112,47 +129,55 @@
 
         .message-block { display: flex; flex-direction: column; gap: 8px; max-width: 900px; width: 100%; margin: 0 auto; }
         .user-prompt-header { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
-        .user-avatar-sm { width: 24px; height: 24px; border-radius: 50%; }
+        .user-avatar-sm { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; background: var(--accent-purple); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
 
-        .ai-response-block { padding-left: 34px; font-size: 14px; line-height: 1.65; color: #334155; display: flex; flex-direction: column; gap: 12px; }
+        .ai-response-block { padding-left: 36px; font-size: 14px; line-height: 1.65; color: var(--text-main); display: flex; flex-direction: column; gap: 12px; }
         .ai-label { font-size: 11px; font-weight: 700; color: var(--accent-purple); display: flex; align-items: center; gap: 4px; }
+
+        /* CODE BLOCK STYLING */
+        pre { background: #000; padding: 14px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; overflow-x: auto; color: #a5f3fc; border: 1px solid var(--border-color); }
 
         /* HERO 3D CARD */
         .hero-3d-card {
-            width: 100%; max-width: 900px; margin: 0 auto 20px; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
-            border: 1px solid #e2e8f0; border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between;
+            width: 100%; max-width: 900px; margin: 0 auto 20px; background: var(--bg-card);
+            border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between;
         }
-        .hero-3d-text h2 { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+        .hero-3d-text h2 { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
         .hero-3d-text p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
         #threeCanvasContainer { width: 120px; height: 120px; flex-shrink: 0; }
 
-        /* INPUT BAR WITH TOOLS */
-        .input-floating-container { padding: 16px 36px 24px; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 40%); }
+        /* INPUT BAR WITH TOOLS & PLUGINS */
+        .input-floating-container { padding: 16px 36px 24px; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--bg-canvas) 40%); }
         .input-floating-bar {
-            max-width: 800px; margin: 0 auto; background: var(--bg-input); border: 1px solid #e2e8f0;
-            border-radius: 24px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 800px; margin: 0 auto; background: var(--bg-input); border: 1px solid var(--border-color);
+            border-radius: 24px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         .input-row-main { display: flex; align-items: center; gap: 10px; }
         .chat-textarea { flex: 1; background: none; border: none; outline: none; font-family: inherit; font-size: 13.5px; color: var(--text-main); resize: none; max-height: 100px; min-height: 24px; }
         
-        .input-tools-bar { display: flex; align-items: center; gap: 12px; padding-top: 4px; border-top: 1px solid #e2e8f0; font-size: 12px; color: var(--text-muted); }
+        .input-tools-bar { display: flex; align-items: center; gap: 12px; padding-top: 6px; border-top: 1px solid var(--border-color); font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
         .tool-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; }
-        .tool-btn:hover { color: var(--accent-purple); }
-        .tool-btn.active { color: var(--accent-purple); }
+        .tool-btn:hover, .tool-btn.active { color: var(--accent-purple); }
 
         .btn-send-pill { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-purple); color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
         .btn-send-pill:hover { background: var(--accent-purple-hover); }
 
         /* MODALS */
         .modal-backdrop {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5);
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100;
         }
-        .modal-card { background: #ffffff; border-radius: 20px; width: 90%; max-width: 440px; padding: 28px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; gap: 16px; }
-        .modal-title { font-size: 18px; font-weight: 800; color: #0f172a; }
+        .modal-card { background: var(--bg-sidebar); border-radius: 20px; width: 90%; max-width: 460px; padding: 28px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--border-color); }
+        .modal-title { font-size: 18px; font-weight: 800; color: var(--text-main); }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-label { font-size: 12px; font-weight: 700; color: var(--text-muted); }
-        .modal-input, .modal-select { width: 100%; background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; font-family: inherit; }
+        .modal-input, .modal-select { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; font-family: inherit; color: var(--text-main); }
+
+        .plugin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+        .plugin-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 4px; cursor: pointer; transition: all 0.2s; }
+        .plugin-card.active { border-color: var(--accent-purple); background: var(--accent-purple-light); }
+        .plugin-title { font-size: 12.5px; font-weight: 700; color: var(--text-main); }
+        .plugin-desc { font-size: 11px; color: var(--text-muted); }
     </style>
 </head>
 <body>
@@ -165,14 +190,17 @@
                     <div class="brand-badge">S</div>
                     SOLACE AI+
                 </div>
+                <button class="btn-icon-round" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                    <span id="themeToggleIcon">🌙</span>
+                </button>
             </div>
 
             <div class="top-actions">
                 <button class="btn-new-chat" onclick="startNewChat()">
                     <span>+</span> New chat
                 </button>
-                <button class="btn-icon-round" onclick="openAuthModal()" title="Account">
-                    <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                <button class="btn-icon-round" onclick="openPluginsModal()" title="Plugins & Toolstore">
+                    🧩
                 </button>
             </div>
 
@@ -183,15 +211,15 @@
 
             <div class="history-group" id="chatHistoryContainer">
                 <div class="history-item active">
-                    <div class="history-item-left"><span>💬</span> Llama 3.2 3B & Multimodal Edge</div>
+                    <div class="history-item-left"><span>💬</span> Enterprise Llama 3.2 3B Chat</div>
                 </div>
             </div>
 
             <div class="sidebar-footer">
                 <button class="sidebar-pill-btn" onclick="openSettingsModal()">⚙️ Settings & Memory</button>
                 <button class="sidebar-pill-btn" onclick="openAuthModal()" id="userProfileBtn">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-circle" alt="">
-                    <span id="userNameDisplay">Samrat Chaudhary</span>
+                    <div class="user-avatar-circle" id="sidebarUserAvatar">U</div>
+                    <span id="userNameDisplay">User</span>
                 </button>
             </div>
         </aside>
@@ -210,25 +238,25 @@
                 <div class="hero-3d-card" id="heroCard">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Fully equipped with NLP, Multimodal File Uploads, Voice Speech-to-Text, and Contextual Memory Profiles.</p>
+                        <p>Next-gen AI assistant with Dark Mode, Code Interpreter, Multimodal uploads, Voice Mode, and Plugins.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
 
                 <div class="message-block">
                     <div class="user-prompt-header">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-sm" alt="">
-                        <span>Hello SOLACE AI+, what features are currently active?</span>
+                        <div class="user-avatar-sm" id="initialMsgAvatar">U</div>
+                        <span>Hello SOLACE AI+, show me what you can do.</span>
                     </div>
                     <div class="ai-response-block">
                         <div class="ai-label">SOLACE AI+ ✦</div>
                         <div class="response-text">
-                            All core intelligence modules are active:
+                            I am fully configured with enterprise tools:
                             <br><br>
-                            ✓ <strong>NLP & Contextual Memory</strong><br>
-                            ✓ <strong>Multimodal File & Image Processing</strong><br>
-                            ✓ <strong>Real-Time Speech-to-Text Voice Mode</strong><br>
-                            ✓ <strong>Custom Memory Profiles & Guardrails</strong>
+                            🌙 <strong>Dark & Light Theme Mode</strong><br>
+                            🧩 <strong>Plugins Ecosystem</strong> (Code Interpreter, DALL-E Image Gen, Web Browsing)<br>
+                            🎙️ <strong>Speech-to-Text Voice Mode</strong><br>
+                            📄 <strong>Document & Image File Analysis</strong>
                         </div>
                     </div>
                 </div>
@@ -238,29 +266,59 @@
             <div class="input-floating-container">
                 <div class="input-floating-bar">
                     <div class="input-row-main">
-                        <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything, upload docs, or click microphone..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
+                        <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything, write code, run plugins..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
                         <button class="btn-send-pill" onclick="sendUserMessage()">
                             <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                         </button>
                     </div>
                     <div class="input-tools-bar">
                         <label class="tool-btn" style="cursor:pointer;">
-                            📎 Upload File/Image <input type="file" id="fileUploadInput" style="display:none" onchange="handleFileUpload(event)">
+                            📎 Attach File <input type="file" id="fileUploadInput" style="display:none" onchange="handleFileUpload(event)">
                         </label>
-                        <button class="tool-btn" id="micBtn" onclick="toggleSpeechToText()">🎙️ Voice Chat</button>
-                        <button class="tool-btn" id="webSearchToggle" onclick="toggleWebSearch()">🌐 Web Search</button>
+                        <button class="tool-btn" id="micBtn" onclick="toggleSpeechToText()">🎙️ Voice</button>
+                        <button class="tool-btn" id="webSearchToggle" onclick="toggleWebSearch()">🌐 Web Browsing</button>
+                        <button class="tool-btn" onclick="openPluginsModal()">🧩 Plugins (Active: <span id="activePluginsCount">1</span>)</button>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- SETTINGS & MEMORY MODAL -->
+    <!-- PLUGINS MODAL -->
+    <div class="modal-backdrop" id="pluginsModal">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="modal-title">Plugin Store & Tooling</span>
+                <button class="action-icon" style="color:var(--text-main);" onclick="closeModal('pluginsModal')">✕</button>
+            </div>
+            <div class="plugin-grid">
+                <div class="plugin-card active" onclick="togglePlugin(this, 'Code Interpreter')">
+                    <div class="plugin-title">💻 Code Runner</div>
+                    <div class="plugin-desc">Executes Python/JS scripts safely inside response blocks.</div>
+                </div>
+                <div class="plugin-card" onclick="togglePlugin(this, 'Web Search')">
+                    <div class="plugin-title">🌐 Live Web Search</div>
+                    <div class="plugin-desc">Fetches live facts and news citations.</div>
+                </div>
+                <div class="plugin-card" onclick="togglePlugin(this, 'Image Generator')">
+                    <div class="plugin-title">🎨 AI Art Generator</div>
+                    <div class="plugin-desc">Generates visual images from text prompts.</div>
+                </div>
+                <div class="plugin-card" onclick="togglePlugin(this, 'Doc Summarizer')">
+                    <div class="plugin-title">📄 Doc Summarizer</div>
+                    <div class="plugin-desc">Extracts key points from uploaded PDFs and text.</div>
+                </div>
+            </div>
+            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="closeModal('pluginsModal')">Apply Plugins</button>
+        </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
     <div class="modal-backdrop" id="settingsModal">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="modal-title">Memory & Intelligence Settings</span>
-                <button class="action-icon" style="color:#000;" onclick="closeModal('settingsModal')">✕</button>
+                <span class="modal-title">Memory & Persona Settings</span>
+                <button class="action-icon" style="color:var(--text-main);" onclick="closeModal('settingsModal')">✕</button>
             </div>
             <div class="form-group">
                 <label class="form-label">Active AI Model</label>
@@ -272,7 +330,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Custom Memory Profile / Instructions</label>
-                <textarea class="modal-input" id="systemPromptInput" rows="3" placeholder="E.g., Developer name Samrat Chaudhary, expert programmer, concise answers."></textarea>
+                <textarea class="modal-input" id="systemPromptInput" rows="3" placeholder="E.g., Senior engineer, concise code outputs."></textarea>
             </div>
             <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveSettings()">Save Configuration</button>
         </div>
@@ -282,12 +340,12 @@
     <div class="modal-backdrop" id="authModal">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="modal-title">User Account</span>
-                <button class="action-icon" style="color:#000;" onclick="closeModal('authModal')">✕</button>
+                <span class="modal-title">Account Profile</span>
+                <button class="action-icon" style="color:var(--text-main);" onclick="closeModal('authModal')">✕</button>
             </div>
             <div class="form-group">
-                <label class="form-label">Full Name</label>
-                <input type="text" class="modal-input" id="authNameInput" value="Samrat Chaudhary">
+                <label class="form-label">Display Name</label>
+                <input type="text" class="modal-input" id="authNameInput" placeholder="Enter your name" value="User">
             </div>
             <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveAuth()">Save</button>
         </div>
@@ -296,17 +354,44 @@
     <script>
         let webSearchEnabled = false;
         let attachedFileContent = null;
+        let selectedAvatarUrl = "";
+        let activePlugins = ["Code Interpreter"];
+
+        // Dark / Light Mode Toggle
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            document.documentElement.classList.toggle('light', !isDark);
+            document.getElementById('themeToggleIcon').innerText = isDark ? "🌙" : "☀️";
+            localStorage.setItem('solace_theme', isDark ? 'dark' : 'light');
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedName = localStorage.getItem('solace_user_name');
-            if (savedName) document.getElementById('userNameDisplay').innerText = savedName;
-            const savedModel = localStorage.getItem('solace_model');
-            if (savedModel) document.getElementById('modelSelect').value = savedModel;
-            const savedSystem = localStorage.getItem('solace_system_prompt');
-            if (savedSystem) document.getElementById('systemPromptInput').value = savedSystem;
-            
+            const savedTheme = localStorage.getItem('solace_theme') || 'dark';
+            if(savedTheme === 'light') toggleTheme();
+
+            const savedName = localStorage.getItem('solace_user_name') || 'User';
+            document.getElementById('userNameDisplay').innerText = savedName;
+            document.getElementById('authNameInput').value = savedName;
+
+            selectedAvatarUrl = localStorage.getItem('solace_avatar_url') || "";
+            renderUserAvatar(savedName, selectedAvatarUrl);
+
             init3DAnimation();
         });
+
+        function renderUserAvatar(name, avatarUrl) {
+            const sidebarAvatar = document.getElementById('sidebarUserAvatar');
+            const initialAvatar = document.getElementById('initialMsgAvatar');
+            const initials = name ? name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U';
+
+            if (avatarUrl) {
+                sidebarAvatar.innerHTML = `<img src="${avatarUrl}" class="user-avatar-circle" style="width:100%;height:100%;">`;
+                if(initialAvatar) initialAvatar.innerHTML = `<img src="${avatarUrl}" class="user-avatar-sm" style="width:100%;height:100%;">`;
+            } else {
+                sidebarAvatar.innerHTML = initials;
+                if(initialAvatar) initialAvatar.innerHTML = initials;
+            }
+        }
 
         function init3DAnimation() {
             const container = document.getElementById('threeCanvasContainer');
@@ -335,14 +420,24 @@
         function toggleSidebar() { document.getElementById('appSidebar').classList.toggle('open'); }
         function openSettingsModal() { document.getElementById('settingsModal').style.display = 'flex'; }
         function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+        function openPluginsModal() { document.getElementById('pluginsModal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        function saveAuth() {
-            const name = document.getElementById('authNameInput').value.trim();
-            if(name) {
-                document.getElementById('userNameDisplay').innerText = name;
-                localStorage.setItem('solace_user_name', name);
+        function togglePlugin(card, name) {
+            card.classList.toggle('active');
+            if(activePlugins.includes(name)) {
+                activePlugins = activePlugins.filter(p => p !== name);
+            } else {
+                activePlugins.push(name);
             }
+            document.getElementById('activePluginsCount').innerText = activePlugins.length;
+        }
+
+        function saveAuth() {
+            const name = document.getElementById('authNameInput').value.trim() || 'User';
+            document.getElementById('userNameDisplay').innerText = name;
+            localStorage.setItem('solace_user_name', name);
+            renderUserAvatar(name, selectedAvatarUrl);
             closeModal('authModal');
         }
 
@@ -356,7 +451,6 @@
             webSearchEnabled = !webSearchEnabled;
             const btn = document.getElementById('webSearchToggle');
             btn.classList.toggle('active', webSearchEnabled);
-            btn.innerText = webSearchEnabled ? "🌐 Web Search: ON" : "🌐 Web Search";
         }
 
         function handleFileUpload(event) {
@@ -365,12 +459,11 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 attachedFileContent = e.target.result;
-                alert(`File "${file.name}" attached successfully! Ready for multimodal analysis.`);
+                alert(`File "${file.name}" attached successfully!`);
             };
             reader.readAsDataURL(file);
         }
 
-        // Voice Speech-to-Text integration
         function toggleSpeechToText() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 alert('Speech recognition is not supported in this browser.');
@@ -380,13 +473,11 @@
             const recognition = new SpeechRecognition();
             const micBtn = document.getElementById('micBtn');
 
-            recognition.onstart = () => { micBtn.innerText = "🎙️ Listening..."; micBtn.style.color = "red"; };
+            recognition.onstart = () => { micBtn.innerText = "🎙️ Listening..."; };
             recognition.onresult = (event) => {
-                const speechToText = event.results[0][0].transcript;
-                document.getElementById('userChatInput').value = speechToText;
+                document.getElementById('userChatInput').value = event.results[0][0].transcript;
             };
-            recognition.onerror = () => { micBtn.innerText = "🎙️ Voice Chat"; micBtn.style.color = ""; };
-            recognition.onend = () => { micBtn.innerText = "🎙️ Voice Chat"; micBtn.style.color = ""; };
+            recognition.onend = () => { micBtn.innerText = "🎙️ Voice"; };
             recognition.start();
         }
 
@@ -400,13 +491,21 @@
             if (!text && !attachedFileContent) return;
 
             const container = document.getElementById('chatMessagesWrapper');
+            const userName = localStorage.getItem('solace_user_name') || 'User';
+            const avatarUrl = localStorage.getItem('solace_avatar_url') || "";
+            const initials = userName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+            let avatarHtml = avatarUrl ? 
+                `<img src="${avatarUrl}" class="user-avatar-sm">` : 
+                `<div class="user-avatar-sm">${initials}</div>`;
+
             let displayPrompt = text;
-            if (attachedFileContent) displayPrompt += " [Attached File/Image Included]";
+            if (attachedFileContent) displayPrompt += " [Attached File Included]";
 
             container.innerHTML += `
                 <div class="message-block">
                     <div class="user-prompt-header">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-sm" alt="">
+                        ${avatarHtml}
                         <span>${escapeHtml(displayPrompt)}</span>
                     </div>
                 </div>
@@ -422,7 +521,7 @@
                 <div class="message-block" id="${loadingId}">
                     <div class="ai-response-block">
                         <div class="ai-label">SOLACE AI+ ✦</div>
-                        <div class="response-text" style="color:var(--text-muted)">Processing request...</div>
+                        <div class="response-text" style="color:var(--text-muted)">Running Llama 3.2 3B & active plugins (${activePlugins.join(', ')})...</div>
                     </div>
                 </div>
             `;
@@ -430,7 +529,7 @@
 
             try {
                 let systemPrompt = localStorage.getItem('solace_system_prompt') || "You are SOLACE AI+, an advanced assistant.";
-                if (webSearchEnabled) systemPrompt += " [Note: Web search tool is enabled for up-to-date facts.]";
+                if (activePlugins.length > 0) systemPrompt += ` [Active Plugins: ${activePlugins.join(', ')}]`;
                 const model = localStorage.getItem('solace_model') || "@cf/meta/llama-3.2-3b-instruct";
 
                 const res = await fetch('/chat', {
@@ -486,7 +585,7 @@
                 } else {
                     clearInterval(interval);
                 }
-            }, 10);
+            }, 8);
         }
 
         function startNewChat() {
@@ -494,7 +593,7 @@
                 <div class="hero-3d-card">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Fully equipped with NLP, Multimodal File Uploads, Voice Speech-to-Text, and Contextual Memory Profiles.</p>
+                        <p>Next-gen AI assistant with Dark Mode, Code Interpreter, Multimodal uploads, Voice Mode, and Plugins.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
