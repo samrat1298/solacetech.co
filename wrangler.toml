@@ -1,0 +1,9 @@
+name = "solacetech-ai"
+main = "worker.js"
+compatibility_date = "2026-10-10"
+
+[vars]
+ALLOWED_ORIGIN = "*"
+
+[ai]
+binding = "AI"
