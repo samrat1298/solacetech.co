@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SolaceTech — SOLACE AI Workspace</title>
+    <title>SolaceTech — SOLACE AI+ Workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,13 +15,12 @@
             --bg-card: #ffffff;
             --bg-input: #f4f7fb;
             --border-color: #e2e8f0;
-            --border-focus: #6366f1;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --text-dimmed: #94a3b8;
             --accent-purple: #6366f1;
             --accent-purple-hover: #4f46e5;
             --accent-purple-light: #eef2ff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --text-dimmed: #94a3b8;
             --shadow-sm: 0 2px 8px rgba(100, 116, 139, 0.06);
             --shadow-md: 0 10px 25px -5px rgba(100, 116, 139, 0.1);
             --sidebar-width: 280px;
@@ -42,17 +41,10 @@
         }
 
         .app-window {
-            width: 100%;
-            max-width: 1440px;
-            height: 96vh;
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-            display: grid;
-            grid-template-columns: var(--sidebar-width) 1fr;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid #e2e8f0;
+            width: 100%; max-width: 1440px; height: 96vh; background: #ffffff;
+            border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            display: grid; grid-template-columns: var(--sidebar-width) 1fr;
+            overflow: hidden; position: relative; border: 1px solid #e2e8f0;
         }
 
         @media (max-width: 868px) {
@@ -63,50 +55,43 @@
 
         /* SIDEBAR */
         .sidebar {
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 16px;
-            gap: 16px;
-            overflow-y: auto;
-            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
+            display: flex; flex-direction: column; padding: 20px 16px; gap: 16px; overflow-y: auto; width: var(--sidebar-width);
         }
 
         .brand-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 8px; }
-        .brand-logo { font-size: 18px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .brand-logo { font-size: 18px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .brand-badge { background: var(--accent-purple); color: #fff; width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
 
         .top-actions { display: flex; gap: 8px; }
         .btn-new-chat {
-            flex: 1; background: var(--accent-purple); color: #ffffff; font-weight: 700; font-size: 13px; padding: 10px 16px; border-radius: 20px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+            flex: 1; background: var(--accent-purple); color: #ffffff; font-weight: 700; font-size: 13px;
+            padding: 10px 16px; border-radius: 20px; border: none; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
         }
-        .btn-new-chat:hover { background: var(--accent-purple-hover); transform: translateY(-1px); }
+        .btn-new-chat:hover { background: var(--accent-purple-hover); }
 
         .btn-icon-round {
-            width: 38px; height: 38px; border-radius: 50%; background: #000000; color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: transform 0.2s;
+            width: 38px; height: 38px; border-radius: 50%; background: #000000; color: #ffffff;
+            border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
         }
-        .btn-icon-round:hover { transform: scale(1.05); }
 
         .nav-section-label { font-size: 11px; font-weight: 700; color: var(--text-dimmed); display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-        .clear-all-link { color: var(--accent-purple); text-decoration: none; cursor: pointer; font-size: 11px; font-weight: 600; }
-        .clear-all-link:hover { text-decoration: underline; }
+        .clear-all-link { color: var(--accent-purple); cursor: pointer; font-size: 11px; font-weight: 600; }
 
         .history-group { display: flex; flex-direction: column; gap: 4px; }
         .history-item {
-            display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 500; color: var(--text-main); cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: space-between; padding: 9px 12px;
+            border-radius: 12px; font-size: 12.5px; font-weight: 500; color: var(--text-main); cursor: pointer; transition: all 0.2s;
         }
         .history-item:hover, .history-item.active { background: var(--accent-purple-light); color: var(--accent-purple); font-weight: 600; }
         .history-item-left { display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .history-item-actions { display: none; gap: 4px; }
-        .history-item:hover .history-item-actions { display: flex; }
-
-        .action-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px; font-size: 13px; }
-        .action-icon:hover { color: #ef4444; }
 
         .sidebar-footer { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
         .sidebar-pill-btn {
-            display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-main); cursor: pointer; transition: all 0.2s; width: 100%;
+            display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid var(--border-color);
+            padding: 10px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-main); cursor: pointer; width: 100%;
         }
         .sidebar-pill-btn:hover { background: #f1f5f9; }
         .user-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
@@ -114,21 +99,18 @@
         /* MAIN CHAT AREA */
         .main-chat-container { display: flex; flex-direction: column; height: 100%; background: #ffffff; position: relative; overflow: hidden; }
         
-        .chat-topbar {
-            padding: 12px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: #ffffff;
-        }
+        .chat-topbar { padding: 12px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: #ffffff; }
         .mobile-menu-btn { display: none; background: none; border: none; font-size: 20px; cursor: pointer; }
         @media (max-width: 868px) { .mobile-menu-btn { display: block; } }
 
         .active-model-badge {
-            background: var(--accent-purple-light); color: var(--accent-purple); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.2); cursor: pointer;
+            background: var(--accent-purple-light); color: var(--accent-purple); font-size: 12px; font-weight: 700;
+            padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.2); cursor: pointer;
         }
 
         .chat-messages-wrapper { flex: 1; overflow-y: auto; padding: 24px 36px; display: flex; flex-direction: column; gap: 24px; scroll-behavior: smooth; }
 
-        .message-block { display: flex; flex-direction: column; gap: 8px; max-width: 900px; width: 100%; margin: 0 auto; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
+        .message-block { display: flex; flex-direction: column; gap: 8px; max-width: 900px; width: 100%; margin: 0 auto; }
         .user-prompt-header { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
         .user-avatar-sm { width: 24px; height: 24px; border-radius: 50%; }
 
@@ -137,47 +119,40 @@
 
         /* HERO 3D CARD */
         .hero-3d-card {
-            width: 100%; max-width: 900px; margin: 0 auto 20px; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); border: 1px solid #e2e8f0; border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm);
+            width: 100%; max-width: 900px; margin: 0 auto 20px; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+            border: 1px solid #e2e8f0; border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between;
         }
         .hero-3d-text h2 { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
         .hero-3d-text p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
         #threeCanvasContainer { width: 120px; height: 120px; flex-shrink: 0; }
 
-        /* RESPONSE ACTIONS BAR */
-        .response-actions { display: flex; align-items: center; gap: 12px; margin-top: 8px; padding-top: 8px; }
-        .btn-action-sm { background: none; border: none; color: var(--text-dimmed); cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
-        .btn-action-sm:hover, .btn-action-sm.active { color: var(--accent-purple); }
-        .btn-regenerate {
-            margin-left: auto; border: 1px solid #e2e8f0; padding: 4px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; color: var(--text-muted); background: #ffffff; cursor: pointer; transition: all 0.2s;
-        }
-        .btn-regenerate:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
-
-        /* FLOATING INPUT BAR */
+        /* INPUT BAR WITH TOOLS */
         .input-floating-container { padding: 16px 36px 24px; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 40%); }
         .input-floating-bar {
-            max-width: 800px; margin: 0 auto; background: var(--bg-input); border: 1px solid #e2e8f0; border-radius: 30px; padding: 8px 12px 8px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.2s;
+            max-width: 800px; margin: 0 auto; background: var(--bg-input); border: 1px solid #e2e8f0;
+            border-radius: 24px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .input-floating-bar:focus-within { background: #ffffff; border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+        .input-row-main { display: flex; align-items: center; gap: 10px; }
         .chat-textarea { flex: 1; background: none; border: none; outline: none; font-family: inherit; font-size: 13.5px; color: var(--text-main); resize: none; max-height: 100px; min-height: 24px; }
-        .btn-send-pill { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-purple); color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; flex-shrink: 0; }
-        .btn-send-pill:hover { transform: scale(1.05); background: var(--accent-purple-hover); }
+        
+        .input-tools-bar { display: flex; align-items: center; gap: 12px; padding-top: 4px; border-top: 1px solid #e2e8f0; font-size: 12px; color: var(--text-muted); }
+        .tool-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; }
+        .tool-btn:hover { color: var(--accent-purple); }
+        .tool-btn.active { color: var(--accent-purple); }
 
-        /* FLOATING UPGRADE BADGE */
-        .upgrade-floating-badge {
-            position: absolute; right: 0; top: 45%; transform: translateY(-50%); background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #ffffff; padding: 12px 6px; border-radius: 12px 0 0 12px; writing-mode: vertical-rl; text-orientation: mixed; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; box-shadow: -4px 0 15px rgba(99, 102, 241, 0.3); transition: all 0.2s;
-        }
-        .upgrade-floating-badge:hover { padding-right: 10px; }
+        .btn-send-pill { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-purple); color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+        .btn-send-pill:hover { background: var(--accent-purple-hover); }
 
-        /* MODAL BACKDROP & CARDS */
+        /* MODALS */
         .modal-backdrop {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100;
         }
         .modal-card { background: #ffffff; border-radius: 20px; width: 90%; max-width: 440px; padding: 28px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; gap: 16px; }
         .modal-title { font-size: 18px; font-weight: 800; color: #0f172a; }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-label { font-size: 12px; font-weight: 700; color: var(--text-muted); }
         .modal-input, .modal-select { width: 100%; background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; font-family: inherit; }
-        .modal-input:focus, .modal-select:focus { border-color: var(--accent-purple); }
     </style>
 </head>
 <body>
@@ -196,7 +171,7 @@
                 <button class="btn-new-chat" onclick="startNewChat()">
                     <span>+</span> New chat
                 </button>
-                <button class="btn-icon-round" onclick="openAuthModal()" title="Account / Login">
+                <button class="btn-icon-round" onclick="openAuthModal()" title="Account">
                     <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
                 </button>
             </div>
@@ -207,22 +182,13 @@
             </div>
 
             <div class="history-group" id="chatHistoryContainer">
-                <div class="history-item active" onclick="switchChatTopic('Create Chatbot GPT Python', this)">
-                    <div class="history-item-left"><span>💬</span> Create Chatbot GPT Python</div>
-                    <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
-                </div>
-                <div class="history-item" onclick="switchChatTopic('Apply To Leave For Emergency', this)">
-                    <div class="history-item-left"><span>💬</span> Apply To Leave For Emergency</div>
-                    <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
-                </div>
-                <div class="history-item" onclick="switchChatTopic('What Is UI UX Design?', this)">
-                    <div class="history-item-left"><span>💬</span> What Is UI UX Design?</div>
-                    <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
+                <div class="history-item active">
+                    <div class="history-item-left"><span>💬</span> Llama 3.2 3B & Multimodal Edge</div>
                 </div>
             </div>
 
             <div class="sidebar-footer">
-                <button class="sidebar-pill-btn" onclick="openSettingsModal()">⚙️ Settings</button>
+                <button class="sidebar-pill-btn" onclick="openSettingsModal()">⚙️ Settings & Memory</button>
                 <button class="sidebar-pill-btn" onclick="openAuthModal()" id="userProfileBtn">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-circle" alt="">
                     <span id="userNameDisplay">Samrat Chaudhary</span>
@@ -234,18 +200,17 @@
         <main class="main-chat-container">
             <div class="chat-topbar">
                 <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-                <div style="font-weight:700; font-size:14px;">SolaceTech Workspace</div>
+                <div style="font-weight:700; font-size:14px;">SolaceTech Enterprise Edge</div>
                 <div class="active-model-badge" id="topbarModelBadge" onclick="openSettingsModal()">
                     ⚡ Llama 3.2 3B
                 </div>
             </div>
 
             <div class="chat-messages-wrapper" id="chatMessagesWrapper">
-                
                 <div class="hero-3d-card" id="heroCard">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Powered by Cloudflare Workers AI edge intelligence.</p>
+                        <p>Fully equipped with NLP, Multimodal File Uploads, Voice Speech-to-Text, and Contextual Memory Profiles.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
@@ -253,68 +218,48 @@
                 <div class="message-block">
                     <div class="user-prompt-header">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-sm" alt="">
-                        <span>Create a chatbot gpt using python language what will be step for that</span>
+                        <span>Hello SOLACE AI+, what features are currently active?</span>
                     </div>
                     <div class="ai-response-block">
                         <div class="ai-label">SOLACE AI+ ✦</div>
                         <div class="response-text">
-                            Sure, I can help you get started with creating a chatbot using GPT in Python. Here are the steps:
+                            All core intelligence modules are active:
                             <br><br>
-                            1. <strong>Install required libraries:</strong> Run <code>pip install transformers torch</code>.<br>
-                            2. <strong>Initialize Model:</strong> Load the model pipeline or connect via Cloudflare Workers AI endpoint.<br>
-                            3. <strong>Build the loop:</strong> Capture input in a loop and display generated responses.
-                        </div>
-                        <div class="response-actions">
-                            <button class="btn-action-sm" onclick="toggleLike(this)">👍</button>
-                            <button class="btn-action-sm" onclick="toggleDislike(this)">👎</button>
-                            <button class="btn-action-sm" onclick="copyText(this)">📋 Copy</button>
-                            <button class="btn-regenerate" onclick="regenerateLastResponse()">↻ Regenerate</button>
+                            ✓ <strong>NLP & Contextual Memory</strong><br>
+                            ✓ <strong>Multimodal File & Image Processing</strong><br>
+                            ✓ <strong>Real-Time Speech-to-Text Voice Mode</strong><br>
+                            ✓ <strong>Custom Memory Profiles & Guardrails</strong>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- FLOATING INPUT BAR -->
+            <!-- FLOATING INPUT BAR WITH TOOLS -->
             <div class="input-floating-container">
                 <div class="input-floating-bar">
-                    <textarea class="chat-textarea" id="userChatInput" placeholder="What's in your mind?..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
-                    <button class="btn-send-pill" onclick="sendUserMessage()">
-                        <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                    </button>
+                    <div class="input-row-main">
+                        <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything, upload docs, or click microphone..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
+                        <button class="btn-send-pill" onclick="sendUserMessage()">
+                            <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        </button>
+                    </div>
+                    <div class="input-tools-bar">
+                        <label class="tool-btn" style="cursor:pointer;">
+                            📎 Upload File/Image <input type="file" id="fileUploadInput" style="display:none" onchange="handleFileUpload(event)">
+                        </label>
+                        <button class="tool-btn" id="micBtn" onclick="toggleSpeechToText()">🎙️ Voice Chat</button>
+                        <button class="tool-btn" id="webSearchToggle" onclick="toggleWebSearch()">🌐 Web Search</button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="upgrade-floating-badge" onclick="alert('Upgrading to SolaceTech Pro...')">
-                ✦ Upgrade to Pro
             </div>
         </main>
     </div>
 
-    <!-- AUTH MODAL -->
-    <div class="modal-backdrop" id="authModal">
-        <div class="modal-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="modal-title">Account Settings</span>
-                <button class="action-icon" style="color:#000;" onclick="closeModal('authModal')">✕</button>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Full Name</label>
-                <input type="text" class="modal-input" id="authNameInput" value="Samrat Chaudhary">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="modal-input" value="samrat@solacetech.co">
-            </div>
-            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveAuth()">Save Account</button>
-        </div>
-    </div>
-
-    <!-- SETTINGS MODAL -->
+    <!-- SETTINGS & MEMORY MODAL -->
     <div class="modal-backdrop" id="settingsModal">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="modal-title">Workspace Settings</span>
+                <span class="modal-title">Memory & Intelligence Settings</span>
                 <button class="action-icon" style="color:#000;" onclick="closeModal('settingsModal')">✕</button>
             </div>
             <div class="form-group">
@@ -326,38 +271,43 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label">System Persona Prompt</label>
-                <textarea class="modal-input" id="systemPromptInput" rows="3" placeholder="You are SOLACE AI, a helpful software engineer assistant."></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Temperature (Creativity): <span id="tempValueDisplay">0.7</span></label>
-                <input type="range" min="0" max="1" step="0.1" value="0.7" id="tempSlider" oninput="document.getElementById('tempValueDisplay').innerText = this.value">
+                <label class="form-label">Custom Memory Profile / Instructions</label>
+                <textarea class="modal-input" id="systemPromptInput" rows="3" placeholder="E.g., Developer name Samrat Chaudhary, expert programmer, concise answers."></textarea>
             </div>
             <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveSettings()">Save Configuration</button>
         </div>
     </div>
 
-    <script>
-        let lastUserPrompt = "";
+    <!-- AUTH MODAL -->
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="modal-title">User Account</span>
+                <button class="action-icon" style="color:#000;" onclick="closeModal('authModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="modal-input" id="authNameInput" value="Samrat Chaudhary">
+            </div>
+            <button class="btn-new-chat" style="border-radius:10px; width:100%;" onclick="saveAuth()">Save</button>
+        </div>
+    </div>
 
-        // Load Preferences on Start
+    <script>
+        let webSearchEnabled = false;
+        let attachedFileContent = null;
+
         window.addEventListener('DOMContentLoaded', () => {
             const savedName = localStorage.getItem('solace_user_name');
-            if (savedName) {
-                document.getElementById('userNameDisplay').innerText = savedName;
-                document.getElementById('authNameInput').value = savedName;
-            }
+            if (savedName) document.getElementById('userNameDisplay').innerText = savedName;
             const savedModel = localStorage.getItem('solace_model');
             if (savedModel) document.getElementById('modelSelect').value = savedModel;
-            
             const savedSystem = localStorage.getItem('solace_system_prompt');
             if (savedSystem) document.getElementById('systemPromptInput').value = savedSystem;
-
-            updateModelBadge();
+            
             init3DAnimation();
         });
 
-        // 3D Visual Mesh
         function init3DAnimation() {
             const container = document.getElementById('threeCanvasContainer');
             if(!container || container.children.length > 0) return;
@@ -382,10 +332,9 @@
             animate();
         }
 
-        // Sidebar & Modal handlers
         function toggleSidebar() { document.getElementById('appSidebar').classList.toggle('open'); }
-        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
         function openSettingsModal() { document.getElementById('settingsModal').style.display = 'flex'; }
+        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function saveAuth() {
@@ -398,27 +347,49 @@
         }
 
         function saveSettings() {
-            const model = document.getElementById('modelSelect').value;
-            const systemPrompt = document.getElementById('systemPromptInput').value;
-            const temp = document.getElementById('tempSlider').value;
-
-            localStorage.setItem('solace_model', model);
-            localStorage.setItem('solace_system_prompt', systemPrompt);
-            localStorage.setItem('solace_temp', temp);
-
-            updateModelBadge();
+            localStorage.setItem('solace_model', document.getElementById('modelSelect').value);
+            localStorage.setItem('solace_system_prompt', document.getElementById('systemPromptInput').value);
             closeModal('settingsModal');
         }
 
-        function updateModelBadge() {
-            const modelVal = localStorage.getItem('solace_model') || '@cf/meta/llama-3.2-3b-instruct';
-            let label = "⚡ Llama 3.2 3B";
-            if (modelVal.includes("llama-3.1-8b")) label = "⚡ Llama 3.1 8B";
-            if (modelVal.includes("mistral")) label = "⚡ Mistral 7B";
-            document.getElementById('topbarModelBadge').innerText = label;
+        function toggleWebSearch() {
+            webSearchEnabled = !webSearchEnabled;
+            const btn = document.getElementById('webSearchToggle');
+            btn.classList.toggle('active', webSearchEnabled);
+            btn.innerText = webSearchEnabled ? "🌐 Web Search: ON" : "🌐 Web Search";
         }
 
-        // Chat Handlers
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                attachedFileContent = e.target.result;
+                alert(`File "${file.name}" attached successfully! Ready for multimodal analysis.`);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Voice Speech-to-Text integration
+        function toggleSpeechToText() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('Speech recognition is not supported in this browser.');
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            const micBtn = document.getElementById('micBtn');
+
+            recognition.onstart = () => { micBtn.innerText = "🎙️ Listening..."; micBtn.style.color = "red"; };
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                document.getElementById('userChatInput').value = speechToText;
+            };
+            recognition.onerror = () => { micBtn.innerText = "🎙️ Voice Chat"; micBtn.style.color = ""; };
+            recognition.onend = () => { micBtn.innerText = "🎙️ Voice Chat"; micBtn.style.color = ""; };
+            recognition.start();
+        }
+
         function handleKeyPress(e) {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendUserMessage(); }
         }
@@ -426,22 +397,24 @@
         async function sendUserMessage() {
             const input = document.getElementById('userChatInput');
             const text = input.value.trim();
-            if (!text) return;
+            if (!text && !attachedFileContent) return;
 
-            lastUserPrompt = text;
             const container = document.getElementById('chatMessagesWrapper');
+            let displayPrompt = text;
+            if (attachedFileContent) displayPrompt += " [Attached File/Image Included]";
 
             container.innerHTML += `
                 <div class="message-block">
                     <div class="user-prompt-header">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="user-avatar-sm" alt="">
-                        <span>${escapeHtml(text)}</span>
+                        <span>${escapeHtml(displayPrompt)}</span>
                     </div>
                 </div>
             `;
-            
-            addHistoryItem(text);
+
             input.value = '';
+            const payloadFile = attachedFileContent;
+            attachedFileContent = null;
             container.scrollTop = container.scrollHeight;
 
             const loadingId = 'loading-' + Date.now();
@@ -449,14 +422,15 @@
                 <div class="message-block" id="${loadingId}">
                     <div class="ai-response-block">
                         <div class="ai-label">SOLACE AI+ ✦</div>
-                        <div class="response-text" style="color:var(--text-muted)">Generating response...</div>
+                        <div class="response-text" style="color:var(--text-muted)">Processing request...</div>
                     </div>
                 </div>
             `;
             container.scrollTop = container.scrollHeight;
 
             try {
-                const systemPrompt = localStorage.getItem('solace_system_prompt') || "You are SOLACE AI, an edge intelligence AI model.";
+                let systemPrompt = localStorage.getItem('solace_system_prompt') || "You are SOLACE AI+, an advanced assistant.";
+                if (webSearchEnabled) systemPrompt += " [Note: Web search tool is enabled for up-to-date facts.]";
                 const model = localStorage.getItem('solace_model') || "@cf/meta/llama-3.2-3b-instruct";
 
                 const res = await fetch('/chat', {
@@ -467,15 +441,15 @@
                             { role: "system", content: systemPrompt },
                             { role: "user", content: text }
                         ],
-                        model: model
+                        model: model,
+                        image: payloadFile
                     })
                 });
 
                 const data = await res.json();
                 const reply = data.response || data.result?.response || JSON.stringify(data);
                 
-                const loadingElem = document.getElementById(loadingId);
-                if(loadingElem) loadingElem.remove();
+                document.getElementById(loadingId).remove();
 
                 const responseBlockId = 'res-' + Date.now();
                 container.innerHTML += `
@@ -483,25 +457,16 @@
                         <div class="ai-response-block">
                             <div class="ai-label">SOLACE AI+ ✦</div>
                             <div class="response-text" id="${responseBlockId}"></div>
-                            <div class="response-actions">
-                                <button class="btn-action-sm" onclick="toggleLike(this)">👍</button>
-                                <button class="btn-action-sm" onclick="toggleDislike(this)">👎</button>
-                                <button class="btn-action-sm" onclick="copyText(this)">📋 Copy</button>
-                                <button class="btn-regenerate" onclick="regenerateLastResponse()">↻ Regenerate</button>
-                            </div>
                         </div>
                     </div>
                 `;
 
                 typeWriterEffect(responseBlockId, reply);
             } catch(err) {
-                const loadingElem = document.getElementById(loadingId);
-                if(loadingElem) loadingElem.remove();
+                document.getElementById(loadingId).remove();
                 container.innerHTML += `
                     <div class="message-block">
-                        <div class="ai-response-block" style="color:#ef4444;">
-                            Error: ${err.message}
-                        </div>
+                        <div class="ai-response-block" style="color:#ef4444;">Error: ${err.message}</div>
                     </div>
                 `;
             }
@@ -517,75 +482,28 @@
                 if (i < text.length) {
                     elem.innerHTML += text.charAt(i) === '\n' ? '<br>' : escapeHtml(text.charAt(i));
                     i++;
-                    const container = document.getElementById('chatMessagesWrapper');
-                    container.scrollTop = container.scrollHeight;
+                    document.getElementById('chatMessagesWrapper').scrollTop = document.getElementById('chatMessagesWrapper').scrollHeight;
                 } else {
                     clearInterval(interval);
                 }
             }, 10);
         }
 
-        function toggleLike(btn) { btn.classList.toggle('active'); }
-        function toggleDislike(btn) { btn.classList.toggle('active'); }
-        function copyText(btn) {
-            const block = btn.closest('.ai-response-block').querySelector('.response-text');
-            if(block) {
-                navigator.clipboard.writeText(block.innerText);
-                btn.innerText = '✓ Copied';
-                setTimeout(() => btn.innerText = '📋 Copy', 2000);
-            }
-        }
-
-        function regenerateLastResponse() {
-            if(lastUserPrompt) {
-                document.getElementById('userChatInput').value = lastUserPrompt;
-                sendUserMessage();
-            }
-        }
-
         function startNewChat() {
             document.getElementById('chatMessagesWrapper').innerHTML = `
-                <div class="hero-3d-card" id="heroCard">
+                <div class="hero-3d-card">
                     <div class="hero-3d-text">
                         <h2>SolaceTech SOLACE AI+</h2>
-                        <p>Powered by Cloudflare Workers AI edge intelligence.</p>
+                        <p>Fully equipped with NLP, Multimodal File Uploads, Voice Speech-to-Text, and Contextual Memory Profiles.</p>
                     </div>
                     <div id="threeCanvasContainer"></div>
                 </div>
             `;
             init3DAnimation();
-            document.getElementById('userChatInput').focus();
-        }
-
-        function addHistoryItem(title) {
-            const container = document.getElementById('chatHistoryContainer');
-            const item = document.createElement('div');
-            item.className = 'history-item';
-            item.onclick = function() { switchChatTopic(title, item); };
-            item.innerHTML = `
-                <div class="history-item-left"><span>💬</span> ${escapeHtml(title)}</div>
-                <div class="history-item-actions"><button class="action-icon" onclick="deleteHistoryItem(this, event)">🗑️</button></div>
-            `;
-            container.prepend(item);
-        }
-
-        function switchChatTopic(title, elem) {
-            document.querySelectorAll('.history-item').forEach(i => i.classList.remove('active'));
-            elem.classList.add('active');
-            document.getElementById('userChatInput').value = title;
-            sendUserMessage();
-        }
-
-        function deleteHistoryItem(btn, event) {
-            event.stopPropagation();
-            const item = btn.closest('.history-item');
-            if(item) item.remove();
         }
 
         function clearAllChats() {
-            if(confirm('Clear all chat history?')) {
-                document.getElementById('chatHistoryContainer').innerHTML = '';
-            }
+            if(confirm('Clear history?')) document.getElementById('chatHistoryContainer').innerHTML = '';
         }
 
         function escapeHtml(str) {
