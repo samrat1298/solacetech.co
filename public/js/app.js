@@ -39,15 +39,16 @@ window.addEventListener('DOMContentLoaded', () => {
     update3DThemeColors(savedTheme === 'dark');
 });
 
-// Theme-aware 3D color updater
+// Theme-aware high-visibility 3D color updater
 function update3DThemeColors(isDark) {
     if (waveParticlesMaterial) {
-        waveParticlesMaterial.color.setHex(isDark ? 0x3b82f6 : 0x2563eb);
-        waveParticlesMaterial.opacity = isDark ? 0.5 : 0.35;
+        waveParticlesMaterial.color.setHex(isDark ? 0x3b82f6 : 0x1d4ed8);
+        waveParticlesMaterial.opacity = isDark ? 0.6 : 0.65;
+        waveParticlesMaterial.size = isDark ? 0.08 : 0.09;
     }
     if (waveOrbMesh) {
-        waveOrbMesh.material.color.setHex(isDark ? 0x8b5cf6 : 0x7c3aed);
-        waveOrbMesh.material.opacity = isDark ? 0.15 : 0.08;
+        waveOrbMesh.material.color.setHex(isDark ? 0x8b5cf6 : 0x6d28d9);
+        waveOrbMesh.material.opacity = isDark ? 0.18 : 0.22;
     }
 }
 
@@ -98,10 +99,10 @@ function initInteractiveQuantumWaveBackground() {
 
     const isDarkInitial = document.documentElement.classList.contains('dark');
     waveParticlesMaterial = new THREE.PointsMaterial({
-        color: isDarkInitial ? 0x3b82f6 : 0x2563eb,
-        size: 0.08,
+        color: isDarkInitial ? 0x3b82f6 : 0x1d4ed8,
+        size: isDarkInitial ? 0.08 : 0.09,
         transparent: true,
-        opacity: isDarkInitial ? 0.5 : 0.35,
+        opacity: isDarkInitial ? 0.6 : 0.65,
         blending: THREE.AdditiveBlending
     });
 
@@ -112,10 +113,10 @@ function initInteractiveQuantumWaveBackground() {
 
     const orbGeom = new THREE.IcosahedronGeometry(1.8, 2);
     const orbMat = new THREE.MeshBasicMaterial({
-        color: isDarkInitial ? 0x8b5cf6 : 0x7c3aed,
+        color: isDarkInitial ? 0x8b5cf6 : 0x6d28d9,
         wireframe: true,
         transparent: true,
-        opacity: isDarkInitial ? 0.15 : 0.08
+        opacity: isDarkInitial ? 0.18 : 0.22
     });
     waveOrbMesh = new THREE.Mesh(orbGeom, orbMat);
     waveOrbMesh.position.set(6, 2, -10);
