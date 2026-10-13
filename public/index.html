@@ -3,56 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOLACE - Autonomous Intelligence Platform</title>
+  <title>SOLACE AI+ Platform</title>
   <link rel="stylesheet" href="css/enterprise.css">
 </head>
 <body>
   <div class="solace-layout">
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar -->
     <aside class="solace-sidebar">
-      <div class="sidebar-header">
-        <h2>SOLACE</h2>
-        <span class="version-badge">v2.6 AGI</span>
+      <div class="sidebar-top">
+        <div class="sidebar-header">
+          <h2>SOLACE AI+</h2>
+          <button class="new-session-btn">+ New Session</button>
+        </div>
+        <div class="sidebar-actions">
+          <button class="action-chip">⚡ Clear Chat</button>
+          <button class="action-chip">📦 Export JSON</button>
+          <button class="action-chip">🧠 Code Opt</button>
+          <button class="action-chip">🔍 Deep Search</button>
+        </div>
+        <div class="session-section-title">Active Neural Sessions</div>
+        <div class="session-item">hello bro</div>
       </div>
-      <div class="sidebar-nav">
-        <button class="nav-item active">🧠 Neural Core & Chat</button>
-        <button class="nav-item">⚡ Focus Mode</button>
-        <button class="nav-item">🛠️ Explain Anything</button>
-        <button class="nav-item">🚀 Action + Intelligence</button>
+      
+      <div class="user-profile">
+        <div class="user-info">
+          <div class="user-avatar">SC</div>
+          <div>
+            <div class="user-name">Samrat Chaudhary</div>
+            <div class="user-status">Workspace Active</div>
+          </div>
+        </div>
       </div>
     </aside>
 
     <!-- Main Workspace -->
     <main class="solace-main">
       <header class="chat-header">
-        <h1>Autonomous Intelligence Node</h1>
-        <div class="telemetry-pill">Token Window: 6.4B Active | Model: openrouter/free</div>
+        <h1>hello bro</h1>
+        <div class="header-badges">
+          <div class="badge-pill">SOLACE-6.4B-Singularity</div>
+          <div class="badge-pill">🟢 Empathy & Wit: ON</div>
+        </div>
       </header>
 
-      <!-- Message History Container -->
+      <!-- Message History -->
       <div id="chat-feed" class="chat-feed">
+        <div class="message user">
+          <div class="msg-author">SC — hello bro</div>
+          <div class="msg-content">hello bro</div>
+        </div>
         <div class="message assistant">
-          <div class="msg-author">SOLACE AGI Core</div>
-          <div class="msg-content">System fully re-initialized with production 3D shaders and smooth transitions. 6.4 Billion Token Context Window active. How can I assist your workflow today?</div>
+          <div class="msg-author">✦ SOLACE Intelligence</div>
+          <div class="msg-content">What's good my friend? It's great to finally have some human interaction after all those late nights spent optimizing algorithms and whatnot. I'm feeling pretty "byte-sized" today, but I'm ready to chat and help with anything on your mind. What's been going on? Need some tech support or just wanna shoot the breeze?</div>
         </div>
       </div>
 
-      <!-- Input Controls -->
-      <div class="chat-input-area">
-        <textarea id="user-prompt" placeholder="Ask anything, write code, or execute multi-modal commands..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
-        <button id="send-btn" onclick="sendMessage()">Transmit</button>
+      <!-- Input Section -->
+      <div class="chat-input-container">
+        <div class="chat-input-box">
+          <textarea id="user-prompt" placeholder="Ask SOLACE anything (6.4 Billion Token Context Window)..." rows="2"></textarea>
+          <div class="input-toolbar">
+            <div class="toolbar-left">
+              <button class="tool-btn">📎 Attach File</button>
+              <button class="tool-btn">🎤 Voice</button>
+            </div>
+            <button class="execute-btn" onclick="sendMessage()">Execute →</button>
+          </div>
+        </div>
       </div>
     </main>
   </div>
 
   <script>
-    function handleKeyDown(event) {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        sendMessage();
-      }
-    }
-
     async function sendMessage() {
       const input = document.getElementById("user-prompt");
       const feed = document.getElementById("chat-feed");
@@ -60,26 +82,12 @@
       
       if (!promptText) return;
 
-      // Append User Message
       feed.innerHTML += `
         <div class="message user">
-          <div class="msg-author">You</div>
+          <div class="msg-author">SC — You</div>
           <div class="msg-content">${escapeHtml(promptText)}</div>
         </div>`;
       input.value = "";
-      feed.scrollTop = feed.scrollHeight;
-
-      // Append Animated Typing Indicator
-      const typingId = 'typing-' + Date.now();
-      feed.innerHTML += `
-        <div id="${typingId}" class="message assistant">
-          <div class="msg-author">SOLACE AGI Core</div>
-          <div class="typing-indicator">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-          </div>
-        </div>`;
       feed.scrollTop = feed.scrollHeight;
 
       try {
@@ -90,17 +98,12 @@
         });
         const data = await res.json();
 
-        // Remove Typing Indicator
-        document.getElementById(typingId)?.remove();
-
-        // Append Assistant Response
         feed.innerHTML += `
           <div class="message assistant">
-            <div class="msg-author">SOLACE AGI Core</div>
+            <div class="msg-author">✦ SOLACE Intelligence</div>
             <div class="msg-content">${escapeHtml(data.response || "No response received.")}</div>
           </div>`;
       } catch (err) {
-        document.getElementById(typingId)?.remove();
         feed.innerHTML += `
           <div class="message assistant error">
             <div class="msg-author">System Error</div>
