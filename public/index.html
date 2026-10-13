@@ -33,19 +33,26 @@
       <div id="chat-feed" class="chat-feed">
         <div class="message assistant">
           <div class="msg-author">SOLACE AGI Core</div>
-          <div class="msg-content">System fully re-initialized. 6.4 Billion Token Context Window active. How can I assist your workflow today?</div>
+          <div class="msg-content">System fully re-initialized with production 3D shaders and smooth transitions. 6.4 Billion Token Context Window active. How can I assist your workflow today?</div>
         </div>
       </div>
 
       <!-- Input Controls -->
       <div class="chat-input-area">
-        <textarea id="user-prompt" placeholder="Ask anything, write code, or execute multi-modal commands..." rows="2"></textarea>
+        <textarea id="user-prompt" placeholder="Ask anything, write code, or execute multi-modal commands..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
         <button id="send-btn" onclick="sendMessage()">Transmit</button>
       </div>
     </main>
   </div>
 
   <script>
+    function handleKeyDown(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
     async function sendMessage() {
       const input = document.getElementById("user-prompt");
       const feed = document.getElementById("chat-feed");
@@ -53,12 +60,26 @@
       
       if (!promptText) return;
 
+      // Append User Message
       feed.innerHTML += `
         <div class="message user">
           <div class="msg-author">You</div>
           <div class="msg-content">${escapeHtml(promptText)}</div>
         </div>`;
       input.value = "";
+      feed.scrollTop = feed.scrollHeight;
+
+      // Append Animated Typing Indicator
+      const typingId = 'typing-' + Date.now();
+      feed.innerHTML += `
+        <div id="${typingId}" class="message assistant">
+          <div class="msg-author">SOLACE AGI Core</div>
+          <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>`;
       feed.scrollTop = feed.scrollHeight;
 
       try {
@@ -69,12 +90,17 @@
         });
         const data = await res.json();
 
+        // Remove Typing Indicator
+        document.getElementById(typingId)?.remove();
+
+        // Append Assistant Response
         feed.innerHTML += `
           <div class="message assistant">
             <div class="msg-author">SOLACE AGI Core</div>
             <div class="msg-content">${escapeHtml(data.response || "No response received.")}</div>
           </div>`;
       } catch (err) {
+        document.getElementById(typingId)?.remove();
         feed.innerHTML += `
           <div class="message assistant error">
             <div class="msg-author">System Error</div>
