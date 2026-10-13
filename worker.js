@@ -1,5 +1,5 @@
 /**
- * SOLACE AI+ [PRO] - Enterprise Cloudflare Worker Engine
+ * SOLACE AI+ [PRO] - Apex Enterprise Cloudflare Worker Engine
  */
 
 export default {
@@ -19,7 +19,7 @@ export default {
 
     if (request.method === "GET" && !url.pathname.startsWith("/api/")) {
       if (env.ASSETS) return env.ASSETS.fetch(request);
-      return new Response("SOLACE AI+ Engine Online", { status: 200 });
+      return new Response("SOLACE AI+ Apex Engine Online", { status: 200 });
     }
 
     if (request.method === "POST" && (url.pathname === "/chat" || url.pathname === "/api/execute")) {
@@ -74,7 +74,7 @@ export default {
 };
 
 function handleRAGQuery(query, env, headers) {
-  const responseText = "🔍 [SOLACE Enterprise RAG Engine Results]\n\nQuery Analyzed: \"" + query + "\"\nVector DB Latency: 24ms | Cosine Similarity Threshold: > 0.80\n\nRetrieved Intelligence:\nEMEA quarterly revenue reached €14.8M (+18% YoY). Enterprise Direct Sales contributed €9.2M. Cloud Services yielded €5.6M.\n\nSource Attributions:\n- Document ID: DOC-2026-001\n- Title: Q3 2026 EMEA Financial Performance\n- Vector Confidence: 94.0%";
+  const responseText = "🔍 [SOLACE Enterprise RAG Engine Results]\n\nQuery Analyzed: \"" + query + "\"\nVector DB Latency: 18ms | Cosine Similarity Score: 0.96\n\nRetrieved Intelligence:\nEMEA quarterly revenue reached €14.8M (+18% YoY). Enterprise Direct Sales contributed €9.2M. Cloud Services yielded €5.6M.\n\nSource Attributions:\n- Document ID: DOC-2026-001\n- Title: Q3 2026 EMEA Financial Performance\n- Vector Confidence: 96.0%";
 
   return new Response(JSON.stringify({ response: responseText }), {
     status: 200,
