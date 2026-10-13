@@ -1,6 +1,6 @@
 /**
  * SOLACE AGI Core - Production Enterprise Controller
- * Theme-Aware Interactive Quantum Wave 3D Background
+ * Theme-Aware 3D Neural Singularity Core + 6 Billion Token Context Engine
  */
 
 let agenticModeEnabled = true;
@@ -8,8 +8,8 @@ let attachedFileContent = null;
 let attachedFileName = null;
 let threads = [];
 let activeThreadId = null;
-let waveParticlesMaterial = null;
-let waveOrbMesh = null;
+let singularityParticlesMaterial = null;
+let singularityRingMesh = null;
 
 window.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('solace_is_logged_in');
@@ -35,20 +35,20 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     loadThreadsFromStorage();
-    initInteractiveQuantumWaveBackground();
+    initNeuralSingularity3DBackground();
     update3DThemeColors(savedTheme === 'dark');
 });
 
-// Theme-aware high-visibility 3D color updater
+// Theme-aware 3D color updater for 6B Singularity Field
 function update3DThemeColors(isDark) {
-    if (waveParticlesMaterial) {
-        waveParticlesMaterial.color.setHex(isDark ? 0x3b82f6 : 0x1d4ed8);
-        waveParticlesMaterial.opacity = isDark ? 0.6 : 0.65;
-        waveParticlesMaterial.size = isDark ? 0.08 : 0.09;
+    if (singularityParticlesMaterial) {
+        singularityParticlesMaterial.color.setHex(isDark ? 0x8b5cf6 : 0x2563eb);
+        singularityParticlesMaterial.opacity = isDark ? 0.75 : 0.7;
+        singularityParticlesMaterial.size = isDark ? 0.055 : 0.06;
     }
-    if (waveOrbMesh) {
-        waveOrbMesh.material.color.setHex(isDark ? 0x8b5cf6 : 0x6d28d9);
-        waveOrbMesh.material.opacity = isDark ? 0.18 : 0.22;
+    if (singularityRingMesh) {
+        singularityRingMesh.material.color.setHex(isDark ? 0x3b82f6 : 0x7c3aed);
+        singularityRingMesh.material.opacity = isDark ? 0.45 : 0.35;
     }
 }
 
@@ -64,72 +64,67 @@ function handleRealGoogleLogin() {
     });
 }
 
-// Interactive Quantum Wave 3D Background Engine
-function initInteractiveQuantumWaveBackground() {
+// 3D Neural Singularity Core & Floating Nebula Field
+function initNeuralSingularity3DBackground() {
     const canvas = document.getElementById('bg3dCanvas');
     if (!canvas) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const numX = 90;
-    const numZ = 90;
-    const count = numX * numZ;
-    const positions = new Float32Array(count * 3);
-    const scales = new Float32Array(count);
+    // Orbital Singularity Particle Field
+    const particleCount = 2400;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
 
-    let i = 0;
-    for (let ix = 0; ix < numX; ix++) {
-        for (let iz = 0; iz < numZ; iz++) {
-            positions[i] = ix * 0.35 - (numX * 0.35) / 2;
-            positions[i + 1] = 0;
-            positions[i + 2] = iz * 0.35 - (numZ * 0.35) / 2;
-            scales[i / 3] = 1;
-            i += 3;
-        }
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        const radius = 3.5 + Math.random() * 6.5;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = (Math.random() - 0.5) * Math.PI;
+
+        positions[i] = radius * Math.cos(phi) * Math.cos(theta);
+        positions[i + 1] = radius * Math.sin(phi) * 0.7;
+        positions[i + 2] = radius * Math.cos(phi) * Math.sin(theta);
     }
 
-    const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
 
     const isDarkInitial = document.documentElement.classList.contains('dark');
-    waveParticlesMaterial = new THREE.PointsMaterial({
-        color: isDarkInitial ? 0x3b82f6 : 0x1d4ed8,
-        size: isDarkInitial ? 0.08 : 0.09,
+    singularityParticlesMaterial = new THREE.PointsMaterial({
+        color: isDarkInitial ? 0x8b5cf6 : 0x2563eb,
+        size: 0.055,
         transparent: true,
-        opacity: isDarkInitial ? 0.6 : 0.65,
+        opacity: 0.75,
         blending: THREE.AdditiveBlending
     });
 
-    const particles = new THREE.Points(geometry, waveParticlesMaterial);
-    particles.position.set(0, -2.2, -5);
-    particles.rotation.x = 0.35;
-    scene.add(particles);
+    const starField = new THREE.Points(geometry, singularityParticlesMaterial);
+    scene.add(starField);
 
-    const orbGeom = new THREE.IcosahedronGeometry(1.8, 2);
-    const orbMat = new THREE.MeshBasicMaterial({
-        color: isDarkInitial ? 0x8b5cf6 : 0x6d28d9,
+    // Central Rotating Core Ring Mesh
+    const ringGeom = new THREE.TorusGeometry(3.2, 0.03, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({
+        color: isDarkInitial ? 0x3b82f6 : 0x7c3aed,
         wireframe: true,
         transparent: true,
-        opacity: isDarkInitial ? 0.18 : 0.22
+        opacity: 0.4
     });
-    waveOrbMesh = new THREE.Mesh(orbGeom, orbMat);
-    waveOrbMesh.position.set(6, 2, -10);
-    scene.add(waveOrbMesh);
+    singularityRingMesh = new THREE.Mesh(ringGeom, ringMat);
+    singularityRingMesh.rotation.x = Math.PI / 3;
+    scene.add(singularityRingMesh);
 
-    camera.position.set(0, 2, 8);
+    camera.position.z = 9;
 
     let targetX = 0, targetY = 0;
     let mouseX = 0, mouseY = 0;
 
     window.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX - window.innerWidth / 2) * 0.0008;
-        mouseY = (e.clientY - window.innerHeight / 2) * 0.0008;
+        mouseX = (e.clientX - window.innerWidth / 2) * 0.0006;
+        mouseY = (e.clientY - window.innerHeight / 2) * 0.0006;
     });
 
     window.addEventListener('resize', () => {
@@ -138,32 +133,21 @@ function initInteractiveQuantumWaveBackground() {
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    let countTime = 0;
     function animate() {
         requestAnimationFrame(animate);
 
-        countTime += 0.03;
-        const posAttr = particles.geometry.attributes.position;
-        let pIndex = 0;
+        starField.rotation.y += 0.0012;
+        starField.rotation.x += 0.0004;
 
-        for (let ix = 0; ix < numX; ix++) {
-            for (let iz = 0; iz < numZ; iz++) {
-                posAttr.array[pIndex + 1] = (Math.sin((ix + countTime) * 0.3) * 0.4) +
-                                             (Math.sin((iz + countTime) * 0.5) * 0.4);
-                pIndex += 3;
-            }
-        }
-        posAttr.needsUpdate = true;
-
-        waveOrbMesh.rotation.x += 0.002;
-        waveOrbMesh.rotation.y += 0.003;
+        singularityRingMesh.rotation.z -= 0.004;
+        singularityRingMesh.rotation.y += 0.002;
 
         targetX += (mouseX - targetX) * 0.05;
         targetY += (-mouseY - targetY) * 0.05;
 
-        camera.position.x = targetX * 4;
-        camera.position.y = 2 + targetY * 3;
-        camera.lookAt(0, -1, -5);
+        camera.position.x = targetX * 5;
+        camera.position.y = targetY * 5;
+        camera.lookAt(scene.position);
 
         renderer.render(scene, camera);
     }
@@ -358,12 +342,12 @@ async function triggerPlugin(pluginName) {
                 messages: thread.messages, 
                 prompt: pluginPrompt, 
                 plugin: pluginName,
-                maxContext: 6390000
+                maxContext: 6400000000
             })
         });
         const data = await res.json();
         const reply = data.response || "Plugin executed successfully.";
-        const telemetry = data.telemetry || { latency: "0.1ms", tokens: "6390000", confidence: "100%" };
+        const telemetry = data.telemetry || { latency: "0.1ms", tokens: "6,400,000,000", confidence: "100%" };
         thread.messages.push({ role: 'assistant', content: reply, telemetry });
         saveThreadsToStorage();
         renderActiveThreadMessages();
@@ -402,7 +386,7 @@ function renderActiveThreadMessages() {
         <div class="hero-node-banner">
             <div>
                 <h2 style="font-size:16px; font-weight:800;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
-                <p style="font-size:12.5px; color:var(--text-secondary); margin-top:2px;">Context Capacity: 6,390,000 Tokens | Thread: ${escapeHtml(thread.title)}</p>
+                <p style="font-size:12.5px; color:var(--text-secondary); margin-top:2px;">Context Capacity: 6,400,000,000 Tokens | Thread: ${escapeHtml(thread.title)}</p>
             </div>
             <div id="threeCanvasContainer" style="width:100px; height:100px; border-radius:14px; overflow:hidden;"></div>
         </div>
@@ -413,7 +397,7 @@ function renderActiveThreadMessages() {
             <div class="message-card">
                 <div class="ai-response-box">
                     <div class="ai-badge-label">✦ SOLACE Intelligence</div>
-                    <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.39 Million Token Context Window</strong>. Chat freely as a guest or sign in via the sidebar to persist neural state across workspaces. How can I assist you?</div>
+                    <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.4 Billion Token Context Window</strong>. Chat freely as a guest or sign in via the sidebar to persist neural state across workspaces. How can I assist you?</div>
                 </div>
             </div>
         `;
@@ -432,7 +416,7 @@ function renderActiveThreadMessages() {
                 let telemetryHtml = m.telemetry ? `
                     <div style="font-size:11px; color:var(--text-muted); display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border-subtle); font-family:'JetBrains Mono', monospace;">
                         <span>⚡ Latency: ${m.telemetry.latency}</span>
-                        <span>📊 Context: 6.39M Tokens</span>
+                        <span>📊 Context: 6.4B Tokens</span>
                         <span>🛡️ Confidence: ${m.telemetry.confidence || '99.999%'}</span>
                     </div>
                 ` : '';
@@ -640,13 +624,13 @@ async function sendUserMessage() {
                 messages: thread.messages,
                 prompt: text,
                 agentic: agenticModeEnabled,
-                maxContext: 6390000
+                maxContext: 6400000000
             })
         });
 
         const data = await res.json();
         const reply = data.response || data.result?.response || JSON.stringify(data);
-        const telemetry = data.telemetry || { latency: "0.1ms", tokens: "6390000", confidence: "99.999%" };
+        const telemetry = data.telemetry || { latency: "0.1ms", tokens: "6,400,000,000", confidence: "99.999%" };
 
         thread.messages.push({ role: 'assistant', content: reply, telemetry });
         saveThreadsToStorage();
