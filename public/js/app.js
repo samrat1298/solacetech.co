@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (overlay) overlay.style.display = 'flex';
     }
 
-    init3DOrb();
+    initNeuralConstellationSphere();
 });
 
 function loadThreadsFromStorage() {
@@ -51,7 +51,7 @@ function saveThreadsToStorage() {
 function createNewThread() {
     const newThread = {
         id: 'thread-' + Date.now(),
-        title: 'New Session',
+        title: 'Neural Session',
         messages: []
     };
     threads.unshift(newThread);
@@ -68,9 +68,9 @@ function switchThread(id) {
 function clearCurrentChat() {
     const thread = threads.find(t => t.id === activeThreadId);
     if (!thread) return;
-    if (confirm("Are you sure you want to clear this chat session?")) {
+    if (confirm("Are you sure you want to clear this session?")) {
         thread.messages = [];
-        thread.title = "New Session";
+        thread.title = "Neural Session";
         saveThreadsToStorage();
         renderActiveThreadMessages();
     }
@@ -150,12 +150,12 @@ function renderActiveThreadMessages() {
     if (titleEl) titleEl.innerText = thread.title;
 
     let html = `
-        <div class="hero-3d-card glass-panel" style="padding:24px; border-radius:20px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div class="hero-3d-card glass-panel">
             <div>
-                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Neural Operating System]</h2>
-                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Active Session: ${escapeHtml(thread.title)}</p>
+                <h2 style="font-size:18px; font-weight:800; color:#f8fafc;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
+                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Active Thread: ${escapeHtml(thread.title)}</p>
             </div>
-            <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
+            <div id="threeCanvasContainer" style="width:110px; height:110px; border-radius:16px; overflow:hidden;"></div>
         </div>
     `;
 
@@ -163,9 +163,9 @@ function renderActiveThreadMessages() {
         html += `
             <div class="message-block">
                 <div class="ai-response-block glass-panel">
-                    <div class="ai-label">SOLACE Intelligence ✦</div>
-                    <div class="response-text">
-                        Hello Samrat! I am your autonomous neural operating system, equipped with empathy, wit, common sense, and instant plugin tools. How can I help you today?
+                    <div class="ai-label">✦ SOLACE Intelligence</div>
+                    <div class="response-text" style="color:var(--text-main);">
+                        Hello Samrat! I am your autonomous neural operating system—blending absolute engineering brilliance with empathy, wit, and common sense. How can I make your day easier?
                     </div>
                 </div>
             </div>
@@ -193,7 +193,7 @@ function renderActiveThreadMessages() {
                 html += `
                     <div class="message-block">
                         <div class="ai-response-block glass-panel">
-                            <div class="ai-label">SOLACE Intelligence ✦</div>
+                            <div class="ai-label">✦ SOLACE Intelligence</div>
                             <div>${formatResponseText(m.content)}</div>
                             ${telemetryHtml}
                         </div>
@@ -205,7 +205,7 @@ function renderActiveThreadMessages() {
 
     container.innerHTML = html;
     container.scrollTop = container.scrollHeight;
-    init3DOrb();
+    initNeuralConstellationSphere();
 }
 
 function handleGoogleOAuthLogin() {
@@ -288,52 +288,74 @@ function toggleAgenticMode() {
     agenticModeEnabled = !agenticModeEnabled;
     const btn = document.getElementById('agentToggleBtn');
     if (btn) {
-        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Empathy & Wit: ACTIVE' : '🤖 Empathy & Wit: PAUSED';
+        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Empathy & Wit: ON' : '🤖 Empathy & Wit: OFF';
         btn.classList.toggle('active', agenticModeEnabled);
     }
 }
 
-function init3DOrb() {
+/**
+ * Stunning Cybernetic Neural Constellation Sphere (Replaces old torus)
+ */
+function initNeuralConstellationSphere() {
     const container = document.getElementById('threeCanvasContainer');
     if (!container || container.children.length > 0) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(100, 100);
+    renderer.setSize(110, 110);
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    const geometry = new THREE.TorusKnotGeometry(1.2, 0.35, 128, 32);
-    const material = new THREE.MeshStandardMaterial({
-        color: 0x3b82f6,
-        emissive: 0x1d4ed8,
-        emissiveIntensity: 0.6,
-        roughness: 0.2,
-        metalness: 0.9
+    // Glowing Particle Sphere representing Neural Constellation
+    const particleCount = 350;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        const u = Math.random();
+        const v = Math.random();
+        const theta = u * 2.0 * Math.PI;
+        const phi = Math.acos(2.0 * v - 1.0);
+        const r = 1.3 + Math.random() * 0.2;
+
+        positions[i] = r * Math.sin(phi) * Math.cos(theta);
+        positions[i + 1] = r * Math.sin(phi) * Math.sin(theta);
+        positions[i + 2] = r * Math.cos(phi);
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const material = new THREE.PointsMaterial({
+        color: 0x38bdf8,
+        size: 0.05,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending
     });
-    const coreMesh = new THREE.Mesh(geometry, material);
+
+    const particleSphere = new THREE.Points(geometry, material);
+    scene.add(particleSphere);
+
+    // Inner Glowing Core Icosahedron
+    const coreGeometry = new THREE.IcosahedronGeometry(0.7, 1);
+    const coreMaterial = new THREE.MeshBasicMaterial({
+        color: 0x8b5cf6,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.6
+    });
+    const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
     scene.add(coreMesh);
 
-    const ringGeometry = new THREE.TorusGeometry(1.9, 0.03, 16, 100);
-    const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true });
-    const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
-    ringMesh.rotation.x = Math.PI / 3;
-    scene.add(ringMesh);
-
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const pointLight = new THREE.PointLight(0x8b5cf6, 3, 50);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
-
-    camera.position.z = 4.5;
+    camera.position.z = 3.2;
 
     function animate() {
         requestAnimationFrame(animate);
-        coreMesh.rotation.x += 0.012;
-        coreMesh.rotation.y += 0.015;
-        ringMesh.rotation.z -= 0.008;
-        ringMesh.rotation.y += 0.005;
+        particleSphere.rotation.y += 0.003;
+        particleSphere.rotation.x += 0.001;
+        coreMesh.rotation.y -= 0.008;
+        coreMesh.rotation.z += 0.005;
         renderer.render(scene, camera);
     }
     animate();
