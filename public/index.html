@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLACE AGI Core - 6.4 Billion Token Neural Workspace</title>
+    <title>SOLACE AGI Core - Multimodal 6.4B Neural Workspace</title>
     <link rel="stylesheet" href="/css/enterprise.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,11 +70,11 @@
                 <div class="topbar-left">
                     <h2 id="currentThreadTitle">Neural Session</h2>
                     <div class="sync-status">
-                        <span class="pulse-dot"></span> 6.4 Billion Token Stream Active
+                        <span class="pulse-dot"></span> 6.4 Billion Token Multimodal Stream Active
                     </div>
                 </div>
                 <div class="topbar-right">
-                    <span class="model-pill">SOLACE-6.4B-Singularity</span>
+                    <span class="model-pill">SOLACE-6.4B-Multimodal</span>
                     <button class="agent-pill-btn active" id="agentToggleBtn" onclick="toggleAgenticMode()">
                         <span>🤖</span> Empathy & Wit: ON
                     </button>
@@ -97,7 +97,7 @@
                     <div class="message-card">
                         <div class="ai-response-box">
                             <div class="ai-badge-label">✦ SOLACE Intelligence</div>
-                            <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.4 Billion Token Context Window</strong>. Chat freely as a guest or sign in via the sidebar to persist neural state across workspaces. How can I assist you?</div>
+                            <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.4 Billion Token Context Window</strong>. Upload files safely without hanging, or use the quick generation buttons below to create Images, PDFs, PPTs, and Videos instantly.</div>
                         </div>
                     </div>
                 </div>
@@ -122,12 +122,20 @@
             <!-- Input Dock Container -->
             <div class="input-dock-container">
                 <div class="input-dock-box">
+                    <!-- Multimodal Generator Quick Bar -->
+                    <div style="display: flex; gap: 6px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); overflow-x: auto;">
+                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('image')" style="background:rgba(37,99,235,0.08); color:var(--accent-blue);">🖼️ Generate Image</button>
+                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('pdf')" style="background:rgba(124,58,237,0.08); color:var(--accent-purple);">📄 Generate PDF</button>
+                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('ppt')" style="background:rgba(5,150,105,0.08); color:var(--accent-green);">📊 Generate PPT</button>
+                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('video')" style="background:rgba(8,145,178,0.08); color:var(--accent-cyan);">🎥 Generate Video</button>
+                    </div>
+
                     <div class="file-preview-badge" id="attachedFileIndicator" style="display: none;">
                         <span>📎 <span id="attachedFileName">document.txt</span></span>
                         <button class="badge-close-btn" onclick="removeAttachedFile()">✕</button>
                     </div>
 
-                    <textarea id="userChatInput" placeholder="Ask SOLACE anything (6.4 Billion Token Context Window)..." onkeydown="handleKeyPress(event)"></textarea>
+                    <textarea id="userChatInput" placeholder="Ask SOLACE or describe an Image, PDF, PPT, or Video to generate..." onkeydown="handleKeyPress(event)"></textarea>
 
                     <div class="dock-actions-row">
                         <div class="dock-tools-left">

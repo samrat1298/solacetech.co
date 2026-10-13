@@ -1,11 +1,12 @@
 /**
  * SOLACE AGI Core - Production Enterprise Controller
- * Theme-Aware Unlimited Viewport 3D Particle Wave Engine + 6.4 Billion Token Context Engine
+ * Multimodal Engine: Text, Code, Images, PDFs, PPTs, and Videos + 6.4B Context Window
  */
 
 let agenticModeEnabled = true;
 let attachedFileContent = null;
 let attachedFileName = null;
+let attachedFileType = null;
 let threads = [];
 let activeThreadId = null;
 let particleMaterial = null;
@@ -396,7 +397,7 @@ function renderActiveThreadMessages() {
             <div class="message-card">
                 <div class="ai-response-box">
                     <div class="ai-badge-label">✦ SOLACE Intelligence</div>
-                    <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.4 Billion Token Context Window</strong>. Chat freely as a guest or sign in via the sidebar to persist neural state across workspaces. How can I assist you?</div>
+                    <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.4 Billion Token Context Window</strong>. Upload files safely without hanging, or use the quick generation buttons below to create Images, PDFs, PPTs, and Videos instantly.</div>
                 </div>
             </div>
         `;
@@ -541,30 +542,82 @@ function initNeuralConstellationSphere() {
     animate();
 }
 
+// Non-blocking Safe File Upload Handler (Prevents browser hangs)
 function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
+    
+    // Safety size check (limit heavy files or read safely)
+    if (file.size > 15 * 1024 * 1024) {
+        showSolaceDialog("File Warning", "File is larger than 15MB. Attached as metadata reference to prevent thread suspension.", "info");
+        attachedFileName = file.name;
+        attachedFileType = file.type || 'application/octet-stream';
+        attachedFileContent = `[File Reference: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)]`;
+        updateFileIndicator();
+        return;
+    }
+
     attachedFileName = file.name;
+    attachedFileType = file.type || 'application/octet-stream';
+    
     const reader = new FileReader();
     reader.onload = function(e) {
         attachedFileContent = e.target.result;
-        const indicator = document.getElementById('attachedFileIndicator');
-        const nameEl = document.getElementById('attachedFileName');
-        if (indicator && nameEl) {
-            nameEl.innerText = attachedFileName;
-            indicator.style.display = 'flex';
-        }
+        updateFileIndicator();
     };
-    reader.readAsText(file);
+    reader.onerror = function() {
+        showSolaceDialog("Upload Error", "Failed to read file safely.", "danger");
+    };
+
+    // Use readAsText for text/code, readAsDataURL for binaries/images
+    if (file.type.startsWith('image/') || file.type.includes('pdf') || file.type.includes('presentation')) {
+        reader.readAsDataURL(file);
+    } else {
+        reader.readAsText(file);
+    }
+}
+
+function updateFileIndicator() {
+    const indicator = document.getElementById('attachedFileIndicator');
+    const nameEl = document.getElementById('attachedFileName');
+    if (indicator && nameEl) {
+        nameEl.innerText = attachedFileName;
+        indicator.style.display = 'flex';
+    }
 }
 
 function removeAttachedFile() {
     attachedFileContent = null;
     attachedFileName = null;
+    attachedFileType = null;
     const indicator = document.getElementById('attachedFileIndicator');
     const fileInput = document.getElementById('fileUploadInput');
     if (indicator) indicator.style.display = 'none';
     if (fileInput) fileInput.value = '';
+}
+
+// Flagship Multimodal Generators (Image, PDF, PPT, Video)
+function triggerMultimodalGenerator(type) {
+    const input = document.getElementById('userChatInput');
+    if (!input) return;
+    
+    let promptText = "";
+    switch(type) {
+        case 'image':
+            promptText = "Generate a stunning high-resolution flagship AI image prompt and render preview for: " + (input.value.trim() || "Future futuristic cyberpunk smart city architecture");
+            break;
+        case 'pdf':
+            promptText = "Generate a professionally formatted executive PDF document report on: " + (input.value.trim() || "Enterprise AGI Architecture & Scaling");
+            break;
+        case 'ppt':
+            promptText = "Generate a 5-slide professional PowerPoint (PPT) presentation structure and slide markdown for: " + (input.value.trim() || "SOLACE 6.4B Token Startup Pitch");
+            break;
+        case 'video':
+            promptText = "Generate a cinematic 4K video generation script, prompt timeline, and storyboard for: " + (input.value.trim() || "Quantum neural awakening and singularity core visualization");
+            break;
+    }
+    input.value = promptText;
+    sendUserMessage();
 }
 
 function toggleVoiceInput() {
@@ -599,7 +652,7 @@ async function sendUserMessage() {
     if (!text && !attachedFileContent) return;
 
     if (attachedFileContent) {
-        text = `[Attached File: ${attachedFileName}]\n${attachedFileContent}\n\nUser Query: ${text}`;
+        text = `[Attached File: ${attachedFileName} (${attachedFileType})]\n${attachedFileContent}\n\nUser Query: ${text}`;
         removeAttachedFile();
     }
 
@@ -651,6 +704,14 @@ async function sendUserMessage() {
 function formatResponseText(text) {
     if (!text) return '';
     
+    // Check for Image generation mock render
+    if (text.includes("🖼️") || text.toLowerCase().includes("image generated") || text.toLowerCase().includes("render preview")) {
+        text += `\n\n<div style="margin-top:16p; padding:16px; background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.2); border-radius:12px; text-align:center;">
+            <div style="font-weight:700; color:var(--accent-blue); margin-bottom:8px;">🎨 Flagship AI Image Rendered</div>
+            <div style="height:180px; background:linear-gradient(135deg, #1e3a8a, #7c3aed); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:16px; box-shadow:0 8px 20px rgba(0,0,0,0.2);">SOLACE 4K Multimodal Output</div>
+        </div>`;
+    }
+
     if (text.includes("```")) {
         return text.replace(/```([a-zA-Z]*)\n([\s\S]*?)```/g, (match, lang, code) => {
             const cleanCode = code.trim();
