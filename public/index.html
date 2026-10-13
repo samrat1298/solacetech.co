@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -40,12 +40,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
+            height: 100%; width: 100%; overflow: hidden;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--text-main);
+            background-color: var(--bg-canvas); color: var(--text-main);
         }
 
         /* AUTH SCREEN OVERLAY */
@@ -72,12 +69,9 @@
 
         /* MAIN LAYOUT WRAPPER */
         .app-window {
-            width: 100vw;
-            height: 100vh;
-            display: grid;
+            width: 100vw; height: 100vh; display: grid;
             grid-template-columns: var(--sidebar-width) 1fr;
-            overflow: hidden;
-            position: relative;
+            overflow: hidden; position: relative;
         }
 
         @media (max-width: 868px) {
@@ -87,14 +81,8 @@
         }
 
         .sidebar {
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 16px;
-            gap: 16px;
-            height: 100%;
-            overflow-y: auto;
+            background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
+            display: flex; flex-direction: column; padding: 20px 16px; gap: 16px; height: 100%; overflow-y: auto;
         }
 
         .brand-header { display: flex; align-items: center; justify-content: space-between; }
@@ -139,34 +127,12 @@
         .user-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
         /* SPLIT WORKSPACE GRID */
-        .workspace-split {
-            display: grid;
-            grid-template-columns: 1fr;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            transition: grid-template-columns 0.3s ease;
-        }
+        .workspace-split { display: grid; grid-template-columns: 1fr; height: 100%; width: 100%; overflow: hidden; transition: grid-template-columns 0.3s ease; }
         .workspace-split.canvas-open { grid-template-columns: 1fr 540px; }
 
-        .main-chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            background: var(--bg-canvas);
-            position: relative;
-            overflow: hidden;
-        }
+        .main-chat-container { display: flex; flex-direction: column; height: 100%; background: var(--bg-canvas); position: relative; overflow: hidden; }
 
-        .chat-topbar {
-            padding: 14px 24px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--bg-sidebar);
-            flex-shrink: 0;
-        }
+        .chat-topbar { padding: 14px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: var(--bg-sidebar); flex-shrink: 0; }
 
         .active-model-badge {
             background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-size: 12px; font-weight: 700;
@@ -174,15 +140,7 @@
         }
 
         /* SCROLLABLE CHAT MESSAGES AREA */
-        .chat-messages-wrapper {
-            flex: 1;
-            overflow-y: auto !important;
-            padding: 24px 36px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            scroll-behavior: smooth;
-        }
+        .chat-messages-wrapper { flex: 1; overflow-y: auto !important; padding: 24px 36px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
 
         .message-block { display: flex; flex-direction: column; gap: 8px; max-width: 920px; width: 100%; margin: 0 auto; }
         .user-prompt-header { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
@@ -195,14 +153,7 @@
         pre { background: #000000; padding: 14px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; overflow-x: auto; color: #38bdf8; border: 1px solid var(--border-color); margin-top: 6px; }
 
         /* CANVAS PANEL */
-        .canvas-artifact-panel {
-            background: var(--bg-sidebar);
-            border-left: 1px solid var(--border-color);
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-        }
+        .canvas-artifact-panel { background: var(--bg-sidebar); border-left: 1px solid var(--border-color); display: none; flex-direction: column; height: 100%; overflow: hidden; }
         .canvas-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 14px; flex-shrink: 0; }
         .canvas-content { flex: 1; padding: 20px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #38bdf8; background: #020408; white-space: pre-wrap; }
         .canvas-actions { padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: var(--bg-card); flex-shrink: 0; }
@@ -216,15 +167,8 @@
         .preset-chip:hover { border-color: #f59e0b; color: var(--text-main); }
 
         /* FLOATING INPUT CONTAINER */
-        .input-floating-container {
-            padding: 12px 36px 20px;
-            background: linear-gradient(180deg, transparent 0%, var(--bg-canvas) 40%);
-            flex-shrink: 0;
-        }
-        .input-floating-bar {
-            max-width: 880px; margin: 0 auto; background: var(--bg-input); border: 1px solid var(--border-color);
-            border-radius: 24px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow-lg);
-        }
+        .input-floating-container { padding: 12px 36px 20px; background: linear-gradient(180deg, transparent 0%, var(--bg-canvas) 40%); flex-shrink: 0; }
+        .input-floating-bar { max-width: 880px; margin: 0 auto; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 24px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow-lg); }
         .input-row-main { display: flex; align-items: center; gap: 10px; }
         .chat-textarea { flex: 1; background: none; border: none; outline: none; font-family: inherit; font-size: 14px; color: var(--text-main); resize: none; max-height: 120px; min-height: 28px; }
         
@@ -235,10 +179,7 @@
         .btn-send-pill { width: 36px; height: 36px; border-radius: 50%; background: var(--gold-gradient); color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: opacity 0.2s; }
         .btn-send-pill:hover { opacity: 0.9; }
 
-        .modal-backdrop {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65);
-            backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 200;
-        }
+        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 200; }
         .modal-card { background: var(--bg-sidebar); border-radius: 20px; width: 90%; max-width: 480px; padding: 28px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 18px; box-shadow: var(--shadow-lg); }
         .modal-title { font-size: 18px; font-weight: 800; color: var(--text-main); }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -341,7 +282,7 @@
                         <div class="ai-response-block">
                             <div class="ai-label">SOLACE AI+ [PRO] ✦</div>
                             <div class="response-text">
-                                Premium subscription active. All systems are scrollable and responsive:
+                                Premium subscription active. High-grade enterprise workflows enabled:
                                 <br><br>
                                 🔍 <strong>Knowledge Discovery & RAG Pipelines</strong><br>
                                 📈 <strong>SEO, Keyword Intent & Sitemap XML Engine</strong><br>
@@ -719,8 +660,6 @@
             input.value = '';
             const payloadFile = attachedFileContent;
             attachedFileContent = null;
-
-            // Auto Scroll to bottom
             container.scrollTop = container.scrollHeight;
 
             let agentStepperHtml = '';
