@@ -42,6 +42,29 @@ body { background: var(--bg-base); color: var(--text-primary); height: 100vh; ov
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
 
+/* Custom Modal Dialog Overlay */
+.solace-dialog-overlay {
+    position: fixed; inset: 0; background: rgba(3, 7, 18, 0.8); display: flex;
+    justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(12px);
+    animation: fadeInModal 0.2s ease;
+}
+@keyframes fadeInModal { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+.solace-dialog-card {
+    background: var(--bg-card); padding: 32px; border-radius: 20px; text-align: center; width: 380px;
+    border: 1px solid var(--border-strong); box-shadow: var(--shadow-lg);
+}
+.dialog-icon { font-size: 32px; color: var(--accent-blue); margin-bottom: 12px; }
+.solace-dialog-card h3 { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+.solace-dialog-card p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; }
+.dialog-actions { display: flex; gap: 10px; justify-content: center; }
+.dialog-btn {
+    padding: 10px 20px; border-radius: 10px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s;
+}
+.dialog-btn.primary { background: var(--accent-blue); color: white; box-shadow: var(--shadow-sm); }
+.dialog-btn.primary:hover { background: var(--accent-blue-hover); }
+.dialog-btn.secondary { background: var(--bg-card-hover); color: var(--text-primary); border: 1px solid var(--border-strong); }
+.dialog-btn.secondary:hover { background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+
 /* Production Auth Modal */
 .auth-overlay {
     position: fixed; inset: 0; background: rgba(3, 7, 18, 0.85); display: flex;

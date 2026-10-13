@@ -9,10 +9,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
 <body>
+    <!-- Custom Enterprise Modal Notification / Confirm Popup Overlay -->
+    <div id="solaceDialogOverlay" class="solace-dialog-overlay" style="display: none;">
+        <div class="solace-dialog-card glass-panel">
+            <div id="solaceDialogIcon" class="dialog-icon">✦</div>
+            <h3 id="solaceDialogTitle">System Notice</h3>
+            <p id="solaceDialogMessage">Message details go here...</p>
+            <div class="dialog-actions" id="solaceDialogActions">
+                <button onclick="closeSolaceDialog()" class="dialog-btn primary">Understood</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Production Auth Modal -->
     <div id="authScreenOverlay" class="auth-overlay" style="display: none;">
         <div class="auth-modal-card">
