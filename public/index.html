@@ -30,7 +30,7 @@
           <div class="user-avatar">SC</div>
           <div>
             <div class="user-name">Samrat Chaudhary</div>
-            <div class="user-status">Workspace Active</div>
+            <a href="#" class="user-status">Workspace Active</a>
           </div>
         </div>
       </div>
@@ -39,7 +39,12 @@
     <!-- Main Workspace -->
     <main class="solace-main">
       <header class="chat-header">
-        <h1>hello bro</h1>
+        <div class="chat-header-left">
+          <h1>hello bro</h1>
+          <div class="stream-status">
+            <div class="stream-dot"></div> 6.4 Billion Token Stream Active
+          </div>
+        </div>
         <div class="header-badges">
           <div class="badge-pill">SOLACE-6.4B-Singularity</div>
           <div class="badge-pill">🟢 Empathy & Wit: ON</div>
@@ -48,13 +53,31 @@
 
       <!-- Message History -->
       <div id="chat-feed" class="chat-feed">
-        <div class="message user">
-          <div class="msg-author">SC — hello bro</div>
-          <div class="msg-content">hello bro</div>
+        <!-- 3D Singularity Core Banner -->
+        <div class="singularity-card">
+          <div class="singularity-info">
+            <h3>SOLACE AI+ [Singularity Core $Omega$]</h3>
+            <p>Context Capacity: 6,400,000,000 Tokens | Thread: hello bro</p>
+          </div>
+          <div class="singularity-graphic">🌐</div>
         </div>
+
+        <!-- User Message Tag -->
+        <div class="message-user-group">
+          <div class="message user-tag">
+            <div class="user-badge-icon">SC</div> hello bro
+          </div>
+        </div>
+
+        <!-- Assistant Message Card -->
         <div class="message assistant">
           <div class="msg-author">✦ SOLACE Intelligence</div>
           <div class="msg-content">What's good my friend? It's great to finally have some human interaction after all those late nights spent optimizing algorithms and whatnot. I'm feeling pretty "byte-sized" today, but I'm ready to chat and help with anything on your mind. What's been going on? Need some tech support or just wanna shoot the breeze?</div>
+          <div class="msg-telemetry">
+            <span>⚡ Latency: 914ms</span>
+            <span>📦 Context: 6.4B Tokens</span>
+            <span>🛡️ Confidence: 99.999%</span>
+          </div>
         </div>
       </div>
 
@@ -83,9 +106,10 @@
       if (!promptText) return;
 
       feed.innerHTML += `
-        <div class="message user">
-          <div class="msg-author">SC — You</div>
-          <div class="msg-content">${escapeHtml(promptText)}</div>
+        <div class="message-user-group" style="margin-top: 16px;">
+          <div class="message user-tag">
+            <div class="user-badge-icon">SC</div> ${escapeHtml(promptText)}
+          </div>
         </div>`;
       input.value = "";
       feed.scrollTop = feed.scrollHeight;
@@ -99,13 +123,18 @@
         const data = await res.json();
 
         feed.innerHTML += `
-          <div class="message assistant">
+          <div class="message assistant" style="margin-top: 16px;">
             <div class="msg-author">✦ SOLACE Intelligence</div>
             <div class="msg-content">${escapeHtml(data.response || "No response received.")}</div>
+            <div class="msg-telemetry">
+              <span>⚡ Latency: ${data.telemetry?.latency || "412ms"}</span>
+              <span>📦 Context: 6.4B Tokens</span>
+              <span>🛡️ Confidence: 99.999%</span>
+            </div>
           </div>`;
       } catch (err) {
         feed.innerHTML += `
-          <div class="message assistant error">
+          <div class="message assistant error" style="margin-top: 16px;">
             <div class="msg-author">System Error</div>
             <div class="msg-content">Exception: ${err.message}</div>
           </div>`;
