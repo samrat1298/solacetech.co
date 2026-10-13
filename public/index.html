@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
             --bg-canvas: #07090e;
             --bg-sidebar: #0b1120;
             --bg-card: #131c31;
-            --bg-input: #0b1120;
+            --bg-input: #0f172a;
             --border-color: rgba(255, 255, 255, 0.08);
             --accent-purple: #6366f1;
             --accent-purple-hover: #4f46e5;
@@ -39,17 +39,13 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-canvas);
             color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            transition: background 0.3s, color 0.3s;
         }
 
         /* AUTH SCREEN OVERLAY */
@@ -74,11 +70,14 @@
         .auth-divider { display: flex; align-items: center; gap: 12px; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
         .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
 
+        /* MAIN LAYOUT WRAPPER */
         .app-window {
-            width: 100%; max-width: 1680px; height: 97vh; background: var(--bg-sidebar);
-            border-radius: 24px; box-shadow: var(--shadow-lg);
-            display: grid; grid-template-columns: var(--sidebar-width) 1fr;
-            overflow: hidden; border: 1px solid var(--border-color); position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            overflow: hidden;
+            position: relative;
         }
 
         @media (max-width: 868px) {
@@ -88,8 +87,14 @@
         }
 
         .sidebar {
-            background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color);
-            display: flex; flex-direction: column; padding: 20px 16px; gap: 16px; width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+            gap: 16px;
+            height: 100%;
+            overflow-y: auto;
         }
 
         .brand-header { display: flex; align-items: center; justify-content: space-between; }
@@ -113,7 +118,7 @@
             border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
 
-        .history-group { display: flex; flex-direction: column; gap: 4px; overflow-y: auto; flex: 1; }
+        .history-group { display: flex; flex-direction: column; gap: 4px; overflow-y: auto; flex: 1; min-height: 120px; }
         .history-item {
             display: flex; align-items: center; justify-content: space-between; padding: 10px 12px;
             border-radius: 10px; font-size: 12.5px; font-weight: 500; color: var(--text-main); cursor: pointer; transition: all 0.2s;
@@ -133,19 +138,52 @@
         }
         .user-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* SPLIT WORKSPACE */
-        .workspace-split { display: grid; grid-template-columns: 1fr; height: 100%; width: 100%; transition: grid-template-columns 0.3s ease; }
+        /* SPLIT WORKSPACE GRID */
+        .workspace-split {
+            display: grid;
+            grid-template-columns: 1fr;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            transition: grid-template-columns 0.3s ease;
+        }
         .workspace-split.canvas-open { grid-template-columns: 1fr 540px; }
 
-        .main-chat-container { display: flex; flex-direction: column; height: 100%; background: var(--bg-canvas); position: relative; overflow: hidden; }
-        .chat-topbar { padding: 14px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; background: var(--bg-sidebar); }
+        .main-chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: var(--bg-canvas);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-topbar {
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-sidebar);
+            flex-shrink: 0;
+        }
 
         .active-model-badge {
             background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-size: 12px; font-weight: 700;
             padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3); cursor: pointer;
         }
 
-        .chat-messages-wrapper { flex: 1; overflow-y: auto; padding: 24px 36px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
+        /* SCROLLABLE CHAT MESSAGES AREA */
+        .chat-messages-wrapper {
+            flex: 1;
+            overflow-y: auto !important;
+            padding: 24px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
         .message-block { display: flex; flex-direction: column; gap: 8px; max-width: 920px; width: 100%; margin: 0 auto; }
         .user-prompt-header { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
         .user-avatar-sm { width: 28px; height: 28px; border-radius: 50%; background: var(--gold-gradient); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
@@ -158,29 +196,37 @@
 
         /* CANVAS PANEL */
         .canvas-artifact-panel {
-            background: var(--bg-sidebar); border-left: 1px solid var(--border-color);
-            display: none; flex-direction: column; height: 100%; overflow: hidden;
+            background: var(--bg-sidebar);
+            border-left: 1px solid var(--border-color);
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
         }
-        .canvas-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 14px; }
+        .canvas-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 14px; flex-shrink: 0; }
         .canvas-content { flex: 1; padding: 20px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #38bdf8; background: #020408; white-space: pre-wrap; }
-        .canvas-actions { padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: var(--bg-card); }
+        .canvas-actions { padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: var(--bg-card); flex-shrink: 0; }
 
         .agent-stepper { background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 12px; font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
         .agent-step-item { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main); }
 
-        /* SUITE PRESETS BAR */
+        /* PRESET CHIPS BAR */
         .suite-presets-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; border-bottom: 1px solid var(--border-color); }
         .preset-chip { background: var(--bg-card); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
         .preset-chip:hover { border-color: #f59e0b; color: var(--text-main); }
 
-        /* FLOATING INPUT BAR */
-        .input-floating-container { padding: 12px 36px 20px; background: linear-gradient(180deg, transparent 0%, var(--bg-canvas) 40%); }
+        /* FLOATING INPUT CONTAINER */
+        .input-floating-container {
+            padding: 12px 36px 20px;
+            background: linear-gradient(180deg, transparent 0%, var(--bg-canvas) 40%);
+            flex-shrink: 0;
+        }
         .input-floating-bar {
             max-width: 880px; margin: 0 auto; background: var(--bg-input); border: 1px solid var(--border-color);
             border-radius: 24px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow-lg);
         }
         .input-row-main { display: flex; align-items: center; gap: 10px; }
-        .chat-textarea { flex: 1; background: none; border: none; outline: none; font-family: inherit; font-size: 14px; color: var(--text-main); resize: none; max-height: 120px; min-height: 24px; }
+        .chat-textarea { flex: 1; background: none; border: none; outline: none; font-family: inherit; font-size: 14px; color: var(--text-main); resize: none; max-height: 120px; min-height: 28px; }
         
         .input-tools-bar { display: flex; align-items: center; gap: 12px; padding-top: 6px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
         .tool-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600; font-size: 12px; display: flex; align-items: center; gap: 4px; }
@@ -277,6 +323,7 @@
                     </div>
                 </div>
 
+                <!-- SCROLLABLE CHAT MESSAGES WRAPPER -->
                 <div class="chat-messages-wrapper" id="chatMessagesWrapper">
                     <div class="hero-3d-card" style="background:var(--bg-card); padding:20px; border-radius:18px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
                         <div>
@@ -294,7 +341,7 @@
                         <div class="ai-response-block">
                             <div class="ai-label">SOLACE AI+ [PRO] ✦</div>
                             <div class="response-text">
-                                Premium subscription active. High-grade capability modules online:
+                                Premium subscription active. All systems are scrollable and responsive:
                                 <br><br>
                                 🔍 <strong>Knowledge Discovery & RAG Pipelines</strong><br>
                                 📈 <strong>SEO, Keyword Intent & Sitemap XML Engine</strong><br>
@@ -309,7 +356,6 @@
                 <!-- FLOATING INPUT BAR -->
                 <div class="input-floating-container">
                     <div class="input-floating-bar">
-                        <!-- PRESET SUITE PIPELINES -->
                         <div class="suite-presets-bar">
                             <span class="preset-chip" onclick="applyPreset('RAG Query: What was our Q3 revenue in EMEA across internal DBs?')">🔍 RAG Enterprise Query</span>
                             <span class="preset-chip" onclick="applyPreset('Write Python Web Scraper using BeautifulSoup to extract product listings and standardize JSON')">🕷️ Web Scraping Code</span>
@@ -673,6 +719,8 @@
             input.value = '';
             const payloadFile = attachedFileContent;
             attachedFileContent = null;
+
+            // Auto Scroll to bottom
             container.scrollTop = container.scrollHeight;
 
             let agentStepperHtml = '';
