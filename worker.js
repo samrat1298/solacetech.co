@@ -1,5 +1,5 @@
 /**
- * SOLACE AI+ [PRO] - Apex Enterprise Cloudflare Worker Engine
+ * SOLACE AI+ [PRO] - Enterprise Cloudflare Worker Engine
  */
 
 export default {
