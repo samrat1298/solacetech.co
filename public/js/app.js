@@ -1,6 +1,6 @@
 /**
  * SOLACE AGI Core - Production Enterprise Controller
- * Theme-Aware 3D Neural Flow Engine + 6 Billion Token Context Engine
+ * Theme-Aware Unlimited Viewport 3D Particle Wave Engine + 6.4B Context Window
  */
 
 let agenticModeEnabled = true;
@@ -42,8 +42,8 @@ window.addEventListener('DOMContentLoaded', () => {
 function update3DThemeColors(isDark) {
     if (particleMaterial) {
         particleMaterial.color.setHex(isDark ? 0x38bdf8 : 0x1d4ed8);
-        particleMaterial.opacity = isDark ? 0.75 : 0.7;
-        particleMaterial.size = isDark ? 0.08 : 0.095;
+        particleMaterial.opacity = isDark ? 0.8 : 0.75;
+        particleMaterial.size = isDark ? 0.085 : 0.1;
     }
 }
 
@@ -59,25 +59,26 @@ function handleRealGoogleLogin() {
     });
 }
 
-// Clean Interactive 3D Particle Wave Field Engine
+// Expanded Unlimited 3D Particle Wave Field Engine
 function init3DParticleFlowBackground() {
     const canvas = document.getElementById('bg3dCanvas');
     if (!canvas) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const numX = 110;
-    const numZ = 110;
+    // Expanded grid density for unlimited edge-to-edge coverage
+    const numX = 140;
+    const numZ = 140;
     const count = numX * numZ;
     const positions = new Float32Array(count * 3);
 
     let idx = 0;
-    const spacing = 0.35;
+    const spacing = 0.38;
     const offsetX = (numX * spacing) / 2;
     const offsetZ = (numZ * spacing) / 2;
 
@@ -96,45 +97,46 @@ function init3DParticleFlowBackground() {
     const isDarkInitial = document.documentElement.classList.contains('dark');
     particleMaterial = new THREE.PointsMaterial({
         color: isDarkInitial ? 0x38bdf8 : 0x1d4ed8,
-        size: isDarkInitial ? 0.08 : 0.095,
+        size: isDarkInitial ? 0.085 : 0.1,
         transparent: true,
-        opacity: isDarkInitial ? 0.75 : 0.7,
+        opacity: isDarkInitial ? 0.8 : 0.75,
         blending: THREE.AdditiveBlending
     });
 
     const particles = new THREE.Points(geometry, particleMaterial);
-    particles.position.set(0, -2.5, -4);
-    particles.rotation.x = 0.3;
+    particles.position.set(0, -2.8, -4.5);
+    particles.rotation.x = 0.32;
     scene.add(particles);
 
-    camera.position.set(0, 3, 10);
+    camera.position.set(0, 3.5, 9.5);
 
     let mouseX = 0, mouseY = 0;
     let targetX = 0, targetY = 0;
 
     window.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX - window.innerWidth / 2) * 0.0008;
-        mouseY = (e.clientY - window.innerHeight / 2) * 0.0008;
+        mouseX = (e.clientX - window.innerWidth / 2) * 0.0007;
+        mouseY = (e.clientY - window.innerHeight / 2) * 0.0007;
     });
 
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
 
     let countTime = 0;
     function animate() {
         requestAnimationFrame(animate);
 
-        countTime += 0.03;
+        countTime += 0.025;
         const posAttr = particles.geometry.attributes.position;
         let pIndex = 0;
 
         for (let ix = 0; ix < numX; ix++) {
             for (let iz = 0; iz < numZ; iz++) {
-                posAttr.array[pIndex + 1] = (Math.sin((ix + countTime) * 0.25) * 0.45) +
-                                             (Math.cos((iz + countTime) * 0.35) * 0.45);
+                posAttr.array[pIndex + 1] = (Math.sin((ix + countTime) * 0.25) * 0.5) +
+                                             (Math.cos((iz + countTime) * 0.35) * 0.5);
                 pIndex += 3;
             }
         }
@@ -143,9 +145,9 @@ function init3DParticleFlowBackground() {
         targetX += (mouseX - targetX) * 0.05;
         targetY += (-mouseY - targetY) * 0.05;
 
-        camera.position.x = targetX * 4;
-        camera.position.y = 3 + targetY * 3;
-        camera.lookAt(0, -1, -4);
+        camera.position.x = targetX * 5;
+        camera.position.y = 3.5 + targetY * 4;
+        camera.lookAt(0, -1, -4.5);
 
         renderer.render(scene, camera);
     }
