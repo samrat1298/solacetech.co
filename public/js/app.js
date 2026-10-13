@@ -96,7 +96,6 @@ function dismissAuthModal() {
 async function handleRealGoogleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
-        // Uses redirect strategy to prevent popup blocking errors
         await auth.signInWithRedirect(provider);
     } catch (err) {
         console.warn("OAuth fallback initiated:", err.message);
@@ -550,12 +549,28 @@ async function sendUserMessage() {
 }
 
 function formatResponseText(text) {
+    if (!text) return '';
+    
+    // Properly format Markdown Code Blocks and prevent unformatted inline smashing
     if (text.includes("```")) {
-        return text.replace(/```(.*?)\n([\s\S]*?)```/g, (match, lang, code) => {
-            return `<pre><code>${escapeHtml(code.trim())}</code></pre><button class="studio-btn run" onclick="openCanvasPanel(\`${escapeHtml(code.trim())}\`)">⚡ Open Artifact Studio</button>`;
+        return text.replace(/```([a-zA-Z]*)\n([\s\S]*?)```/g, (match, lang, code) => {
+            const cleanCode = code.trim();
+            return `
+                <div class="code-block-wrapper" style="margin: 12px 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-strong);">
+                    <div style="background: rgba(0,0,0,0.04); padding: 6px 12px; font-size: 11px; font-weight: 700; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle);">
+                        <span>${lang ? lang.toUpperCase() : 'CODE SNIPPET'}</span>
+                        <button class="studio-btn run" style="padding: 2px 8px; font-size: 10px;" onclick="openCanvasPanel(\`${escapeHtml(cleanCode)}\`)">⚡ Open in Studio</button>
+                    </div>
+                    <pre style="background: #090d16; color: #38bdf8; padding: 14px; margin: 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.6;"><code>${escapeHtml(cleanCode)}</code></pre>
+                </div>
+            `;
         });
     }
-    return escapeHtml(text).replace(/\n/g, '<br>');
+
+    return escapeHtml(text)
+        .replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--text-primary);">$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
 }
 
 function escapeHtml(str) {
