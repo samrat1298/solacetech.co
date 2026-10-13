@@ -29,7 +29,6 @@ body {
   width: 100vw;
 }
 
-/* Sidebar Styling */
 .solace-sidebar {
   width: 260px;
   background-color: var(--bg-sidebar);
@@ -78,7 +77,6 @@ body {
   cursor: pointer;
 }
 
-/* Main Workspace */
 .solace-main {
   flex: 1;
   display: flex;
@@ -109,7 +107,6 @@ body {
   border-radius: 20px;
 }
 
-/* Chat Feed */
 .chat-feed {
   flex: 1;
   overflow-y: auto;
@@ -152,7 +149,6 @@ body {
   white-space: pre-wrap;
 }
 
-/* Input Area */
 .chat-input-area {
   padding: 20px 24px;
   border-top: 1px solid var(--border-subtle);

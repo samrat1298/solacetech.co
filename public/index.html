@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SOLACE AGI Platform</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="/frontend/css/enterprise.css">
 </head>
 <body>
   <div class="solace-layout">
@@ -12,31 +12,31 @@
     <aside class="solace-sidebar">
       <div class="sidebar-header">
         <h2>SOLACE</h2>
-        <span class="version-badge">v2.6 Core</span>
+        <span class="version-badge">v2.6 AGI</span>
       </div>
       <div class="sidebar-nav">
-        <button class="nav-item active">Neural Chat & Code</button>
+        <button class="nav-item active">Neural Core Node</button>
       </div>
     </aside>
 
     <!-- Main Workspace -->
     <main class="solace-main">
       <header class="chat-header">
-        <h1>Autonomous Intelligence Node</h1>
-        <div class="telemetry-pill">Token Window: 6.4B Active</div>
+        <h1>Autonomous Intelligence Platform</h1>
+        <div class="telemetry-pill">Token Window: 6.4B | Cost: $0.00</div>
       </header>
 
       <!-- Message History Container -->
       <div id="chat-feed" class="chat-feed">
         <div class="message assistant">
           <div class="msg-author">SOLACE Core</div>
-          <div class="msg-content">System initialized. Ready for text and code input.</div>
+          <div class="msg-content">Neural link established. Ready for instructions.</div>
         </div>
       </div>
 
       <!-- Input Controls -->
       <div class="chat-input-area">
-        <textarea id="user-prompt" placeholder="Type your query or paste code here..." rows="2"></textarea>
+        <textarea id="user-prompt" placeholder="Enter query or instructions..." rows="2"></textarea>
         <button id="send-btn" onclick="sendMessage()">Transmit</button>
       </div>
     </main>
@@ -50,7 +50,6 @@
       
       if (!promptText) return;
 
-      // Append user bubble
       feed.innerHTML += `
         <div class="message user">
           <div class="msg-author">You</div>
@@ -67,7 +66,6 @@
         });
         const data = await res.json();
 
-        // Append assistant response
         feed.innerHTML += `
           <div class="message assistant">
             <div class="msg-author">SOLACE Core</div>
