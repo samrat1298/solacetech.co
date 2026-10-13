@@ -22,7 +22,7 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.7);
-            --sidebar-width: 280px;
+            --sidebar-width: 290px;
         }
 
         html.light {
@@ -76,7 +76,7 @@
 
         @media (max-width: 868px) {
             .app-window { grid-template-columns: 1fr; }
-            .sidebar { position: absolute; left: -280px; top: 0; height: 100%; z-index: 100; transition: left 0.3s ease; }
+            .sidebar { position: absolute; left: -290px; top: 0; height: 100%; z-index: 100; transition: left 0.3s ease; }
             .sidebar.open { left: 0; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
         }
 
@@ -224,7 +224,7 @@
         <!-- SIDEBAR -->
         <aside class="sidebar" id="appSidebar">
             <div class="brand-header">
-                <div class="brand-logo" onclick="location.reload()">
+                <div class="brand-logo" onclick="createNewThread()">
                     <div class="brand-badge-pro">PRO</div> SOLACE AI+
                 </div>
                 <button class="btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
@@ -232,10 +232,10 @@
                 </button>
             </div>
 
-            <button class="btn-primary-action" onclick="location.reload()">+ New PRO Thread</button>
+            <button class="btn-primary-action" onclick="createNewThread()">+ New PRO Thread</button>
 
             <div class="history-group" id="chatHistoryList">
-                <div class="history-item active">💬 Active Llama 3.2 3B [PRO Session]</div>
+                <!-- Dynamic threads load here -->
             </div>
 
             <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--border-color); display:flex; flex-direction:column; gap:8px;">
@@ -255,7 +255,7 @@
             <main class="main-chat-container">
                 <div class="chat-topbar">
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-weight:800; font-size:14px;">SOLACE AI+ Workspace</span>
+                        <span style="font-weight:800; font-size:14px;" id="currentThreadTitle">SOLACE Workspace</span>
                         <span class="brand-badge-pro">PRO ACTIVE</span>
                     </div>
                     <div style="display:flex; gap:8px; align-items:center;">
@@ -269,28 +269,9 @@
                     <div class="hero-3d-card" style="background:var(--bg-card); padding:20px; border-radius:18px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
                         <div>
                             <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [PRO]</h2>
-                            <p style="font-size:13px; color:var(--text-muted);">Priority compute routing, side canvas studio, autonomous agents, and RAG knowledge engines.</p>
+                            <p style="font-size:13px; color:var(--text-muted);">Persistent memory, multi-threading, canvas studio, and enterprise RAG engines online.</p>
                         </div>
                         <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
-                    </div>
-
-                    <div class="message-block">
-                        <div class="user-prompt-header">
-                            <div class="user-avatar-sm" id="initialMsgAvatar">SC</div>
-                            <span>Hello SOLACE AI+, verify enterprise feature matrix.</span>
-                        </div>
-                        <div class="ai-response-block">
-                            <div class="ai-label">SOLACE AI+ [PRO] ✦</div>
-                            <div class="response-text">
-                                Premium subscription active. High-grade enterprise workflows enabled:
-                                <br><br>
-                                🔍 <strong>Knowledge Discovery & RAG Pipelines</strong><br>
-                                📈 <strong>SEO, Keyword Intent & Sitemap XML Engine</strong><br>
-                                👥 <strong>HR Onboarding, Rubrics & Policy Workflows</strong><br>
-                                🕷️ <strong>Web Data Scraping & Structural Cleaners</strong><br>
-                                🎨 <strong>Interactive Side Canvas & Live Code Executor</strong>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -305,7 +286,7 @@
                         </div>
 
                         <div class="input-row-main" style="margin-top:4px;">
-                            <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything, trigger RAG, run web scrapers, or write code..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
+                            <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything with persistent enterprise memory..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
                             <button class="btn-send-pill" onclick="sendUserMessage()">
                                 <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                             </button>
@@ -379,7 +360,7 @@
     <div class="modal-backdrop" id="settingsModal">
         <div class="modal-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="modal-title">Workspace Settings</span>
+                <span class="modal-title">Workspace Settings & Memory</span>
                 <button class="tool-btn" onclick="closeModal('settingsModal')">✕</button>
             </div>
             <div class="form-group">
@@ -391,8 +372,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label">System Persona Prompt</label>
-                <textarea class="modal-input" id="systemPromptInput" rows="3" placeholder="You are SOLACE AI+ [PRO], an elite software engineering assistant."></textarea>
+                <label class="form-label">Persistent Memory & Context</label>
+                <textarea class="modal-input" id="persistentMemoryInput" rows="3" placeholder="Saved facts about projects, code styles, and preferences..."></textarea>
             </div>
             <button class="btn-primary-action" style="border-radius:12px; width:100%;" onclick="saveSettings()">Save Configuration</button>
         </div>
@@ -402,6 +383,8 @@
         let agenticModeEnabled = false;
         let attachedFileContent = null;
         let tempAvatarData = "";
+        let threads = [];
+        let activeThreadId = null;
 
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('googleLoginBtn').addEventListener('click', handleGoogleOAuthLogin);
@@ -418,18 +401,123 @@
             if (isLoggedIn === 'true') {
                 document.getElementById('authScreenOverlay').style.display = 'none';
                 loadUserProfile();
+                loadThreadsFromStorage();
             } else {
                 document.getElementById('authScreenOverlay').style.display = 'flex';
             }
 
             const savedModel = localStorage.getItem('solace_model');
             if(savedModel) document.getElementById('modelSelect').value = savedModel;
-            const savedSystem = localStorage.getItem('solace_system_prompt');
-            if(savedSystem) document.getElementById('systemPromptInput').value = savedSystem;
+            const savedMemory = localStorage.getItem('solace_persistent_memory');
+            if(savedMemory) document.getElementById('persistentMemoryInput').value = savedMemory;
 
             updateModelBadge();
             init3DOrb();
         });
+
+        function loadThreadsFromStorage() {
+            const stored = localStorage.getItem('solace_chat_threads');
+            if (stored) {
+                threads = JSON.parse(stored);
+            }
+            if (threads.length === 0) {
+                createNewThread();
+            } else {
+                switchThread(threads[0].id);
+            }
+        }
+
+        function saveThreadsToStorage() {
+            localStorage.setItem('solace_chat_threads', JSON.stringify(threads));
+            renderThreadList();
+        }
+
+        function createNewThread() {
+            const newThread = {
+                id: 'thread-' + Date.now(),
+                title: 'New PRO Session',
+                messages: []
+            };
+            threads.unshift(newThread);
+            saveThreadsToStorage();
+            switchThread(newThread.id);
+        }
+
+        function switchThread(id) {
+            activeThreadId = id;
+            renderThreadList();
+            renderActiveThreadMessages();
+        }
+
+        function renderThreadList() {
+            const list = document.getElementById('chatHistoryList');
+            list.innerHTML = '';
+            threads.forEach(t => {
+                const isActive = t.id === activeThreadId;
+                list.innerHTML += `
+                    <div class="history-item ${isActive ? 'active' : ''}" onclick="switchThread('${t.id}')">
+                        <span>💬 ${escapeHtml(t.title)}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function renderActiveThreadMessages() {
+            const container = document.getElementById('chatMessagesWrapper');
+            const thread = threads.find(t => t.id === activeThreadId);
+            if (!thread) return;
+
+            document.getElementById('currentThreadTitle').innerText = thread.title;
+
+            let html = `
+                <div class="hero-3d-card" style="background:var(--bg-card); padding:20px; border-radius:18px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [PRO]</h2>
+                        <p style="font-size:13px; color:var(--text-muted);">Active Thread: ${escapeHtml(thread.title)}</p>
+                    </div>
+                    <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
+                </div>
+            `;
+
+            if (thread.messages.length === 0) {
+                html += `
+                    <div class="message-block">
+                        <div class="ai-response-block">
+                            <div class="ai-label">SOLACE AI+ [PRO] ✦</div>
+                            <div class="response-text">
+                                Persistent memory & multi-threading active. Ask anything or select a preset below!
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                thread.messages.forEach(m => {
+                    if (m.role === 'user') {
+                        html += `
+                            <div class="message-block">
+                                <div class="user-prompt-header">
+                                    <div class="user-avatar-sm" id="msgAvatar">SC</div>
+                                    <span>${escapeHtml(m.content)}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="message-block">
+                                <div class="ai-response-block">
+                                    <div class="ai-label">SOLACE AI+ [PRO] ✦</div>
+                                    <div>${formatResponseText(m.content)}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+            init3DOrb();
+        }
 
         function applyPreset(text) {
             document.getElementById('userChatInput').value = text;
@@ -444,16 +532,13 @@
             
             document.getElementById('authScreenOverlay').style.display = 'none';
             loadUserProfile();
+            loadThreadsFromStorage();
         }
 
         function handleEmailAuthSubmit() {
             const emailField = document.getElementById('inputAuthEmail');
             const email = emailField ? emailField.value.trim() : '';
-            
-            if (!email) {
-                alert('Please enter a valid email address.');
-                return;
-            }
+            if (!email) { alert('Please enter email.'); return; }
             let name = email.split('@')[0];
             name = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -463,6 +548,7 @@
             
             document.getElementById('authScreenOverlay').style.display = 'none';
             loadUserProfile();
+            loadThreadsFromStorage();
         }
 
         function handleLogout() {
@@ -472,28 +558,11 @@
 
         function loadUserProfile() {
             const name = localStorage.getItem('solace_user_name') || 'Samrat Chaudhary';
-            const avatarUrl = localStorage.getItem('solace_avatar_url') || '';
-
+            const avatarUrl = localStorage.getItem('solace_avatar_url'] || '';
             document.getElementById('userNameDisplay').innerText = name;
             document.getElementById('profileNameInput').value = name;
             document.getElementById('profileAvatarInput').value = avatarUrl;
             tempAvatarData = avatarUrl;
-
-            renderAvatarElements(name, avatarUrl);
-        }
-
-        function renderAvatarElements(name, avatarUrl) {
-            const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'U';
-            const sidebarAvatar = document.getElementById('sidebarUserAvatar');
-            const initialMsgAvatar = document.getElementById('initialMsgAvatar');
-
-            if (avatarUrl) {
-                sidebarAvatar.innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
-                initialMsgAvatar.innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
-            } else {
-                sidebarAvatar.innerText = initials;
-                initialMsgAvatar.innerText = initials;
-            }
         }
 
         function handleProfileAvatarUpload(event) {
@@ -510,10 +579,8 @@
         function saveProfileChanges() {
             const name = document.getElementById('profileNameInput').value.trim() || 'User';
             const avatarUrl = document.getElementById('profileAvatarInput').value.trim() || tempAvatarData;
-
             localStorage.setItem('solace_user_name', name);
             localStorage.setItem('solace_avatar_url', avatarUrl);
-
             loadUserProfile();
             closeModal('authModal');
         }
@@ -563,7 +630,7 @@
 
         function saveSettings() {
             localStorage.setItem('solace_model', document.getElementById('modelSelect').value);
-            localStorage.setItem('solace_system_prompt', document.getElementById('systemPromptInput').value);
+            localStorage.setItem('solace_persistent_memory', document.getElementById('persistentMemoryInput').value);
             updateModelBadge();
             closeModal('settingsModal');
         }
@@ -606,14 +673,14 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 attachedFileContent = e.target.result;
-                alert(`File "${file.name}" uploaded to PRO multimodal context!`);
+                alert(`File "${file.name}" uploaded to PRO context!`);
             };
             reader.readAsDataURL(file);
         }
 
         function toggleVoiceInput() {
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert('Speech recognition is not supported in this browser.');
+                alert('Speech recognition not supported.');
                 return;
             }
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -640,83 +707,50 @@
             const text = input.value.trim();
             if (!text && !attachedFileContent) return;
 
-            const container = document.getElementById('chatMessagesWrapper');
-            const name = localStorage.getItem('solace_user_name') || 'User';
-            const avatarUrl = localStorage.getItem('solace_avatar_url') || '';
-            const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            const thread = threads.find(t => t.id === activeThreadId);
+            if (!thread) return;
 
-            let avatarHtml = avatarUrl ? `<img src="${avatarUrl}" alt="Avatar">` : initials;
-            let displayPrompt = text;
-            if (attachedFileContent) displayPrompt += " [Attached File Included]";
+            if (thread.messages.length === 0) {
+                thread.title = text.length > 30 ? text.substring(0, 30) + '...' : text;
+            }
 
-            container.innerHTML += `
-                <div class="message-block">
-                    <div class="user-prompt-header">
-                        <div class="user-avatar-sm">${avatarHtml}</div>
-                        <span>${escapeHtml(displayPrompt)}</span>
-                    </div>
-                </div>
-            `;
+            thread.messages.push({ role: 'user', content: text });
             input.value = '';
             const payloadFile = attachedFileContent;
             attachedFileContent = null;
-            container.scrollTop = container.scrollHeight;
-
-            let agentStepperHtml = '';
-            if (agenticModeEnabled) {
-                agentStepperHtml = `
-                    <div class="agent-stepper">
-                        <div class="agent-step-item">🔄 [PRO Agent] Step 1: Parsing enterprise instruction...</div>
-                        <div class="agent-step-item">⚡ [PRO Agent] Step 2: Querying Model Context Protocol (MCP) data...</div>
-                        <div class="agent-step-item">🚀 [PRO Agent] Step 3: Executing multi-step reasoning pipeline...</div>
-                    </div>
-                `;
-            }
-
-            const loadId = 'loading-' + Date.now();
-            container.innerHTML += `
-                <div class="message-block" id="${loadId}">
-                    <div class="ai-response-block">
-                        <div class="ai-label">SOLACE AI+ [PRO] ✦</div>
-                        ${agentStepperHtml}
-                        <div style="color:var(--text-muted)">Generating via priority PRO compute cluster...</div>
-                    </div>
-                </div>
-            `;
-            container.scrollTop = container.scrollHeight;
+            saveThreadsToStorage();
+            renderActiveThreadMessages();
 
             try {
                 const model = localStorage.getItem('solace_model') || "@cf/meta/llama-3.2-3b-instruct";
-                let systemPrompt = localStorage.getItem('solace_system_prompt') || "You are SOLACE AI+ [PRO], an elite assistant.";
-                if (agenticModeEnabled) systemPrompt += " [PRO Agent Mode: Provide structured, autonomous multi-step execution plans]";
+                const persistentMemory = localStorage.getItem('solace_persistent_memory') || "";
+                let systemPrompt = "You are SOLACE AI+ [PRO], an elite enterprise assistant.";
+                if (persistentMemory) systemPrompt += " Persistent Enterprise Memory Context: " + persistentMemory;
+                if (agenticModeEnabled) systemPrompt += " [PRO Agent Mode Enabled]";
+
+                const apiMessages = [
+                    { role: "system", content: systemPrompt },
+                    ...thread.messages.map(m => ({ role: m.role, content: m.content }))
+                ];
+
+                let featureParam = "";
+                if (text.toLowerCase().includes("rag query")) featureParam = "rag";
+                if (text.toLowerCase().includes("scraper")) featureParam = "scraper";
+                if (text.toLowerCase().includes("seo")) featureParam = "seo";
+                if (text.toLowerCase().includes("job description") || text.toLowerCase().includes("hr")) featureParam = "hr";
 
                 const res = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        messages: [
-                            { role: "system", content: systemPrompt },
-                            { role: "user", content: text }
-                        ],
-                        model: model,
-                        image: payloadFile
-                    })
+                    body: JSON.stringify({ messages: apiMessages, model: model, image: payloadFile, feature: featureParam })
                 });
 
                 const data = await res.json();
                 const reply = data.response || data.result?.response || JSON.stringify(data);
 
-                document.getElementById(loadId).remove();
-
-                const responseId = 'res-' + Date.now();
-                container.innerHTML += `
-                    <div class="message-block">
-                        <div class="ai-response-block">
-                            <div class="ai-label">SOLACE AI+ [PRO] ✦</div>
-                            <div id="${responseId}">${formatResponseText(reply)}</div>
-                        </div>
-                    </div>
-                `;
+                thread.messages.push({ role: 'assistant', content: reply });
+                saveThreadsToStorage();
+                renderActiveThreadMessages();
 
                 if (reply.includes("```")) {
                     const codeMatch = reply.match(/```(.*?)\n([\s\S]*?)```/);
@@ -725,14 +759,10 @@
                     }
                 }
             } catch (err) {
-                document.getElementById(loadId)?.remove();
-                container.innerHTML += `
-                    <div class="message-block">
-                        <div class="ai-response-block" style="color:#ef4444;">Error: ${err.message}</div>
-                    </div>
-                `;
+                thread.messages.push({ role: 'assistant', content: "Error executing request: " + err.message });
+                saveThreadsToStorage();
+                renderActiveThreadMessages();
             }
-            container.scrollTop = container.scrollHeight;
         }
 
         function formatResponseText(text) {
