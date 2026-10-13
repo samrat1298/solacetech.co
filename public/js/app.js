@@ -43,12 +43,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function toggleSidebar() {
     const sidebar = document.getElementById('appSidebar');
-    const expandBtn = document.getElementById('sidebarExpandBtn');
+    const toggleBtn = document.getElementById('sidebarEdgeToggleBtn');
     if (!sidebar) return;
 
     const isCollapsed = sidebar.classList.toggle('collapsed');
-    if (expandBtn) {
-        expandBtn.style.display = isCollapsed ? 'flex' : 'none';
+    if (toggleBtn) {
+        toggleBtn.innerText = isCollapsed ? '⟩' : '⟨';
     }
 }
 

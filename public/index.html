@@ -31,25 +31,15 @@
 
     <!-- Main Workspace -->
     <div class="app-layout" id="workspaceSplit">
-        <!-- Floating Expand Button when Sidebar is Collapsed -->
-        <button onclick="toggleSidebar()" class="sidebar-expand-floating-btn" id="sidebarExpandBtn" title="Expand Sidebar" style="display: none;">
-            ▶
-        </button>
-
         <aside class="sidebar glass-panel" id="appSidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
                     <span class="logo-spark">✦</span>
                     <span class="logo-text">SOLACE <small>OS</small></span>
                 </div>
-                <div class="sidebar-header-actions">
-                    <button onclick="createNewThread()" class="new-chat-btn" title="New Session">
-                        <span>+</span> New
-                    </button>
-                    <button onclick="toggleSidebar()" class="sidebar-collapse-btn" id="sidebarToggleBtn" title="Collapse Sidebar">
-                        ◀
-                    </button>
-                </div>
+                <button onclick="createNewThread()" class="new-chat-btn" title="New Session">
+                    <span>+</span> New
+                </button>
             </div>
 
             <!-- Quick Action Grid -->
@@ -74,6 +64,11 @@
                 <button onclick="toggleTheme()" id="themeToggleIcon" class="icon-btn" title="Toggle Theme">🌙</button>
             </div>
         </aside>
+
+        <!-- Middle-Edge Floating Collapse / Expand Toggle Button -->
+        <button onclick="toggleSidebar()" class="sidebar-edge-toggle-btn" id="sidebarEdgeToggleBtn" title="Toggle Sidebar">
+            ⟨
+        </button>
 
         <main class="main-content">
             <header class="topbar glass-panel">
