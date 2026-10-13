@@ -1,5 +1,6 @@
 /**
  * SOLACE AI+ Edge Worker Gateway
+ * Orchestrates multi-agent routing, autonomous tool dispatching, and MIME-safe asset delivery.
  */
 
 import { handleAGIExecution } from './services/agentOrchestrator.js';
@@ -24,7 +25,28 @@ export default {
     }
 
     if (request.method === "GET" && !url.pathname.startsWith("/api/")) {
-      if (env.ASSETS) return env.ASSETS.fetch(request);
+      if (env.ASSETS) {
+        let assetResponse = await env.ASSETS.fetch(request);
+        
+        // Ensure proper MIME types for static assets
+        if (url.pathname.endsWith(".css")) {
+          const newHeaders = new Headers(assetResponse.headers);
+          newHeaders.set("Content-Type", "text/css");
+          return new Response(assetResponse.body, {
+            status: assetResponse.status,
+            headers: newHeaders
+          });
+        } else if (url.pathname.endsWith(".js")) {
+          const newHeaders = new Headers(assetResponse.headers);
+          newHeaders.set("Content-Type", "application/javascript");
+          return new Response(assetResponse.body, {
+            status: assetResponse.status,
+            headers: newHeaders
+          });
+        }
+
+        return assetResponse;
+      }
       return new Response("SOLACE Omniscient Core Matrix Gateway Online", { status: 200 });
     }
 
