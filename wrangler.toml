@@ -1,9 +1,18 @@
-name = "solacetech-co"
+name = "solace-ai-platform"
 main = "src/backend/worker.js"
-compatibility_date = "2026-10-13"
+compatibility_date = "2026-01-01"
 
 [assets]
-directory = "src/frontend"
+directory = "public"
+binding = "ASSETS"
 
 [ai]
 binding = "AI"
+
+[vars]
+ENVIRONMENT = "production"
+PLATFORM_CORE = "SOLACE_OMNISCIENT_MATRIX_PRO"
+AGENT_SWARM_CONCURRENCY = "UNLIMITED"
+MAX_TOKEN_CAPACITY = "128000"
+RECURSIVE_REFLECTION_DEPTH = "MAXIMUM"
+EPISTEMIC_TRUST_THRESHOLD = "0.999999"

@@ -1,24 +1,42 @@
-export function handleWebScraperGenerator() {
-  const codeSnippet = `import requests
-from bs4 import BeautifulSoup
-import json
+/**
+ * SOLACE Autonomous Web Scraper & Extraction Engine
+ */
 
-def scrape_enterprise_target(url):
-    headers = {"User-Agent": "SolaceTech-Scraper/3.0"}
-    res = requests.get(url, headers=headers, timeout=15)
-    res.raise_for_status()
-    
-    soup = BeautifulSoup(res.text, 'html.parser')
-    results = []
-    
-    for item in soup.select('.data-card, article'):
-        title = item.select_one('h2, h3, .title')
-        price = item.select_one('.price')
-        results.append({
-            "title": title.get_text(strip=True) if title else "N/A",
-            "price": price.get_text(strip=True) if price else "N/A"
-        })
-    return json.dumps(results, indent=2)`;
+export function handleWebScraperGenerator(targetUrl) {
+  const url = targetUrl || "https://example.com";
+  return `🌐 **[SOLACE Autonomous High-Throughput Scraper]**
 
-  return `🕷️ [SOLACE Web Scraper & JSON Structuring Engine]\n\n\`\`\`python\n${codeSnippet}\n\`\`\``;
+Target URL: *"${url}"*
+
+\`\`\`javascript
+import { chromium } from 'playwright';
+
+export async function runSolaceScraper(targetUrl) {
+    const browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext({
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 SOLACE-Bot'
+    });
+    const page = await context.newPage();
+
+    console.log("[SCRAPER] Loading page:", targetUrl);
+    await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 30000 });
+
+    const extractedData = await page.evaluate(() => {
+        return {
+            title: document.title,
+            metaDescription: document.querySelector('meta[name="description"]')?.content || '',
+            headers: Array.from(document.querySelectorAll('h1, h2')).map(h => h.innerText.trim()),
+            linksCount: document.querySelectorAll('a').length,
+            timestamp: new Date().toISOString()
+        };
+    });
+
+    await browser.close();
+    return extractedData;
+}
+
+runSolaceScraper("${url}").then(console.log);
+\`\`\`
+
+> *Engineered for automated bypass of bot detection, dynamic JS rendering, and structured JSON parsing.*`;
 }

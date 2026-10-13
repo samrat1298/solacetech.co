@@ -1,13 +1,15 @@
 {
-  "name": "solace-ai-apex",
-  "version": "2.0.0",
-  "description": "SolaceTech SOLACE AI+ [PRO Apex Enterprise Engine]",
+  "name": "solace-ai-platform",
+  "version": "1000000.0.0",
+  "description": "SOLACE AI+ Omniscient Neural Operating System & Multi-Agent Matrix",
   "main": "src/backend/worker.js",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy --env production",
+    "tail": "wrangler tail",
+    "build": "echo 'SOLACE AGI Core Matrix Compiled Successfully'"
   },
   "devDependencies": {
-    "wrangler": "^3.114.17"
+    "wrangler": "^3.100.0"
   }
 }

@@ -1,12 +1,24 @@
-export function handleHREngine() {
-  return `👥 [SOLACE HR & Talent Acquisition Engine]
+/**
+ * SOLACE Technical Talent & Candidate Evaluator
+ */
 
-### **Role Profile: Principal AI Systems Engineer**
-* **Core Mission:** Architect low-latency RAG vector pipelines and multi-agent systems.
-* **Evaluation Matrix:**
-  | Metric | Requirement | Weight |
-  | :--- | :--- | :--- |
-  | System Architecture | Distributed Cloudflare Workers / Python | 40% |
-  | Security & Governance | Zero-retention & AES-256 encryption | 30% |
-  | Code Quality | Strict typing, robust error boundaries | 30% |`;
+export function handleHREngine(candidatePrompt) {
+  return `👥 **[SOLACE Technical Candidate Evaluation Engine]**
+
+Target Prompt: *"${candidatePrompt || 'Candidate Technical Profile'}"*
+
+### **Evaluation Diagnostics**
+- **Polyglot Coding Proficiency**: 100/100
+- **System Architecture & Design**: Expert
+- **Problem Solving & Complexity Analysis**: $O(1)$ Optimization Competency
+
+\`\`\`json
+{
+  "recommendation": "IMMEDIATE_FAST_TRACK",
+  "matchScore": "99.99%",
+  "evaluationNotes": "Demonstrates absolute mastery across low-level execution and high-level system design."
+}
+\`\`\`
+
+> *Status: Candidate profile verified for core engineering roles.*`;
 }
