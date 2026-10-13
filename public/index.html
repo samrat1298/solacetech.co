@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOLACE AGI Platform</title>
+  <title>SOLACE - Autonomous Intelligence Platform</title>
   <link rel="stylesheet" href="css/enterprise.css">
 </head>
 <body>
@@ -15,28 +15,31 @@
         <span class="version-badge">v2.6 AGI</span>
       </div>
       <div class="sidebar-nav">
-        <button class="nav-item active">Neural Core Node</button>
+        <button class="nav-item active">🧠 Neural Core & Chat</button>
+        <button class="nav-item">⚡ Focus Mode</button>
+        <button class="nav-item">🛠️ Explain Anything</button>
+        <button class="nav-item">🚀 Action + Intelligence</button>
       </div>
     </aside>
 
     <!-- Main Workspace -->
     <main class="solace-main">
       <header class="chat-header">
-        <h1>Autonomous Intelligence Platform</h1>
-        <div class="telemetry-pill">Token Window: 6.4B | Cost: $0.00</div>
+        <h1>Autonomous Intelligence Node</h1>
+        <div class="telemetry-pill">Token Window: 6.4B Active | Model: openrouter/free</div>
       </header>
 
       <!-- Message History Container -->
       <div id="chat-feed" class="chat-feed">
         <div class="message assistant">
-          <div class="msg-author">SOLACE Core</div>
-          <div class="msg-content">Neural link established. Ready for instructions.</div>
+          <div class="msg-author">SOLACE AGI Core</div>
+          <div class="msg-content">System fully re-initialized. 6.4 Billion Token Context Window active. How can I assist your workflow today?</div>
         </div>
       </div>
 
       <!-- Input Controls -->
       <div class="chat-input-area">
-        <textarea id="user-prompt" placeholder="Enter query or instructions..." rows="2"></textarea>
+        <textarea id="user-prompt" placeholder="Ask anything, write code, or execute multi-modal commands..." rows="2"></textarea>
         <button id="send-btn" onclick="sendMessage()">Transmit</button>
       </div>
     </main>
@@ -68,7 +71,7 @@
 
         feed.innerHTML += `
           <div class="message assistant">
-            <div class="msg-author">SOLACE Core</div>
+            <div class="msg-author">SOLACE AGI Core</div>
             <div class="msg-content">${escapeHtml(data.response || "No response received.")}</div>
           </div>`;
       } catch (err) {

@@ -1,5 +1,6 @@
 /**
  * SOLACE AGI Core - Main Backend Orchestrator
+ * Connected to OpenRouter Free Tier via local .dev.vars
  */
 
 export default {
