@@ -3,160 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLACE AI+ | Enterprise Neural OS</title>
-    <link rel="stylesheet" href="css/enterprise.css">
+    <title>SOLACE AGI Core - 6.4 Billion Token Neural Workspace</title>
+    <link rel="stylesheet" href="/css/enterprise.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <!-- Full-page Interactive Quantum Wave 3D Background Canvas -->
+
+    <!-- Dynamic Unlimited 3D Background Canvas -->
     <canvas id="bg3dCanvas"></canvas>
 
-    <!-- Custom Enterprise Modal Notification / Confirm Popup Overlay -->
-    <div id="solaceDialogOverlay" class="solace-dialog-overlay" style="display: none;">
-        <div class="solace-dialog-card glass-panel">
-            <div id="solaceDialogIcon" class="dialog-icon">✦</div>
-            <h3 id="solaceDialogTitle">System Notice</h3>
-            <p id="solaceDialogMessage">Message details go here...</p>
-            <div class="dialog-actions" id="solaceDialogActions">
-                <button onclick="closeSolaceDialog()" class="dialog-btn primary">Understood</button>
-            </div>
-        </div>
-    </div>
+    <!-- App Layout Structure -->
+    <div class="app-layout">
 
-    <!-- Production Auth Modal -->
-    <div id="authScreenOverlay" class="auth-overlay" style="display: none;">
-        <div class="auth-modal-card glass-panel">
-            <div class="auth-modal-header">
-                <div class="brand-badge-lg">✦</div>
-                <h2>Enterprise Neural ID</h2>
-                <p>Connect to SOLACE Cloud & Sync Neural Threads across devices.</p>
-            </div>
-            
-            <button onclick="handleRealGoogleLogin()" class="enterprise-auth-btn google">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                Continue with Google Workspace
-            </button>
-
-            <div class="auth-divider"><span>OR ENTERPRISE EMAIL</span></div>
-            
-            <div class="auth-field-group">
-                <input type="email" id="inputAuthEmail" placeholder="samrat@solacetech.ai" class="enterprise-input">
-                <input type="password" id="inputAuthPassword" placeholder="••••••••••••" class="enterprise-input">
-            </div>
-            
-            <div class="auth-action-grid">
-                <button onclick="handleRealEmailLogin()" class="enterprise-auth-btn primary">Sign In</button>
-                <button onclick="handleRealEmailSignup()" class="enterprise-auth-btn secondary">Register Node</button>
-            </div>
-
-            <button onclick="dismissAuthModal()" class="auth-dismiss-link">Continue as Guest (Local Workspace) ➔</button>
-        </div>
-    </div>
-
-    <!-- Main Workspace Layout -->
-    <div class="app-layout" id="workspaceSplit">
+        <!-- Sidebar Navigation Pane -->
         <aside class="sidebar-pane glass-panel" id="appSidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
                     <span class="logo-spark">✦</span>
-                    <span class="logo-text">SOLACE</span>
-                    <span class="logo-tier">PRO</span>
+                    <span>SOLACE AI+</span>
+                    <span class="logo-tier">6.4B CORE</span>
                 </div>
-                <button onclick="createNewThread()" class="btn-new-session" title="New Session">
-                    <span>+</span> New Chat
+                <button class="btn-new-session" onclick="createNewThread()">
+                    <span>+</span> New Session
                 </button>
             </div>
 
-            <!-- Tool Actions Grid -->
+            <!-- Quick Enterprise Tools Grid -->
             <div class="sidebar-tools-grid">
-                <button onclick="clearCurrentChat()" class="tool-chip" title="Clear Chat">🗑️ Clear</button>
-                <button onclick="exportCurrentChat()" class="tool-chip" title="Export JSON">📥 Export</button>
-                <button onclick="triggerPlugin('gitSync')" class="tool-chip plugin" title="Git Sync">📦 Git</button>
-                <button onclick="triggerPlugin('debugger')" class="tool-chip plugin" title="Debugger">🛠️ Debug</button>
+                <button class="tool-chip" onclick="clearCurrentChat()">🧹 Clear Chat</button>
+                <button class="tool-chip" onclick="exportCurrentChat()">💾 Export JSON</button>
+                <button class="tool-chip plugin" onclick="triggerPlugin('Code Optimizer')">⚡ Code Opt</button>
+                <button class="tool-chip plugin" onclick="triggerPlugin('Deep Research')">🔍 Deep Search</button>
             </div>
 
-            <div class="sidebar-section-title">ACTIVE THREADS</div>
-            <div class="chat-history-list" id="chatHistoryList"></div>
+            <div class="sidebar-section-title">ACTIVE NEURAL SESSIONS</div>
 
+            <!-- Session History List -->
+            <div class="chat-history-list" id="chatHistoryList">
+                <!-- Dynamically populated via app.js -->
+            </div>
+
+            <!-- Sidebar Footer User Profile -->
             <div class="sidebar-footer">
-                <div class="user-pill" id="userProfileCard" onclick="openAuthModal()" title="Manage Account">
+                <div class="user-pill" onclick="openAuthModal()">
                     <div class="user-avatar" id="sidebarUserAvatar">SC</div>
                     <div class="user-details">
-                        <span id="userNameDisplay" class="user-name">Samrat Chaudhary</span>
-                        <span id="userRoleDisplay" class="user-role">System Architect</span>
+                        <span class="user-name" id="userNameDisplay">Samrat Chaudhary</span>
+                        <span class="user-role" id="userRoleDisplay">Enterprise Node</span>
                     </div>
                 </div>
-                <button onclick="toggleTheme()" id="themeToggleIcon" class="icon-action-btn" title="Toggle Theme">🌙</button>
+                <button class="icon-action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
+                    <span id="themeToggleIcon">🌙</span>
+                </button>
             </div>
         </aside>
 
-        <!-- Middle Edge Collapse Toggle Button -->
-        <button onclick="toggleSidebar()" class="sidebar-edge-toggle" id="sidebarEdgeToggleBtn" title="Toggle Sidebar">
-            ⟨
-        </button>
+        <!-- Sidebar Collapse Toggle Button -->
+        <button class="sidebar-edge-toggle" id="sidebarEdgeToggleBtn" onclick="toggleSidebar()" title="Toggle Sidebar">⟨</button>
 
+        <!-- Main Workspace Pane -->
         <main class="main-content-pane">
+            <!-- Top Navigation Bar -->
             <header class="workspace-topbar glass-panel">
                 <div class="topbar-left">
-                    <h2 id="currentThreadTitle">Omniscient Session Active</h2>
-                    <div class="sync-status"><span class="pulse-dot"></span> Neural Mesh Synchronized</div>
+                    <h2 id="currentThreadTitle">Neural Session</h2>
+                    <div class="sync-status">
+                        <span class="pulse-dot"></span> 6.4 Billion Token Stream Active
+                    </div>
                 </div>
                 <div class="topbar-right">
-                    <div class="model-pill">⚡ Core Ω [6.39M Context Window]</div>
-                    <button onclick="toggleAgenticMode()" id="agentToggleBtn" class="agent-pill-btn active">
+                    <span class="model-pill">SOLACE-6.4B-Singularity</span>
+                    <button class="agent-pill-btn active" id="agentToggleBtn" onclick="toggleAgenticMode()">
                         <span>🤖</span> Empathy & Wit: ON
                     </button>
                 </div>
             </header>
 
-            <div class="chat-stream-container" id="chatMessagesWrapper"></div>
-
-            <div class="input-dock-container">
-                <div class="input-dock-box glass-panel">
-                    <div id="attachedFileIndicator" class="file-preview-badge" style="display: none;">
-                        <span>📎 Context Attached: <strong id="attachedFileName">file.txt</strong></span>
-                        <button onclick="removeAttachedFile()" class="badge-close-btn">✕</button>
+            <!-- Workspace Split Container (Chat + Studio) -->
+            <div class="workspace-split" id="workspaceSplit" style="display: flex; flex: 1; overflow: hidden; position: relative;">
+                
+                <!-- Chat Messages Stream -->
+                <div class="chat-stream-container" id="chatMessagesWrapper">
+                    <div class="hero-node-banner">
+                        <div>
+                            <h2 style="font-size:16px; font-weight:800;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
+                            <p style="font-size:12.5px; color:var(--text-secondary); margin-top:2px;">Context Capacity: 6,400,000,000 Tokens (6.4 Billion)</p>
+                        </div>
+                        <div id="threeCanvasContainer" style="width:100px; height:100px; border-radius:14px; overflow:hidden;"></div>
                     </div>
-                    <textarea id="userChatInput" placeholder="Command SOLACE AI+ Engine (e.g., 'Architect a bulletproof distributed event pipeline with 6.39M context capacity')..." onkeydown="handleKeyPress(event)"></textarea>
+
+                    <div class="message-card">
+                        <div class="ai-response-box">
+                            <div class="ai-badge-label">✦ SOLACE Intelligence</div>
+                            <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.4 Billion Token Context Window</strong>. Chat freely as a guest or sign in via the sidebar to persist neural state across workspaces. How can I assist you?</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas Artifact Studio Pane (Right Side Drawer) -->
+                <aside class="artifact-studio-pane" id="canvasArtifactPanel" style="display: none;">
+                    <div class="studio-header">
+                        <div class="studio-title">
+                            <span>⚡</span> Interactive Artifact Studio
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="studio-btn run" onclick="executeArtifactSandbox()">▶ Run Code</button>
+                            <button class="studio-btn close" onclick="closeCanvasPanel()">✕</button>
+                        </div>
+                    </div>
+                    <div class="studio-code-output" id="canvasArtifactContent" contenteditable="true" spellcheck="false">// Artifact output stream...</div>
+                    <div class="studio-footer">Status: Sandbox Isolated | Context Scope: 6.4B Tokens</div>
+                </aside>
+
+            </div>
+
+            <!-- Input Dock Container -->
+            <div class="input-dock-container">
+                <div class="input-dock-box">
+                    <div class="file-preview-badge" id="attachedFileIndicator" style="display: none;">
+                        <span>📎 <span id="attachedFileName">document.txt</span></span>
+                        <button class="badge-close-btn" onclick="removeAttachedFile()">✕</button>
+                    </div>
+
+                    <textarea id="userChatInput" placeholder="Ask SOLACE anything (6.4 Billion Token Context Window)..." onkeydown="handleKeyPress(event)"></textarea>
+
                     <div class="dock-actions-row">
                         <div class="dock-tools-left">
-                            <label class="dock-tool-btn" title="Attach Context">
-                                📎 Attach <input type="file" id="fileUploadInput" onchange="handleFileUpload(event)" hidden>
-                            </label>
-                            <button onclick="toggleVoiceInput()" id="micBtn" class="dock-tool-btn" title="Voice Input">🎙️ Voice</button>
+                            <input type="file" id="fileUploadInput" style="display: none;" onchange="handleFileUpload(event)">
+                            <button class="dock-tool-btn" onclick="document.getElementById('fileUploadInput').click()">📎 Attach File</button>
+                            <button class="dock-tool-btn" id="micBtn" onclick="toggleVoiceInput()">🎙️ Voice</button>
                         </div>
-                        <button onclick="sendUserMessage()" class="execute-btn">
+                        <button class="execute-btn" onclick="sendUserMessage()">
                             <span>Execute</span>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            <span>➔</span>
                         </button>
                     </div>
                 </div>
             </div>
         </main>
 
-        <div class="artifact-studio-pane glass-panel" id="canvasArtifactPanel" style="display: none;">
-            <div class="studio-header">
-                <div class="studio-title">
-                    <span>⚡</span>
-                    <h3>Live Code & Artifact Studio</h3>
-                </div>
-                <div class="studio-actions">
-                    <button onclick="executeArtifactSandbox()" class="studio-btn run">▶ Run Code</button>
-                    <button onclick="closeCanvasPanel()" class="studio-btn close">✕</button>
-                </div>
+    </div>
+
+    <!-- Production Google Auth Modal -->
+    <div class="auth-overlay" id="authScreenOverlay" style="display: none;">
+        <div class="auth-modal-card glass-panel">
+            <div class="brand-badge-lg">✦</div>
+            <div class="auth-modal-header">
+                <h2>SOLACE Enterprise Gateway</h2>
+                <p>Sign in with your Google Workspace identity to sync your 6.4B token sessions across enterprise nodes.</p>
             </div>
-            <div class="studio-editor-wrapper">
-                <pre class="studio-code-output" id="canvasArtifactContent"></pre>
+
+            <div class="auth-field-group">
+                <button class="enterprise-auth-btn google" onclick="handleRealGoogleLogin()">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.29v3.15C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.29C.47 8.21 0 10.05 0 12s.47 3.79 1.29 5.42l3.99-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.58l3.99 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+                    Continue with Google Workspace
+                </button>
             </div>
-            <div class="studio-footer">
-                <span id="sandboxExecutionStatus">Sandbox Verified | Context 6,390,000 Tokens Active</span>
+
+            <div class="auth-divider">OR ENTERPRISE CREDENTIALS</div>
+
+            <div class="auth-field-group">
+                <input type="email" id="inputAuthEmail" class="enterprise-input" placeholder="enterprise@solacetech.ai">
+                <input type="password" id="inputAuthPassword" class="enterprise-input" placeholder="••••••••••••">
+            </div>
+
+            <div class="auth-action-grid">
+                <button class="enterprise-auth-btn primary" onclick="handleRealEmailLogin()">Sign In</button>
+                <button class="enterprise-auth-btn secondary" onclick="handleRealEmailSignup()">Register Node</button>
+            </div>
+
+            <button class="auth-dismiss-link" onclick="dismissAuthModal()">Continue as Guest Workspace ➔</button>
+        </div>
+    </div>
+
+    <!-- Custom Closable Dialog Overlay -->
+    <div class="solace-dialog-overlay" id="solaceDialogOverlay" style="display: none;">
+        <div class="solace-dialog-card glass-panel">
+            <div class="dialog-icon" id="solaceDialogIcon">✦</div>
+            <h3 id="solaceDialogTitle">SOLACE System Notice</h3>
+            <p id="solaceDialogMessage">Message details will appear here.</p>
+            <div class="dialog-actions" id="solaceDialogActions">
+                <button onclick="closeSolaceDialog()" class="dialog-btn primary">Understood</button>
             </div>
         </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="/js/app.js"></script>
 </body>
 </html>
