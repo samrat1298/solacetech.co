@@ -1,6 +1,6 @@
 /**
  * SOLACE AGI Core - Production Enterprise Controller
- * Interactive Quantum Wave 3D Background + Enterprise Auth & Dialog System
+ * Theme-Aware Interactive Quantum Wave 3D Background
  */
 
 let agenticModeEnabled = true;
@@ -8,6 +8,8 @@ let attachedFileContent = null;
 let attachedFileName = null;
 let threads = [];
 let activeThreadId = null;
+let waveParticlesMaterial = null;
+let waveOrbMesh = null;
 
 window.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('solace_is_logged_in');
@@ -34,9 +36,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
     loadThreadsFromStorage();
     initInteractiveQuantumWaveBackground();
+    update3DThemeColors(savedTheme === 'dark');
 });
 
-// Verified Google Workspace Authentication Handler (Zero invalid_client errors)
+// Theme-aware 3D color updater
+function update3DThemeColors(isDark) {
+    if (waveParticlesMaterial) {
+        waveParticlesMaterial.color.setHex(isDark ? 0x3b82f6 : 0x2563eb);
+        waveParticlesMaterial.opacity = isDark ? 0.5 : 0.35;
+    }
+    if (waveOrbMesh) {
+        waveOrbMesh.material.color.setHex(isDark ? 0x8b5cf6 : 0x7c3aed);
+        waveOrbMesh.material.opacity = isDark ? 0.15 : 0.08;
+    }
+}
+
+// Verified Google Workspace Authentication Handler
 function handleRealGoogleLogin() {
     showSolaceDialog("Google Workspace Auth", "Authenticating enterprise node via secure OAuth gateway...", "info", () => {
         localStorage.setItem('solace_is_logged_in', 'true');
@@ -48,7 +63,7 @@ function handleRealGoogleLogin() {
     });
 }
 
-// Production-Grade Interactive 3D Quantum Wave Background Engine
+// Interactive Quantum Wave 3D Background Engine
 function initInteractiveQuantumWaveBackground() {
     const canvas = document.getElementById('bg3dCanvas');
     if (!canvas) return;
@@ -81,29 +96,30 @@ function initInteractiveQuantumWaveBackground() {
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
 
-    const material = new THREE.PointsMaterial({
-        color: 0x3b82f6,
+    const isDarkInitial = document.documentElement.classList.contains('dark');
+    waveParticlesMaterial = new THREE.PointsMaterial({
+        color: isDarkInitial ? 0x3b82f6 : 0x2563eb,
         size: 0.08,
         transparent: true,
-        opacity: 0.45,
+        opacity: isDarkInitial ? 0.5 : 0.35,
         blending: THREE.AdditiveBlending
     });
 
-    const particles = new THREE.Points(geometry, material);
+    const particles = new THREE.Points(geometry, waveParticlesMaterial);
     particles.position.set(0, -2.2, -5);
     particles.rotation.x = 0.35;
     scene.add(particles);
 
     const orbGeom = new THREE.IcosahedronGeometry(1.8, 2);
     const orbMat = new THREE.MeshBasicMaterial({
-        color: 0x8b5cf6,
+        color: isDarkInitial ? 0x8b5cf6 : 0x7c3aed,
         wireframe: true,
         transparent: true,
-        opacity: 0.12
+        opacity: isDarkInitial ? 0.15 : 0.08
     });
-    const orb = new THREE.Mesh(orbGeom, orbMat);
-    orb.position.set(6, 2, -10);
-    scene.add(orb);
+    waveOrbMesh = new THREE.Mesh(orbGeom, orbMat);
+    waveOrbMesh.position.set(6, 2, -10);
+    scene.add(waveOrbMesh);
 
     camera.position.set(0, 2, 8);
 
@@ -138,8 +154,8 @@ function initInteractiveQuantumWaveBackground() {
         }
         posAttr.needsUpdate = true;
 
-        orb.rotation.x += 0.002;
-        orb.rotation.y += 0.003;
+        waveOrbMesh.rotation.x += 0.002;
+        waveOrbMesh.rotation.y += 0.003;
 
         targetX += (mouseX - targetX) * 0.05;
         targetY += (-mouseY - targetY) * 0.05;
@@ -153,7 +169,17 @@ function initInteractiveQuantumWaveBackground() {
     animate();
 }
 
-// Custom Closable Dialog Overlay (Eliminating browser alerts/confirms)
+// Theme Toggle with 3D Color Sync
+function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    document.documentElement.classList.toggle('light', !isDark);
+    const themeIcon = document.getElementById('themeToggleIcon');
+    if (themeIcon) themeIcon.innerText = isDark ? "☀️" : "🌙";
+    localStorage.setItem('solace_theme', isDark ? 'dark' : 'light');
+    update3DThemeColors(isDark);
+}
+
+// Custom Closable Dialog Overlay
 function showSolaceDialog(title, message, type = 'info', onConfirm = null) {
     const overlay = document.getElementById('solaceDialogOverlay');
     const titleEl = document.getElementById('solaceDialogTitle');
@@ -426,14 +452,6 @@ function renderActiveThreadMessages() {
     container.innerHTML = html;
     container.scrollTop = container.scrollHeight;
     initNeuralConstellationSphere();
-}
-
-function toggleTheme() {
-    const isDark = document.documentElement.classList.toggle('dark');
-    document.documentElement.classList.toggle('light', !isDark);
-    const themeIcon = document.getElementById('themeToggleIcon');
-    if (themeIcon) themeIcon.innerText = isDark ? "☀️" : "🌙";
-    localStorage.setItem('solace_theme', isDark ? 'dark' : 'light');
 }
 
 function openCanvasPanel(content) {

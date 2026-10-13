@@ -36,7 +36,7 @@ html.light {
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
 body { background: var(--bg-base); color: var(--text-primary); height: 100vh; overflow: hidden; -webkit-font-smoothing: antialiased; position: relative; }
 
-/* Interactive Quantum Wave 3D Background Canvas */
+/* Dynamic Theme-Aware 3D Background Canvas */
 #bg3dCanvas {
     position: fixed;
     inset: 0;
@@ -44,7 +44,15 @@ body { background: var(--bg-base); color: var(--text-primary); height: 100vh; ov
     height: 100vh;
     z-index: 0;
     pointer-events: none;
-    background: radial-gradient(circle at 50% 30%, rgba(37, 99, 235, 0.08) 0%, rgba(11, 15, 25, 0.95) 70%);
+    transition: background 0.3s ease;
+}
+
+html.dark #bg3dCanvas {
+    background: radial-gradient(circle at 50% 30%, rgba(37, 99, 235, 0.12) 0%, rgba(3, 7, 18, 0.98) 75%);
+}
+
+html.light #bg3dCanvas {
+    background: radial-gradient(circle at 50% 30%, rgba(37, 99, 235, 0.06) 0%, rgba(248, 250, 252, 0.95) 75%);
 }
 
 /* Glassmorphism Panel Class */
