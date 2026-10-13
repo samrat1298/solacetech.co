@@ -14,12 +14,17 @@ window.addEventListener('DOMContentLoaded', () => {
     if (googleBtn) googleBtn.addEventListener('click', handleGoogleOAuthLogin);
     if (emailBtn) emailBtn.addEventListener('click', handleEmailAuthSubmit);
 
-    const savedTheme = localStorage.getItem('solace_theme') || 'dark';
-    if (savedTheme === 'light') {
+    const savedTheme = localStorage.getItem('solace_theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+        const icon = document.getElementById('themeToggleIcon');
+        if (icon) icon.innerText = "☀️";
+    } else {
         document.documentElement.classList.remove('dark');
         document.documentElement.classList.add('light');
         const icon = document.getElementById('themeToggleIcon');
-        if (icon) icon.innerText = "☀️";
+        if (icon) icon.innerText = "🌙";
     }
 
     const isLoggedIn = localStorage.getItem('solace_is_logged_in');
@@ -35,6 +40,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
     initNeuralConstellationSphere();
 });
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('appSidebar');
+    const expandBtn = document.getElementById('sidebarExpandBtn');
+    if (!sidebar) return;
+
+    const isCollapsed = sidebar.classList.toggle('collapsed');
+    if (expandBtn) {
+        expandBtn.style.display = isCollapsed ? 'flex' : 'none';
+    }
+}
 
 function loadThreadsFromStorage() {
     const stored = localStorage.getItem('solace_chat_threads');
@@ -152,7 +168,7 @@ function renderActiveThreadMessages() {
     let html = `
         <div class="hero-3d-card glass-panel">
             <div>
-                <h2 style="font-size:18px; font-weight:800; color:#f8fafc;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
+                <h2 style="font-size:18px; font-weight:800;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
                 <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Active Thread: ${escapeHtml(thread.title)}</p>
             </div>
             <div id="threeCanvasContainer" style="width:110px; height:110px; border-radius:16px; overflow:hidden;"></div>
@@ -164,7 +180,7 @@ function renderActiveThreadMessages() {
             <div class="message-block">
                 <div class="ai-response-block glass-panel">
                     <div class="ai-label">✦ SOLACE Intelligence</div>
-                    <div class="response-text" style="color:var(--text-main);">
+                    <div class="response-text">
                         Hello Samrat! I am your autonomous neural operating system—blending absolute engineering brilliance with empathy, wit, and common sense. How can I make your day easier?
                     </div>
                 </div>
@@ -183,7 +199,7 @@ function renderActiveThreadMessages() {
                 `;
             } else {
                 let telemetryHtml = m.telemetry ? `
-                    <div style="font-size:11px; color:#94a3b8; display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.08); font-family:'JetBrains Mono', monospace;">
+                    <div style="font-size:11px; color:#94a3b8; display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid rgba(0,0,0,0.06); font-family:'JetBrains Mono', monospace;">
                         <span>⚡ Latency: ${m.telemetry.latency}</span>
                         <span>📊 Tokens: ${m.telemetry.tokens}</span>
                         <span>🛡️ Confidence: ${m.telemetry.confidence}</span>
@@ -244,7 +260,7 @@ function toggleTheme() {
     const isDark = document.documentElement.classList.toggle('dark');
     document.documentElement.classList.toggle('light', !isDark);
     const themeIcon = document.getElementById('themeToggleIcon');
-    if (themeIcon) themeIcon.innerText = isDark ? "🌙" : "☀️";
+    if (themeIcon) themeIcon.innerText = isDark ? "☀️" : "🌙";
     localStorage.setItem('solace_theme', isDark ? 'dark' : 'light');
 }
 
@@ -293,9 +309,6 @@ function toggleAgenticMode() {
     }
 }
 
-/**
- * Stunning Cybernetic Neural Constellation Sphere (Replaces old torus)
- */
 function initNeuralConstellationSphere() {
     const container = document.getElementById('threeCanvasContainer');
     if (!container || container.children.length > 0) return;
@@ -307,8 +320,7 @@ function initNeuralConstellationSphere() {
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    // Glowing Particle Sphere representing Neural Constellation
-    const particleCount = 350;
+    const particleCount = 300;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
 
@@ -327,7 +339,7 @@ function initNeuralConstellationSphere() {
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const material = new THREE.PointsMaterial({
-        color: 0x38bdf8,
+        color: 0x2563eb,
         size: 0.05,
         transparent: true,
         opacity: 0.9,
@@ -337,10 +349,9 @@ function initNeuralConstellationSphere() {
     const particleSphere = new THREE.Points(geometry, material);
     scene.add(particleSphere);
 
-    // Inner Glowing Core Icosahedron
     const coreGeometry = new THREE.IcosahedronGeometry(0.7, 1);
     const coreMaterial = new THREE.MeshBasicMaterial({
-        color: 0x8b5cf6,
+        color: 0x7c3aed,
         wireframe: true,
         transparent: true,
         opacity: 0.6

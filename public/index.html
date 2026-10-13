@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLACE AI+ | Omniscient Super-OS $\Omega$</title>
+    <title>SOLACE AI+ | Omniscient Super-OS</title>
     <link rel="stylesheet" href="css/enterprise.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,22 +31,32 @@
 
     <!-- Main Workspace -->
     <div class="app-layout" id="workspaceSplit">
-        <aside class="sidebar glass-panel">
+        <!-- Floating Expand Button when Sidebar is Collapsed -->
+        <button onclick="toggleSidebar()" class="sidebar-expand-floating-btn" id="sidebarExpandBtn" title="Expand Sidebar" style="display: none;">
+            ▶
+        </button>
+
+        <aside class="sidebar glass-panel" id="appSidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
                     <span class="logo-spark">✦</span>
                     <span class="logo-text">SOLACE <small>OS</small></span>
                 </div>
-                <button onclick="createNewThread()" class="new-chat-btn">
-                    <span>+</span> New Session
-                </button>
+                <div class="sidebar-header-actions">
+                    <button onclick="createNewThread()" class="new-chat-btn" title="New Session">
+                        <span>+</span> New
+                    </button>
+                    <button onclick="toggleSidebar()" class="sidebar-collapse-btn" id="sidebarToggleBtn" title="Collapse Sidebar">
+                        ◀
+                    </button>
+                </div>
             </div>
 
-            <!-- Quick Control Actions -->
+            <!-- Quick Action Grid -->
             <div class="sidebar-controls-grid">
-                <button onclick="clearCurrentChat()" class="control-action-btn" title="Clear messages">🗑️ Clear</button>
+                <button onclick="clearCurrentChat()" class="control-action-btn" title="Clear Chat">🗑️ Clear</button>
                 <button onclick="exportCurrentChat()" class="control-action-btn" title="Export JSON">📥 Export</button>
-                <button onclick="triggerPlugin('gitSync')" class="control-action-btn plugin" title="Git Sync">📦 Git Sync</button>
+                <button onclick="triggerPlugin('gitSync')" class="control-action-btn plugin" title="Git Sync">📦 Git</button>
                 <button onclick="triggerPlugin('debugger')" class="control-action-btn plugin" title="Debugger">🛠️ Debug</button>
             </div>
 
@@ -73,7 +83,7 @@
                 </div>
                 <div class="topbar-actions">
                     <span id="topbarModelBadge" class="badge-glow">⚡ Llama 3.2 3B [Singularity Core]</span>
-                    <button onclick="toggleAgenticMode()" id="agentToggleBtn" class="agent-toggle-btn active">
+                    <button onclick="toggleAgenticMode()" id="agentToggleBtn" class="agent-toggle-btn">
                         <span class="agent-icon">🤖</span> Empathy & Wit: ON
                     </button>
                 </div>
