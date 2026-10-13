@@ -50,7 +50,7 @@ function saveThreadsToStorage() {
 function createNewThread() {
     const newThread = {
         id: 'thread-' + Date.now(),
-        title: 'Singularity Core Session',
+        title: 'Neural Conversation',
         messages: []
     };
     threads.unshift(newThread);
@@ -90,8 +90,8 @@ function renderActiveThreadMessages() {
     let html = `
         <div class="hero-3d-card glass-panel" style="padding:24px; border-radius:20px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div>
-                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Singularity Core $\Omega^{\infty\infty}$]</h2>
-                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Session Context: ${escapeHtml(thread.title)}</p>
+                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Neural Operating System]</h2>
+                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Active Session: ${escapeHtml(thread.title)}</p>
             </div>
             <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
         </div>
@@ -101,9 +101,9 @@ function renderActiveThreadMessages() {
         html += `
             <div class="message-block">
                 <div class="ai-response-block glass-panel">
-                    <div class="ai-label">SOLACE Singularity Core ✦</div>
+                    <div class="ai-label">SOLACE Intelligence ✦</div>
                     <div class="response-text">
-                        Unbounded neural matrix online. Enter any prompt, system architecture challenge, or engineering command to begin.
+                        Hello Samrat! I am your autonomous neural operating system. How can I help you build, architect, or solve complex problems today?
                     </div>
                 </div>
             </div>
@@ -125,14 +125,13 @@ function renderActiveThreadMessages() {
                         <span>⚡ Latency: ${m.telemetry.latency}</span>
                         <span>📊 Tokens: ${m.telemetry.tokens}</span>
                         <span>🛡️ Confidence: ${m.telemetry.confidence}</span>
-                        <span>🌀 State: ${m.telemetry.agiState || "SINGULARITY"}</span>
                     </div>
                 ` : '';
 
                 html += `
                     <div class="message-block">
                         <div class="ai-response-block glass-panel">
-                            <div class="ai-label">SOLACE Singularity Core ✦</div>
+                            <div class="ai-label">SOLACE Intelligence ✦</div>
                             <div>${formatResponseText(m.content)}</div>
                             ${telemetryHtml}
                         </div>
@@ -227,7 +226,7 @@ function toggleAgenticMode() {
     agenticModeEnabled = !agenticModeEnabled;
     const btn = document.getElementById('agentToggleBtn');
     if (btn) {
-        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Singularity Mesh: ACTIVE' : '🤖 Singularity Mesh: PAUSED';
+        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Neural Mesh: ACTIVE' : '🤖 Neural Mesh: PAUSED';
         btn.classList.toggle('active', agenticModeEnabled);
     }
 }
@@ -235,22 +234,46 @@ function toggleAgenticMode() {
 function init3DOrb() {
     const container = document.getElementById('threeCanvasContainer');
     if (!container || container.children.length > 0) return;
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(100, 100);
+    renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    const geometry = new THREE.IcosahedronGeometry(1.6, 2);
-    const material = new THREE.MeshNormalMaterial({ wireframe: true });
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
+    // Advanced Torus Knot Quantum Energy Core
+    const geometry = new THREE.TorusKnotGeometry(1.2, 0.35, 128, 32);
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x3b82f6,
+        emissive: 0x1d4ed8,
+        emissiveIntensity: 0.6,
+        roughness: 0.2,
+        metalness: 0.9
+    });
+    const coreMesh = new THREE.Mesh(geometry, material);
+    scene.add(coreMesh);
+
+    // Orbiting Cyber Ring
+    const ringGeometry = new THREE.TorusGeometry(1.9, 0.03, 16, 100);
+    const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true });
+    const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
+    ringMesh.rotation.x = Math.PI / 3;
+    scene.add(ringMesh);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+    const pointLight = new THREE.PointLight(0x8b5cf6, 3, 50);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
+
     camera.position.z = 4.5;
 
     function animate() {
         requestAnimationFrame(animate);
-        sphere.rotation.x += 0.008;
-        sphere.rotation.y += 0.01;
+        coreMesh.rotation.x += 0.012;
+        coreMesh.rotation.y += 0.015;
+        ringMesh.rotation.z -= 0.008;
+        ringMesh.rotation.y += 0.005;
         renderer.render(scene, camera);
     }
     animate();
@@ -262,14 +285,14 @@ function handleFileUpload(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         attachedFileContent = e.target.result;
-        alert(`File "${file.name}" uploaded to Singularity Context!`);
+        alert(`File "${file.name}" uploaded to neural context.`);
     };
     reader.readAsDataURL(file);
 }
 
 function toggleVoiceInput() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        alert('Speech recognition not supported in this browser.');
+        alert('Speech recognition not supported.');
         return;
     }
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
