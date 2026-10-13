@@ -50,7 +50,7 @@ function saveThreadsToStorage() {
 function createNewThread() {
     const newThread = {
         id: 'thread-' + Date.now(),
-        title: 'Omniscient Session',
+        title: 'Singularity Core Session',
         messages: []
     };
     threads.unshift(newThread);
@@ -90,7 +90,7 @@ function renderActiveThreadMessages() {
     let html = `
         <div class="hero-3d-card glass-panel" style="padding:24px; border-radius:20px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div>
-                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Omniscient Core]</h2>
+                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Singularity Core $\Omega^{\infty\infty}$]</h2>
                 <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Session Context: ${escapeHtml(thread.title)}</p>
             </div>
             <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
@@ -101,9 +101,9 @@ function renderActiveThreadMessages() {
         html += `
             <div class="message-block">
                 <div class="ai-response-block glass-panel">
-                    <div class="ai-label">SOLACE Omniscient Core ✦</div>
+                    <div class="ai-label">SOLACE Singularity Core ✦</div>
                     <div class="response-text">
-                        System initialized with absolute capability. Enter any prompt or system command to begin.
+                        Unbounded neural matrix online. Enter any prompt, system architecture challenge, or engineering command to begin.
                     </div>
                 </div>
             </div>
@@ -125,14 +125,14 @@ function renderActiveThreadMessages() {
                         <span>⚡ Latency: ${m.telemetry.latency}</span>
                         <span>📊 Tokens: ${m.telemetry.tokens}</span>
                         <span>🛡️ Confidence: ${m.telemetry.confidence}</span>
-                        <span>🌀 State: ${m.telemetry.agiState || "OMNISCIENT"}</span>
+                        <span>🌀 State: ${m.telemetry.agiState || "SINGULARITY"}</span>
                     </div>
                 ` : '';
 
                 html += `
                     <div class="message-block">
                         <div class="ai-response-block glass-panel">
-                            <div class="ai-label">SOLACE Omniscient Core ✦</div>
+                            <div class="ai-label">SOLACE Singularity Core ✦</div>
                             <div>${formatResponseText(m.content)}</div>
                             ${telemetryHtml}
                         </div>
@@ -227,7 +227,7 @@ function toggleAgenticMode() {
     agenticModeEnabled = !agenticModeEnabled;
     const btn = document.getElementById('agentToggleBtn');
     if (btn) {
-        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Meta-Reasoning: ACTIVE' : '🤖 Meta-Reasoning: PAUSED';
+        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Singularity Mesh: ACTIVE' : '🤖 Singularity Mesh: PAUSED';
         btn.classList.toggle('active', agenticModeEnabled);
     }
 }
@@ -262,7 +262,7 @@ function handleFileUpload(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         attachedFileContent = e.target.result;
-        alert(`File "${file.name}" uploaded to Context!`);
+        alert(`File "${file.name}" uploaded to Singularity Context!`);
     };
     reader.readAsDataURL(file);
 }
