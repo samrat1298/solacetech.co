@@ -48,11 +48,11 @@ body { background: var(--bg-base); color: var(--text-primary); height: 100vh; ov
 }
 
 html.dark #bg3dCanvas {
-    background: radial-gradient(circle at 50% 40%, rgba(124, 58, 237, 0.12) 0%, rgba(3, 7, 18, 0.98) 80%);
+    background: radial-gradient(circle at 50% 50%, rgba(30, 58, 138, 0.18) 0%, rgba(3, 7, 18, 0.98) 85%);
 }
 
 html.light #bg3dCanvas {
-    background: radial-gradient(circle at 50% 40%, rgba(37, 99, 235, 0.08) 0%, rgba(226, 232, 240, 0.95) 80%);
+    background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.1) 0%, rgba(226, 232, 240, 0.96) 85%);
 }
 
 /* Glassmorphism Panel Class */

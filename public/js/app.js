@@ -1,6 +1,6 @@
 /**
  * SOLACE AGI Core - Production Enterprise Controller
- * Theme-Aware 3D Neural Singularity Core + 6 Billion Token Context Engine
+ * Theme-Aware 3D Neural Flow Engine + 6 Billion Token Context Engine
  */
 
 let agenticModeEnabled = true;
@@ -8,8 +8,7 @@ let attachedFileContent = null;
 let attachedFileName = null;
 let threads = [];
 let activeThreadId = null;
-let singularityParticlesMaterial = null;
-let singularityRingMesh = null;
+let particleMaterial = null;
 
 window.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('solace_is_logged_in');
@@ -35,20 +34,16 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     loadThreadsFromStorage();
-    initNeuralSingularity3DBackground();
+    init3DParticleFlowBackground();
     update3DThemeColors(savedTheme === 'dark');
 });
 
-// Theme-aware 3D color updater for 6B Singularity Field
+// High-visibility Theme-Aware Particle Color Controller
 function update3DThemeColors(isDark) {
-    if (singularityParticlesMaterial) {
-        singularityParticlesMaterial.color.setHex(isDark ? 0x8b5cf6 : 0x2563eb);
-        singularityParticlesMaterial.opacity = isDark ? 0.75 : 0.7;
-        singularityParticlesMaterial.size = isDark ? 0.055 : 0.06;
-    }
-    if (singularityRingMesh) {
-        singularityRingMesh.material.color.setHex(isDark ? 0x3b82f6 : 0x7c3aed);
-        singularityRingMesh.material.opacity = isDark ? 0.45 : 0.35;
+    if (particleMaterial) {
+        particleMaterial.color.setHex(isDark ? 0x38bdf8 : 0x1d4ed8);
+        particleMaterial.opacity = isDark ? 0.75 : 0.7;
+        particleMaterial.size = isDark ? 0.08 : 0.095;
     }
 }
 
@@ -64,8 +59,8 @@ function handleRealGoogleLogin() {
     });
 }
 
-// 3D Neural Singularity Core & Floating Nebula Field
-function initNeuralSingularity3DBackground() {
+// Clean Interactive 3D Particle Wave Field Engine
+function init3DParticleFlowBackground() {
     const canvas = document.getElementById('bg3dCanvas');
     if (!canvas) return;
 
@@ -76,55 +71,50 @@ function initNeuralSingularity3DBackground() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Orbital Singularity Particle Field
-    const particleCount = 2400;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
+    const numX = 110;
+    const numZ = 110;
+    const count = numX * numZ;
+    const positions = new Float32Array(count * 3);
 
-    for (let i = 0; i < particleCount * 3; i += 3) {
-        const radius = 3.5 + Math.random() * 6.5;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = (Math.random() - 0.5) * Math.PI;
+    let idx = 0;
+    const spacing = 0.35;
+    const offsetX = (numX * spacing) / 2;
+    const offsetZ = (numZ * spacing) / 2;
 
-        positions[i] = radius * Math.cos(phi) * Math.cos(theta);
-        positions[i + 1] = radius * Math.sin(phi) * 0.7;
-        positions[i + 2] = radius * Math.cos(phi) * Math.sin(theta);
+    for (let ix = 0; ix < numX; ix++) {
+        for (let iz = 0; iz < numZ; iz++) {
+            positions[idx] = ix * spacing - offsetX;
+            positions[idx + 1] = 0;
+            positions[idx + 2] = iz * spacing - offsetZ;
+            idx += 3;
+        }
     }
 
+    const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const isDarkInitial = document.documentElement.classList.contains('dark');
-    singularityParticlesMaterial = new THREE.PointsMaterial({
-        color: isDarkInitial ? 0x8b5cf6 : 0x2563eb,
-        size: 0.055,
+    particleMaterial = new THREE.PointsMaterial({
+        color: isDarkInitial ? 0x38bdf8 : 0x1d4ed8,
+        size: isDarkInitial ? 0.08 : 0.095,
         transparent: true,
-        opacity: 0.75,
+        opacity: isDarkInitial ? 0.75 : 0.7,
         blending: THREE.AdditiveBlending
     });
 
-    const starField = new THREE.Points(geometry, singularityParticlesMaterial);
-    scene.add(starField);
+    const particles = new THREE.Points(geometry, particleMaterial);
+    particles.position.set(0, -2.5, -4);
+    particles.rotation.x = 0.3;
+    scene.add(particles);
 
-    // Central Rotating Core Ring Mesh
-    const ringGeom = new THREE.TorusGeometry(3.2, 0.03, 16, 100);
-    const ringMat = new THREE.MeshBasicMaterial({
-        color: isDarkInitial ? 0x3b82f6 : 0x7c3aed,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.4
-    });
-    singularityRingMesh = new THREE.Mesh(ringGeom, ringMat);
-    singularityRingMesh.rotation.x = Math.PI / 3;
-    scene.add(singularityRingMesh);
+    camera.position.set(0, 3, 10);
 
-    camera.position.z = 9;
-
-    let targetX = 0, targetY = 0;
     let mouseX = 0, mouseY = 0;
+    let targetX = 0, targetY = 0;
 
     window.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX - window.innerWidth / 2) * 0.0006;
-        mouseY = (e.clientY - window.innerHeight / 2) * 0.0006;
+        mouseX = (e.clientX - window.innerWidth / 2) * 0.0008;
+        mouseY = (e.clientY - window.innerHeight / 2) * 0.0008;
     });
 
     window.addEventListener('resize', () => {
@@ -133,21 +123,29 @@ function initNeuralSingularity3DBackground() {
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
+    let countTime = 0;
     function animate() {
         requestAnimationFrame(animate);
 
-        starField.rotation.y += 0.0012;
-        starField.rotation.x += 0.0004;
+        countTime += 0.03;
+        const posAttr = particles.geometry.attributes.position;
+        let pIndex = 0;
 
-        singularityRingMesh.rotation.z -= 0.004;
-        singularityRingMesh.rotation.y += 0.002;
+        for (let ix = 0; ix < numX; ix++) {
+            for (let iz = 0; iz < numZ; iz++) {
+                posAttr.array[pIndex + 1] = (Math.sin((ix + countTime) * 0.25) * 0.45) +
+                                             (Math.cos((iz + countTime) * 0.35) * 0.45);
+                pIndex += 3;
+            }
+        }
+        posAttr.needsUpdate = true;
 
         targetX += (mouseX - targetX) * 0.05;
         targetY += (-mouseY - targetY) * 0.05;
 
-        camera.position.x = targetX * 5;
-        camera.position.y = targetY * 5;
-        camera.lookAt(scene.position);
+        camera.position.x = targetX * 4;
+        camera.position.y = 3 + targetY * 3;
+        camera.lookAt(0, -1, -4);
 
         renderer.render(scene, camera);
     }
