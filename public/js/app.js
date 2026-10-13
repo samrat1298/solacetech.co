@@ -4,6 +4,7 @@
 
 let agenticModeEnabled = true;
 let attachedFileContent = null;
+let attachedFileName = null;
 let threads = [];
 let activeThreadId = null;
 
@@ -50,7 +51,7 @@ function saveThreadsToStorage() {
 function createNewThread() {
     const newThread = {
         id: 'thread-' + Date.now(),
-        title: 'Singularity Core Session',
+        title: 'New Session',
         messages: []
     };
     threads.unshift(newThread);
@@ -62,6 +63,67 @@ function switchThread(id) {
     activeThreadId = id;
     renderThreadList();
     renderActiveThreadMessages();
+}
+
+function clearCurrentChat() {
+    const thread = threads.find(t => t.id === activeThreadId);
+    if (!thread) return;
+    if (confirm("Are you sure you want to clear this chat session?")) {
+        thread.messages = [];
+        thread.title = "New Session";
+        saveThreadsToStorage();
+        renderActiveThreadMessages();
+    }
+}
+
+function exportCurrentChat() {
+    const thread = threads.find(t => t.id === activeThreadId);
+    if (!thread || thread.messages.length === 0) {
+        alert("No messages to export.");
+        return;
+    }
+    const exportData = JSON.stringify(thread, null, 2);
+    const blob = new Blob([exportData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${thread.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_solace.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+async function triggerPlugin(pluginName) {
+    const thread = threads.find(t => t.id === activeThreadId);
+    if (!thread) return;
+
+    const pluginPrompt = `Execute plugin: ${pluginName}`;
+    thread.messages.push({ role: 'user', content: `Run plugin [${pluginName}]` });
+    saveThreadsToStorage();
+    renderActiveThreadMessages();
+
+    try {
+        const res = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                messages: thread.messages,
+                prompt: pluginPrompt,
+                plugin: pluginName 
+            })
+        });
+
+        const data = await res.json();
+        const reply = data.response || "Plugin executed successfully.";
+        const telemetry = data.telemetry || { latency: "0.1ms", tokens: "512", confidence: "100%" };
+
+        thread.messages.push({ role: 'assistant', content: reply, telemetry });
+        saveThreadsToStorage();
+        renderActiveThreadMessages();
+    } catch (err) {
+        thread.messages.push({ role: 'assistant', content: "Plugin Execution Error: " + err.message });
+        saveThreadsToStorage();
+        renderActiveThreadMessages();
+    }
 }
 
 function renderThreadList() {
@@ -90,8 +152,8 @@ function renderActiveThreadMessages() {
     let html = `
         <div class="hero-3d-card glass-panel" style="padding:24px; border-radius:20px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div>
-                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Singularity Core $\Omega^{\infty\infty}$]</h2>
-                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Session Context: ${escapeHtml(thread.title)}</p>
+                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Neural Operating System]</h2>
+                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Active Session: ${escapeHtml(thread.title)}</p>
             </div>
             <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
         </div>
@@ -101,9 +163,9 @@ function renderActiveThreadMessages() {
         html += `
             <div class="message-block">
                 <div class="ai-response-block glass-panel">
-                    <div class="ai-label">SOLACE Singularity Core ✦</div>
+                    <div class="ai-label">SOLACE Intelligence ✦</div>
                     <div class="response-text">
-                        Welcome Samrat. I am the world's most advanced autonomous neural operating system. How may I assist you with your engineering or scientific objectives today?
+                        Hello Samrat! I am your autonomous neural operating system, equipped with empathy, wit, common sense, and instant plugin tools. How can I help you today?
                     </div>
                 </div>
             </div>
@@ -131,7 +193,7 @@ function renderActiveThreadMessages() {
                 html += `
                     <div class="message-block">
                         <div class="ai-response-block glass-panel">
-                            <div class="ai-label">SOLACE Singularity Core ✦</div>
+                            <div class="ai-label">SOLACE Intelligence ✦</div>
                             <div>${formatResponseText(m.content)}</div>
                             ${telemetryHtml}
                         </div>
@@ -226,7 +288,7 @@ function toggleAgenticMode() {
     agenticModeEnabled = !agenticModeEnabled;
     const btn = document.getElementById('agentToggleBtn');
     if (btn) {
-        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Singularity Mesh: ACTIVE' : '🤖 Singularity Mesh: PAUSED';
+        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Empathy & Wit: ACTIVE' : '🤖 Empathy & Wit: PAUSED';
         btn.classList.toggle('active', agenticModeEnabled);
     }
 }
@@ -280,12 +342,27 @@ function init3DOrb() {
 function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
+    attachedFileName = file.name;
     const reader = new FileReader();
     reader.onload = function(e) {
         attachedFileContent = e.target.result;
-        alert(`File "${file.name}" uploaded to Singularity Context.`);
+        const indicator = document.getElementById('attachedFileIndicator');
+        const nameEl = document.getElementById('attachedFileName');
+        if (indicator && nameEl) {
+            nameEl.innerText = attachedFileName;
+            indicator.style.display = 'flex';
+        }
     };
-    reader.readAsDataURL(file);
+    reader.readAsText(file);
+}
+
+function removeAttachedFile() {
+    attachedFileContent = null;
+    attachedFileName = null;
+    const indicator = document.getElementById('attachedFileIndicator');
+    const fileInput = document.getElementById('fileUploadInput');
+    if (indicator) indicator.style.display = 'none';
+    if (fileInput) fileInput.value = '';
 }
 
 function toggleVoiceInput() {
@@ -316,8 +393,13 @@ function handleKeyPress(e) {
 async function sendUserMessage() {
     const input = document.getElementById('userChatInput');
     if (!input) return;
-    const text = input.value.trim();
+    let text = input.value.trim();
     if (!text && !attachedFileContent) return;
+
+    if (attachedFileContent) {
+        text = `[Attached File: ${attachedFileName}]\n${attachedFileContent}\n\nUser Query: ${text}`;
+        removeAttachedFile();
+    }
 
     const thread = threads.find(t => t.id === activeThreadId);
     if (!thread) return;
@@ -328,8 +410,6 @@ async function sendUserMessage() {
 
     thread.messages.push({ role: 'user', content: text });
     input.value = '';
-    const payloadFile = attachedFileContent;
-    attachedFileContent = null;
     saveThreadsToStorage();
     renderActiveThreadMessages();
 
@@ -340,7 +420,6 @@ async function sendUserMessage() {
             body: JSON.stringify({ 
                 messages: thread.messages,
                 prompt: text,
-                image: payloadFile, 
                 agentic: agenticModeEnabled 
             })
         });

@@ -42,6 +42,14 @@
                 </button>
             </div>
 
+            <!-- Quick Feature Control Buttons -->
+            <div class="sidebar-controls-grid">
+                <button onclick="clearCurrentChat()" class="control-action-btn" title="Clear current session messages">🗑️ Clear Chat</button>
+                <button onclick="exportCurrentChat()" class="control-action-btn" title="Export session history">📥 Export</button>
+                <button onclick="triggerPlugin('gitSync')" class="control-action-btn plugin" title="Run Git Sync Plugin">📦 Git Sync</button>
+                <button onclick="triggerPlugin('debugger')" class="control-action-btn plugin" title="Run Auto-Debugger">🛠️ Debugger</button>
+            </div>
+
             <div class="sidebar-section-label">NEURAL SESSIONS</div>
             <div class="chat-history" id="chatHistoryList"></div>
 
@@ -66,7 +74,7 @@
                 <div class="topbar-actions">
                     <span id="topbarModelBadge" class="badge-glow">⚡ Llama 3.2 3B [Omniscient Engine]</span>
                     <button onclick="toggleAgenticMode()" id="agentToggleBtn" class="agent-toggle-btn active">
-                        <span class="agent-icon">🤖</span> Meta-Reasoning: ACTIVE
+                        <span class="agent-icon">🤖</span> Empathy & Wit: ACTIVE
                     </button>
                 </div>
             </header>
@@ -75,11 +83,15 @@
 
             <div class="input-container">
                 <div class="input-box glass-panel">
-                    <textarea id="userChatInput" placeholder="Command SOLACE AI+ Engine (e.g., 'Build an infinite scalability system')..." onkeydown="handleKeyPress(event)"></textarea>
+                    <div id="attachedFileIndicator" class="file-badge-preview" style="display: none;">
+                        <span>📎 Attached: <strong id="attachedFileName">file.txt</strong></span>
+                        <button onclick="removeAttachedFile()" class="remove-file-btn">✕</button>
+                    </div>
+                    <textarea id="userChatInput" placeholder="Command SOLACE AI+ Engine (e.g., 'Refactor this API with common sense')..." onkeydown="handleKeyPress(event)"></textarea>
                     <div class="input-actions">
                         <div class="action-tools">
                             <label class="tool-icon-btn" title="Upload Context/File">
-                                📎 <input type="file" onchange="handleFileUpload(event)" hidden>
+                                📎 Upload <input type="file" id="fileUploadInput" onchange="handleFileUpload(event)" hidden>
                             </label>
                             <button onclick="toggleVoiceInput()" id="micBtn" class="tool-icon-btn" title="Voice Input">🎙️ Voice</button>
                         </div>
