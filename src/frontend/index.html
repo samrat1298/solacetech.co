@@ -3,22 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SolaceTech — SOLACE AI+ [Apex Enterprise]</title>
+    <title>SolaceTech — SOLACE AI+ [PRO Enterprise Platform]</title>
     <link rel="stylesheet" href="./css/enterprise.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- AUTH OVERLAY -->
+
+    <!-- AUTH OVERLAY SCREEN -->
     <div class="auth-screen-overlay" id="authScreenOverlay">
         <div class="auth-box">
             <div style="text-align: center;">
-                <span style="background:var(--gold-gradient); color:#fff; padding:3px 10px; border-radius:6px; font-size:10px; font-weight:800;">PRO APEX</span>
-                <h2 style="font-size: 26px; font-weight: 800; margin-top:10px;">SOLACE AI+</h2>
-                <p style="font-size: 13.5px; color: var(--text-muted); margin-top:4px;">Frontier Enterprise Platform Workspace</p>
+                <div style="display:inline-block; margin-bottom: 8px;"><span class="brand-badge-pro">PRO SUBSCRIPTION</span></div>
+                <h2 style="font-size: 26px; font-weight: 800; margin-bottom: 6px;">SOLACE AI+</h2>
+                <p style="font-size: 13.5px; color: var(--text-muted);">Enterprise Premium Workspace</p>
             </div>
-            <button class="btn-primary-action" id="googleLoginBtn">Sign in with Google / Gmail</button>
+
+            <button class="oauth-btn" id="googleLoginBtn">
+                <svg style="width:20px;height:20px;" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.15C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.61H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.39l3.99-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.61l3.99 3.15c.95-2.85 3.6-4.96 6.72-4.96z"/></svg>
+                Sign in with Google / Gmail (Pro Pass)
+            </button>
+
+            <div class="auth-divider">or email credentials</div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="modal-input" id="inputAuthEmail" placeholder="samrat@solacetech.co">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="modal-input" id="inputAuthPassword" placeholder="••••••••">
+            </div>
+
+            <button class="btn-primary-action" id="emailLoginBtn">Access PRO Workspace</button>
         </div>
     </div>
 
@@ -26,47 +46,82 @@
     <div class="app-window">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="appSidebar">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div onclick="createNewThread()" style="font-weight:800; font-size:16px; cursor:pointer; color:var(--text-main);">
-                    ⚡ SOLACE AI+
+            <div class="brand-header">
+                <div class="brand-logo" onclick="createNewThread()">
+                    <div class="brand-badge-pro">PRO</div> SOLACE AI+
                 </div>
-                <button onclick="toggleTheme()" style="background:none; border:none; color:var(--text-main); cursor:pointer;">🌙</button>
+                <button class="btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                    <span id="themeToggleIcon">🌙</span>
+                </button>
             </div>
 
-            <button class="btn-primary-action" onclick="createNewThread()">+ New Thread</button>
+            <button class="btn-primary-action" onclick="createNewThread()">+ New PRO Thread</button>
 
-            <div style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:4px;" id="chatHistoryList"></div>
+            <div class="history-group" id="chatHistoryList">
+                <!-- Dynamic threads load here -->
+            </div>
 
-            <div style="padding-top:12px; border-top:1px solid var(--border-color); display:flex; flex-direction:column; gap:8px;">
-                <div style="font-size:12px; font-weight:700; color:var(--text-main);" id="userNameDisplay">Samrat Chaudhary</div>
-                <button onclick="handleLogout()" style="background:none; border:none; color:#ef4444; font-size:12px; font-weight:700; cursor:pointer; text-align:left;">Log Out</button>
+            <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--border-color); display:flex; flex-direction:column; gap:8px;">
+                <button class="sidebar-user-pill" onclick="openAuthModal()" title="Edit Account">
+                    <div class="user-avatar-circle" id="sidebarUserAvatar">SC</div>
+                    <div style="overflow:hidden;">
+                        <div id="userNameDisplay" style="font-size:13px; font-weight:700; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">Samrat Chaudhary</div>
+                        <div style="font-size:11px; color:#f59e0b; font-weight:700;">PRO Subscriber ➔</div>
+                    </div>
+                </button>
+                <button class="tool-btn" onclick="handleLogout()" style="color:#ef4444; font-weight:700; justify-content:center; padding:4px;">Log Out</button>
             </div>
         </aside>
 
-        <!-- WORKSPACE SPLIT -->
+        <!-- SPLIT WORKSPACE -->
         <div class="workspace-split" id="workspaceSplit">
             <main class="main-chat-container">
                 <div class="chat-topbar">
-                    <span style="font-weight:800; font-size:14px;" id="currentThreadTitle">Workspace</span>
-                    <span style="background:rgba(245,158,11,0.15); color:#f59e0b; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; border:1px solid rgba(245,158,11,0.3);">
-                        ⚡ Llama 3.2 3B [Apex Engine]
-                    </span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-weight:800; font-size:14px;" id="currentThreadTitle">SOLACE Workspace</span>
+                        <span class="brand-badge-pro">PRO ACTIVE</span>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button class="tool-btn" onclick="openMCPModal()" style="background:var(--bg-card); padding:5px 12px; border-radius:14px; border:1px solid var(--border-color);">🔌 MCP Connected</button>
+                        <div class="active-model-badge" id="topbarModelBadge" onclick="openSettingsModal()">⚡ Llama 3.2 3B [PRO]</div>
+                    </div>
                 </div>
 
-                <div class="chat-messages-wrapper" id="chatMessagesWrapper"></div>
+                <!-- SCROLLABLE CHAT MESSAGES WRAPPER -->
+                <div class="chat-messages-wrapper" id="chatMessagesWrapper">
+                    <div class="hero-3d-card" style="background:var(--bg-card); padding:20px; border-radius:18px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [PRO]</h2>
+                            <p style="font-size:13px; color:var(--text-muted);">Persistent memory, multi-threading, canvas studio, and enterprise RAG engines online.</p>
+                        </div>
+                        <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
+                    </div>
+                </div>
 
-                <!-- FLOATING INPUT -->
+                <!-- FLOATING INPUT BAR -->
                 <div class="input-floating-container">
                     <div class="input-floating-bar">
-                        <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px;">
-                            <button onclick="applyPreset('RAG Query: Summarize EMEA financial records across internal DBs')" style="background:var(--bg-card); border:1px solid var(--border-color); padding:4px 10px; border-radius:12px; font-size:11px; color:var(--text-muted); cursor:pointer;">🔍 RAG Query</button>
-                            <button onclick="applyPreset('Write Python Scraper for product pricing extraction')" style="background:var(--bg-card); border:1px solid var(--border-color); padding:4px 10px; border-radius:12px; font-size:11px; color:var(--text-muted); cursor:pointer;">🕷️ Web Scraper</button>
-                            <button onclick="applyPreset('Generate Chart.js analytics preview for Q3 sales trends')" style="background:var(--bg-card); border:1px solid var(--border-color); padding:4px 10px; border-radius:12px; font-size:11px; color:var(--text-muted); cursor:pointer;">📊 Analytics Chart</button>
+                        <div class="suite-presets-bar">
+                            <span class="preset-chip" onclick="applyPreset('RAG Query: What was our Q3 revenue in EMEA across internal DBs?')">🔍 RAG Enterprise Query</span>
+                            <span class="preset-chip" onclick="applyPreset('Write Python Web Scraper using BeautifulSoup to extract product listings and standardize JSON')">🕷️ Web Scraping Code</span>
+                            <span class="preset-chip" onclick="applyPreset('Generate SEO Keyword Cluster & XML Sitemap for an AI SaaS Platform')">📈 SEO & Sitemap Tool</span>
+                            <span class="preset-chip" onclick="applyPreset('Draft Senior AI Engineer Job Description with interview rubrics and onboarding plan')">👥 HR Interview & Rubric</span>
                         </div>
 
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything, query vector RAG, or generate artifacts..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
-                            <button class="btn-send-pill" onclick="sendUserMessage()">➤</button>
+                        <div class="input-row-main" style="margin-top:4px;">
+                            <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything with persistent enterprise memory..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
+                            <button class="btn-send-pill" onclick="sendUserMessage()">
+                                <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                            </button>
+                        </div>
+                        <div class="input-tools-bar">
+                            <label class="tool-btn" style="cursor:pointer;">
+                                📎 Attach File <input type="file" id="fileUploadInput" style="display:none" onchange="handleFileUpload(event)">
+                            </label>
+                            <button class="tool-btn" id="micBtn" onclick="toggleVoiceInput()">🎙️ Voice Input</button>
+                            <button class="tool-btn" id="agentToggleBtn" onclick="toggleAgenticMode()">🤖 Agent Mode: OFF</button>
+                            <button class="tool-btn" onclick="openMCPModal()">🔌 MCP Connectors</button>
+                            <button class="tool-btn" onclick="openSettingsModal()">⚙️ Settings</button>
                         </div>
                     </div>
                 </div>
@@ -75,24 +130,75 @@
             <!-- CANVAS PANEL -->
             <aside class="canvas-artifact-panel" id="canvasArtifactPanel">
                 <div class="canvas-header">
-                    <span>🎨 Canvas Studio [Apex Pro]</span>
-                    <button onclick="closeCanvasPanel()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:700;">✕</button>
+                    <span>🎨 Canvas Artifact Studio [PRO]</span>
+                    <button class="tool-btn" onclick="closeCanvasPanel()">✕ Close</button>
                 </div>
-
-                <div class="canvas-tabs">
-                    <div class="canvas-tab active" id="tabCodeBtn" onclick="switchCanvasTab('code')">💻 Code</div>
-                    <div class="canvas-tab" id="tabPreviewBtn" onclick="switchCanvasTab('preview')">👁️ Live Preview</div>
-                    <div class="canvas-tab" id="tabChartBtn" onclick="switchCanvasTab('chart')">📊 Chart Analytics</div>
-                </div>
-
-                <div class="canvas-body">
-                    <div class="canvas-content" id="canvasArtifactContent">// Code loads here...</div>
-                    <iframe id="canvasPreviewFrame" style="width:100%; height:100%; border:none; display:none; background:#fff;"></iframe>
-                    <div id="canvasChartContainer" style="padding:20px; display:none; height:100%;">
-                        <canvas id="canvasChartElement"></canvas>
-                    </div>
+                <div class="canvas-content" id="canvasArtifactContent">// Generated Artifacts & Code load here...</div>
+                <div class="canvas-actions">
+                    <button class="btn-primary-action" onclick="executeArtifactSandbox()">▶️ Run Code Sandbox</button>
+                    <button class="tool-btn" onclick="navigator.clipboard.writeText(document.getElementById('canvasArtifactContent').innerText); alert('Copied to clipboard!');">📋 Copy</button>
                 </div>
             </aside>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal-backdrop" id="mcpModal">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="modal-title">Model Context Protocol (MCP)</span>
+                <button class="tool-btn" onclick="closeModal('mcpModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Active PRO Enterprise Connections</label>
+                <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:8px;">
+                    <div>🟢 <strong>PostgreSQL / Vector RAG Database MCP:</strong> Connected</div>
+                    <div>🟢 <strong>Local Codebase Workspace MCP:</strong> Active</div>
+                    <div>🟢 <strong>Google Workspace / Drive & Gmail MCP:</strong> Synced</div>
+                </div>
+            </div>
+            <button class="btn-primary-action" style="border-radius:12px; width:100%;" onclick="closeModal('mcpModal')">Done</button>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="modal-title">Account & PRO Subscription</span>
+                <button class="tool-btn" onclick="closeModal('authModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Display Name</label>
+                <input type="text" class="modal-input" id="profileNameInput" value="Samrat Chaudhary">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Profile Avatar URL or Upload</label>
+                <input type="text" class="modal-input" id="profileAvatarInput" placeholder="https://...">
+                <input type="file" accept="image/*" class="modal-input" style="padding:6px;" onchange="handleProfileAvatarUpload(event)">
+            </div>
+            <button class="btn-primary-action" style="border-radius:12px; width:100%;" onclick="saveProfileChanges()">Save Changes</button>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="settingsModal">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="modal-title">Workspace Settings & Memory</span>
+                <button class="tool-btn" onclick="closeModal('settingsModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Active AI Model [PRO Tier]</label>
+                <select class="modal-select" id="modelSelect">
+                    <option value="@cf/meta/llama-3.2-3b-instruct">Llama 3.2 3B Instruct (Default PRO)</option>
+                    <option value="@cf/meta/llama-3.1-8b-instruct">Llama 3.1 8B Instruct (High Reasoning)</option>
+                    <option value="@cf/mistral/mistral-7b-instruct-v0.1">Mistral 7B Instruct (Advanced)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Persistent Memory & Context</label>
+                <textarea class="modal-input" id="persistentMemoryInput" rows="3" placeholder="Saved facts about projects, code styles, and preferences..."></textarea>
+            </div>
+            <button class="btn-primary-action" style="border-radius:12px; width:100%;" onclick="saveSettings()">Save Configuration</button>
         </div>
     </div>
 
