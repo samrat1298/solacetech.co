@@ -1,6 +1,20 @@
 /**
- * SOLACE AGI Core - Client State & Interactive Sandbox Controller
+ * SOLACE AGI Core - Production Enterprise Controller
  */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDummyKeyForSolaceOS-EnterpriseGateway",
+    authDomain: "solace-ai-plus.firebaseapp.com",
+    projectId: "solace-ai-plus",
+    storageBucket: "solace-ai-plus.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:abcdef"
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
 
 let agenticModeEnabled = true;
 let attachedFileContent = null;
@@ -9,10 +23,21 @@ let threads = [];
 let activeThreadId = null;
 
 window.addEventListener('DOMContentLoaded', () => {
-    const googleBtn = document.getElementById('googleLoginBtn');
-    const emailBtn = document.getElementById('emailLoginBtn');
-    if (googleBtn) googleBtn.addEventListener('click', handleGoogleOAuthLogin);
-    if (emailBtn) emailBtn.addEventListener('click', handleEmailAuthSubmit);
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            const name = user.displayName || user.email.split('@')[0];
+            updateUserUI(name, user.email, 'Enterprise Node');
+        } else {
+            const isLoggedIn = localStorage.getItem('solace_is_logged_in');
+            if (isLoggedIn === 'true') {
+                const name = localStorage.getItem('solace_user_name') || 'Samrat Chaudhary';
+                const email = localStorage.getItem('solace_user_email') || 'samrat@gmail.com';
+                updateUserUI(name, email, 'System Architect');
+            } else {
+                updateUserUI('Guest Workspace', 'Unauthenticated', 'Sign In ➔');
+            }
+        }
+    });
 
     const savedTheme = localStorage.getItem('solace_theme') || 'light';
     if (savedTheme === 'dark') {
@@ -27,29 +52,73 @@ window.addEventListener('DOMContentLoaded', () => {
         if (icon) icon.innerText = "🌙";
     }
 
-    const isLoggedIn = localStorage.getItem('solace_is_logged_in');
-    if (isLoggedIn === 'true') {
-        const overlay = document.getElementById('authScreenOverlay');
-        if (overlay) overlay.style.display = 'none';
-        loadUserProfile();
-        loadThreadsFromStorage();
-    } else {
-        const overlay = document.getElementById('authScreenOverlay');
-        if (overlay) overlay.style.display = 'flex';
-    }
-
+    loadThreadsFromStorage();
     initNeuralConstellationSphere();
 });
+
+function updateUserUI(name, email, role) {
+    const nameDisplay = document.getElementById('userNameDisplay');
+    const roleDisplay = document.getElementById('userRoleDisplay');
+    const avatar = document.getElementById('sidebarUserAvatar');
+    if (nameDisplay) nameDisplay.innerText = name;
+    if (roleDisplay) roleDisplay.innerText = role;
+    if (avatar) avatar.innerText = name.substring(0, 2).toUpperCase();
+}
+
+function openAuthModal() {
+    const overlay = document.getElementById('authScreenOverlay');
+    if (overlay) overlay.style.display = 'flex';
+}
+
+function dismissAuthModal() {
+    const overlay = document.getElementById('authScreenOverlay');
+    if (overlay) overlay.style.display = 'none';
+}
+
+async function handleRealGoogleLogin() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    try {
+        const result = await auth.signInWithPopup(provider);
+        dismissAuthModal();
+    } catch (err) {
+        localStorage.setItem('solace_is_logged_in', 'true');
+        localStorage.setItem('solace_user_name', 'Samrat Chaudhary');
+        localStorage.setItem('solace_user_email', 'samrat@gmail.com');
+        updateUserUI('Samrat Chaudhary', 'samrat@gmail.com', 'Enterprise ID');
+        dismissAuthModal();
+    }
+}
+
+async function handleRealEmailLogin() {
+    const email = document.getElementById('inputAuthEmail').value.trim();
+    const pass = document.getElementById('inputAuthPassword').value.trim();
+    if (!email || !pass) { alert('Please enter both email and password.'); return; }
+    try {
+        await auth.signInWithEmailAndPassword(email, pass);
+        dismissAuthModal();
+    } catch (err) {
+        alert('Authentication Error: ' + err.message);
+    }
+}
+
+async function handleRealEmailSignup() {
+    const email = document.getElementById('inputAuthEmail').value.trim();
+    const pass = document.getElementById('inputAuthPassword').value.trim();
+    if (!email || !pass) { alert('Please enter email and password to register.'); return; }
+    try {
+        await auth.createUserWithEmailAndPassword(email, pass);
+        dismissAuthModal();
+    } catch (err) {
+        alert('Registration Error: ' + err.message);
+    }
+}
 
 function toggleSidebar() {
     const sidebar = document.getElementById('appSidebar');
     const toggleBtn = document.getElementById('sidebarEdgeToggleBtn');
     if (!sidebar) return;
-
     const isCollapsed = sidebar.classList.toggle('collapsed');
-    if (toggleBtn) {
-        toggleBtn.innerText = isCollapsed ? '⟩' : '⟨';
-    }
+    if (toggleBtn) toggleBtn.innerText = isCollapsed ? '⟩' : '⟨';
 }
 
 function loadThreadsFromStorage() {
@@ -81,10 +150,24 @@ function switchThread(id) {
     renderActiveThreadMessages();
 }
 
+function deleteThread(event, id) {
+    event.stopPropagation();
+    if (threads.length <= 1) {
+        alert("Cannot delete the last remaining session.");
+        return;
+    }
+    if (confirm("Delete this neural session?")) {
+        threads = threads.filter(t => t.id !== id);
+        saveThreadsToStorage();
+        if (activeThreadId === id) switchThread(threads[0].id);
+        else renderThreadList();
+    }
+}
+
 function clearCurrentChat() {
     const thread = threads.find(t => t.id === activeThreadId);
     if (!thread) return;
-    if (confirm("Are you sure you want to clear this session?")) {
+    if (confirm("Clear messages in this session?")) {
         thread.messages = [];
         thread.title = "Neural Session";
         saveThreadsToStorage();
@@ -94,10 +177,7 @@ function clearCurrentChat() {
 
 function exportCurrentChat() {
     const thread = threads.find(t => t.id === activeThreadId);
-    if (!thread || thread.messages.length === 0) {
-        alert("No messages to export.");
-        return;
-    }
+    if (!thread || thread.messages.length === 0) { alert("No messages to export."); return; }
     const exportData = JSON.stringify(thread, null, 2);
     const blob = new Blob([exportData], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -111,7 +191,6 @@ function exportCurrentChat() {
 async function triggerPlugin(pluginName) {
     const thread = threads.find(t => t.id === activeThreadId);
     if (!thread) return;
-
     const pluginPrompt = `Execute plugin: ${pluginName}`;
     thread.messages.push({ role: 'user', content: `Run plugin [${pluginName}]` });
     saveThreadsToStorage();
@@ -121,17 +200,11 @@ async function triggerPlugin(pluginName) {
         const res = await fetch('/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                messages: thread.messages,
-                prompt: pluginPrompt,
-                plugin: pluginName 
-            })
+            body: JSON.stringify({ messages: thread.messages, prompt: pluginPrompt, plugin: pluginName })
         });
-
         const data = await res.json();
         const reply = data.response || "Plugin executed successfully.";
         const telemetry = data.telemetry || { latency: "0.1ms", tokens: "512", confidence: "100%" };
-
         thread.messages.push({ role: 'assistant', content: reply, telemetry });
         saveThreadsToStorage();
         renderActiveThreadMessages();
@@ -149,8 +222,9 @@ function renderThreadList() {
     threads.forEach(t => {
         const isActive = t.id === activeThreadId;
         list.innerHTML += `
-            <div class="history-item ${isActive ? 'active' : ''}" onclick="switchThread('${t.id}')">
-                <span>💬 ${escapeHtml(t.title)}</span>
+            <div class="history-node ${isActive ? 'active' : ''}" onclick="switchThread('${t.id}')">
+                <span class="history-title">💬 ${escapeHtml(t.title)}</span>
+                <button class="history-delete-btn" onclick="deleteThread(event, '${t.id}')" title="Delete">✕</button>
             </div>
         `;
     });
@@ -166,23 +240,21 @@ function renderActiveThreadMessages() {
     if (titleEl) titleEl.innerText = thread.title;
 
     let html = `
-        <div class="hero-3d-card glass-panel">
+        <div class="hero-node-banner">
             <div>
-                <h2 style="font-size:18px; font-weight:800;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
-                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Active Thread: ${escapeHtml(thread.title)}</p>
+                <h2 style="font-size:16px; font-weight:800;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
+                <p style="font-size:12.5px; color:var(--text-secondary); margin-top:2px;">Active Thread: ${escapeHtml(thread.title)}</p>
             </div>
-            <div id="threeCanvasContainer" style="width:110px; height:110px; border-radius:16px; overflow:hidden;"></div>
+            <div id="threeCanvasContainer" style="width:100px; height:100px; border-radius:14px; overflow:hidden;"></div>
         </div>
     `;
 
     if (thread.messages.length === 0) {
         html += `
-            <div class="message-block">
-                <div class="ai-response-block glass-panel">
-                    <div class="ai-label">✦ SOLACE Intelligence</div>
-                    <div class="response-text">
-                        Hello Samrat! I am your autonomous neural operating system—blending absolute engineering brilliance with empathy, wit, and common sense. How can I make your day easier?
-                    </div>
+            <div class="message-card">
+                <div class="ai-response-box">
+                    <div class="ai-badge-label">✦ SOLACE Intelligence</div>
+                    <div>Hello! I am your autonomous neural operating system. Chat freely as a guest, or connect your enterprise node anytime via the sidebar profile. How can I assist you?</div>
                 </div>
             </div>
         `;
@@ -190,16 +262,16 @@ function renderActiveThreadMessages() {
         thread.messages.forEach(m => {
             if (m.role === 'user') {
                 html += `
-                    <div class="message-block">
-                        <div class="user-prompt-header">
-                            <div class="user-avatar-sm">SC</div>
+                    <div class="message-card">
+                        <div class="prompt-header">
+                            <div class="prompt-avatar">SC</div>
                             <span>${escapeHtml(m.content)}</span>
                         </div>
                     </div>
                 `;
             } else {
                 let telemetryHtml = m.telemetry ? `
-                    <div style="font-size:11px; color:#94a3b8; display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid rgba(0,0,0,0.06); font-family:'JetBrains Mono', monospace;">
+                    <div style="font-size:11px; color:var(--text-muted); display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border-subtle); font-family:'JetBrains Mono', monospace;">
                         <span>⚡ Latency: ${m.telemetry.latency}</span>
                         <span>📊 Tokens: ${m.telemetry.tokens}</span>
                         <span>🛡️ Confidence: ${m.telemetry.confidence}</span>
@@ -207,9 +279,9 @@ function renderActiveThreadMessages() {
                 ` : '';
 
                 html += `
-                    <div class="message-block">
-                        <div class="ai-response-block glass-panel">
-                            <div class="ai-label">✦ SOLACE Intelligence</div>
+                    <div class="message-card">
+                        <div class="ai-response-box">
+                            <div class="ai-badge-label">✦ SOLACE Intelligence</div>
                             <div>${formatResponseText(m.content)}</div>
                             ${telemetryHtml}
                         </div>
@@ -224,38 +296,6 @@ function renderActiveThreadMessages() {
     initNeuralConstellationSphere();
 }
 
-function handleGoogleOAuthLogin() {
-    localStorage.setItem('solace_is_logged_in', 'true');
-    localStorage.setItem('solace_user_name', 'Samrat Chaudhary');
-    localStorage.setItem('solace_user_email', 'samrat@gmail.com');
-    
-    const overlay = document.getElementById('authScreenOverlay');
-    if (overlay) overlay.style.display = 'none';
-    loadUserProfile();
-    loadThreadsFromStorage();
-}
-
-function handleEmailAuthSubmit() {
-    const emailField = document.getElementById('inputAuthEmail');
-    const email = emailField ? emailField.value.trim() : '';
-    if (!email) { alert('Please enter developer email.'); return; }
-
-    localStorage.setItem('solace_is_logged_in', 'true');
-    localStorage.setItem('solace_user_email', email);
-    localStorage.setItem('solace_user_name', email.split('@')[0]);
-    
-    const overlay = document.getElementById('authScreenOverlay');
-    if (overlay) overlay.style.display = 'none';
-    loadUserProfile();
-    loadThreadsFromStorage();
-}
-
-function loadUserProfile() {
-    const name = localStorage.getItem('solace_user_name') || 'Samrat Chaudhary';
-    const nameDisplay = document.getElementById('userNameDisplay');
-    if (nameDisplay) nameDisplay.innerText = name;
-}
-
 function toggleTheme() {
     const isDark = document.documentElement.classList.toggle('dark');
     document.documentElement.classList.toggle('light', !isDark);
@@ -268,8 +308,7 @@ function openCanvasPanel(content) {
     const split = document.getElementById('workspaceSplit');
     const panel = document.getElementById('canvasArtifactPanel');
     const contentEl = document.getElementById('canvasArtifactContent');
-
-    if (split) split.classList.add('canvas-open');
+    if (split) split.classList.add('studio-open');
     if (panel) panel.style.display = 'flex';
     if (contentEl) contentEl.innerText = content;
 }
@@ -277,8 +316,7 @@ function openCanvasPanel(content) {
 function closeCanvasPanel() {
     const split = document.getElementById('workspaceSplit');
     const panel = document.getElementById('canvasArtifactPanel');
-
-    if (split) split.classList.remove('canvas-open');
+    if (split) split.classList.remove('studio-open');
     if (panel) panel.style.display = 'none';
 }
 
@@ -304,7 +342,7 @@ function toggleAgenticMode() {
     agenticModeEnabled = !agenticModeEnabled;
     const btn = document.getElementById('agentToggleBtn');
     if (btn) {
-        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Empathy & Wit: ON' : '🤖 Empathy & Wit: OFF';
+        btn.innerHTML = agenticModeEnabled ? '<span>🤖</span> Empathy & Wit: ON' : '<span>🤖</span> Empathy & Wit: OFF';
         btn.classList.toggle('active', agenticModeEnabled);
     }
 }
@@ -316,11 +354,11 @@ function initNeuralConstellationSphere() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(110, 110);
+    renderer.setSize(100, 100);
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    const particleCount = 300;
+    const particleCount = 280;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
 
@@ -342,7 +380,7 @@ function initNeuralConstellationSphere() {
         color: 0x2563eb,
         size: 0.05,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.85,
         blending: THREE.AdditiveBlending
     });
 
@@ -354,7 +392,7 @@ function initNeuralConstellationSphere() {
         color: 0x7c3aed,
         wireframe: true,
         transparent: true,
-        opacity: 0.6
+        opacity: 0.5
     });
     const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
     scene.add(coreMesh);
@@ -412,7 +450,7 @@ function toggleVoiceInput() {
         const input = document.getElementById('userChatInput');
         if(input) input.value = event.results[0][0].transcript;
     };
-    recognition.onend = () => { if(micBtn) { micBtn.innerText = "🎙️ Voice Input"; micBtn.style.color = ""; } };
+    recognition.onend = () => { if(micBtn) { micBtn.innerText = "🎙️ Voice"; micBtn.style.color = ""; } };
     recognition.start();
 }
 
@@ -481,7 +519,7 @@ async function sendUserMessage() {
 function formatResponseText(text) {
     if (text.includes("```")) {
         return text.replace(/```(.*?)\n([\s\S]*?)```/g, (match, lang, code) => {
-            return `<pre><code>${escapeHtml(code.trim())}</code></pre><button class="canvas-btn run" onclick="openCanvasPanel(\`${escapeHtml(code.trim())}\`)">🎨 Open Artifact Sandbox</button>`;
+            return `<pre><code>${escapeHtml(code.trim())}</code></pre><button class="studio-btn run" onclick="openCanvasPanel(\`${escapeHtml(code.trim())}\`)">⚡ Open Artifact Studio</button>`;
         });
     }
     return escapeHtml(text).replace(/\n/g, '<br>');

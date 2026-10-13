@@ -3,129 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLACE AI+ | Omniscient Super-OS</title>
+    <title>SOLACE AI+ | Enterprise Neural OS</title>
     <link rel="stylesheet" href="css/enterprise.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <!-- Auth Overlay -->
-    <div id="authScreenOverlay" class="auth-overlay">
-        <div class="auth-card glass-panel">
-            <div class="auth-brand">
-                <div class="brand-logo">✦</div>
-                <h2>SOLACE AI+</h2>
-                <p>Omniscient Neural Operating System</p>
+    <!-- Production Auth Modal -->
+    <div id="authScreenOverlay" class="auth-overlay" style="display: none;">
+        <div class="auth-modal-card">
+            <div class="auth-modal-header">
+                <div class="brand-badge-lg">✦</div>
+                <h2>Enterprise Neural ID</h2>
+                <p>Connect to SOLACE Cloud & Sync Neural Threads across devices.</p>
             </div>
-            <button id="googleLoginBtn" class="auth-btn google">
+            
+            <button onclick="handleRealGoogleLogin()" class="enterprise-auth-btn google">
                 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                Continue with Google
+                Continue with Google Workspace
             </button>
-            <div class="auth-divider"><span>DEVELOPER ACCESS</span></div>
-            <input type="email" id="inputAuthEmail" placeholder="samrat@solacetech.ai" class="auth-input">
-            <button id="emailLoginBtn" class="auth-btn email">Launch Core OS</button>
+
+            <div class="auth-divider"><span>OR ENTERPRISE EMAIL</span></div>
+            
+            <div class="auth-field-group">
+                <input type="email" id="inputAuthEmail" placeholder="name@company.com" class="enterprise-input">
+                <input type="password" id="inputAuthPassword" placeholder="••••••••••••" class="enterprise-input">
+            </div>
+            
+            <div class="auth-action-grid">
+                <button onclick="handleRealEmailLogin()" class="enterprise-auth-btn primary">Sign In</button>
+                <button onclick="handleRealEmailSignup()" class="enterprise-auth-btn secondary">Register Node</button>
+            </div>
+
+            <button onclick="dismissAuthModal()" class="auth-dismiss-link">Continue as Guest (Local Workspace) ➔</button>
         </div>
     </div>
 
-    <!-- Main Workspace -->
+    <!-- Main Workspace Layout -->
     <div class="app-layout" id="workspaceSplit">
-        <aside class="sidebar glass-panel" id="appSidebar">
+        <aside class="sidebar-pane" id="appSidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
                     <span class="logo-spark">✦</span>
                     <span class="logo-text">SOLACE</span>
-                    <span class="logo-badge">OS</span>
+                    <span class="logo-tier">PRO</span>
                 </div>
-                <button onclick="createNewThread()" class="new-chat-btn" title="New Session">
-                    <span>+</span> New
+                <button onclick="createNewThread()" class="btn-new-session" title="New Session">
+                    <span>+</span> New Chat
                 </button>
             </div>
 
-            <!-- Quick Action Grid -->
-            <div class="sidebar-controls-grid">
-                <button onclick="clearCurrentChat()" class="control-action-btn" title="Clear Chat">🗑️ Clear</button>
-                <button onclick="exportCurrentChat()" class="control-action-btn" title="Export JSON">📥 Export</button>
-                <button onclick="triggerPlugin('gitSync')" class="control-action-btn plugin" title="Git Sync">📦 Git</button>
-                <button onclick="triggerPlugin('debugger')" class="control-action-btn plugin" title="Debugger">🛠️ Debug</button>
+            <!-- Tool Actions Grid -->
+            <div class="sidebar-tools-grid">
+                <button onclick="clearCurrentChat()" class="tool-chip" title="Clear Chat">🗑️ Clear</button>
+                <button onclick="exportCurrentChat()" class="tool-chip" title="Export JSON">📥 Export</button>
+                <button onclick="triggerPlugin('gitSync')" class="tool-chip plugin" title="Git Sync">📦 Git</button>
+                <button onclick="triggerPlugin('debugger')" class="tool-chip plugin" title="Debugger">🛠️ Debug</button>
             </div>
 
-            <div class="sidebar-section-label">NEURAL THREADS</div>
-            <div class="chat-history" id="chatHistoryList"></div>
+            <div class="sidebar-section-title">ACTIVE THREADS</div>
+            <div class="chat-history-list" id="chatHistoryList"></div>
 
             <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar" id="sidebarUserAvatar">SC</div>
-                    <div class="user-info">
-                        <span id="userNameDisplay" class="user-name">Samrat Chaudhary</span>
-                        <span class="user-role">System Architect</span>
+                <div class="user-pill" id="userProfileCard" onclick="openAuthModal()" title="Manage Account">
+                    <div class="user-avatar" id="sidebarUserAvatar">GS</div>
+                    <div class="user-details">
+                        <span id="userNameDisplay" class="user-name">Guest Workspace</span>
+                        <span id="userRoleDisplay" class="user-role">Sign In ➔</span>
                     </div>
                 </div>
-                <button onclick="toggleTheme()" id="themeToggleIcon" class="icon-btn" title="Toggle Theme">🌙</button>
+                <button onclick="toggleTheme()" id="themeToggleIcon" class="icon-action-btn" title="Toggle Theme">🌙</button>
             </div>
         </aside>
 
-        <!-- Middle-Edge Floating Toggle Button -->
-        <button onclick="toggleSidebar()" class="sidebar-edge-toggle-btn" id="sidebarEdgeToggleBtn" title="Toggle Sidebar">
+        <!-- Middle Edge Collapse Toggle Button -->
+        <button onclick="toggleSidebar()" class="sidebar-edge-toggle" id="sidebarEdgeToggleBtn" title="Toggle Sidebar">
             ⟨
         </button>
 
-        <main class="main-content">
-            <header class="topbar glass-panel">
-                <div class="topbar-title-group">
-                    <h2 id="currentThreadTitle">Omniscient Session Active</h2>
-                    <span class="status-indicator"><span class="pulse"></span> Neural Mesh Synchronized</span>
+        <main class="main-content-pane">
+            <header class="workspace-topbar">
+                <div class="topbar-left">
+                    <h2 id="currentThreadTitle">Omniscient Session</h2>
+                    <div class="sync-status"><span class="pulse-dot"></span> Neural Mesh Synchronized</div>
                 </div>
-                <div class="topbar-actions">
-                    <span id="topbarModelBadge" class="badge-glow">⚡ Llama 3.2 3B [Singularity Core]</span>
-                    <button onclick="toggleAgenticMode()" id="agentToggleBtn" class="agent-toggle-btn">
-                        <span class="agent-icon">🤖</span> Empathy & Wit: ON
+                <div class="topbar-right">
+                    <div class="model-pill">⚡ Llama 3.2 3B [Singularity Core]</div>
+                    <button onclick="toggleAgenticMode()" id="agentToggleBtn" class="agent-pill-btn active">
+                        <span>🤖</span> Empathy & Wit: ON
                     </button>
                 </div>
             </header>
 
-            <div class="chat-container" id="chatMessagesWrapper"></div>
+            <div class="chat-stream-container" id="chatMessagesWrapper"></div>
 
-            <div class="input-container">
-                <div class="input-box glass-panel">
-                    <div id="attachedFileIndicator" class="file-badge-preview" style="display: none;">
-                        <span>📎 Attached: <strong id="attachedFileName">file.txt</strong></span>
-                        <button onclick="removeAttachedFile()" class="remove-file-btn">✕</button>
+            <div class="input-dock-container">
+                <div class="input-dock-box">
+                    <div id="attachedFileIndicator" class="file-preview-badge" style="display: none;">
+                        <span>📎 Context Attached: <strong id="attachedFileName">file.txt</strong></span>
+                        <button onclick="removeAttachedFile()" class="badge-close-btn">✕</button>
                     </div>
-                    <textarea id="userChatInput" placeholder="Command SOLACE AI+ Engine (e.g., 'Architect a distributed streaming pipeline with common sense')..." onkeydown="handleKeyPress(event)"></textarea>
-                    <div class="input-actions">
-                        <div class="action-tools">
-                            <label class="tool-icon-btn" title="Upload Context/File">
-                                📎 Upload <input type="file" id="fileUploadInput" onchange="handleFileUpload(event)" hidden>
+                    <textarea id="userChatInput" placeholder="Command SOLACE AI+ Engine (e.g., 'Architect a bulletproof distributed event pipeline with common sense')..." onkeydown="handleKeyPress(event)"></textarea>
+                    <div class="dock-actions-row">
+                        <div class="dock-tools-left">
+                            <label class="dock-tool-btn" title="Attach Context">
+                                📎 Attach <input type="file" id="fileUploadInput" onchange="handleFileUpload(event)" hidden>
                             </label>
-                            <button onclick="toggleVoiceInput()" id="micBtn" class="tool-icon-btn" title="Voice Input">🎙️ Voice</button>
+                            <button onclick="toggleVoiceInput()" id="micBtn" class="dock-tool-btn" title="Voice Input">🎙️ Voice</button>
                         </div>
-                        <button onclick="sendUserMessage()" class="send-btn">
+                        <button onclick="sendUserMessage()" class="execute-btn">
                             <span>Execute</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         </button>
                     </div>
                 </div>
             </div>
         </main>
 
-        <div class="canvas-panel glass-panel" id="canvasArtifactPanel" style="display: none;">
-            <div class="canvas-header">
-                <div class="canvas-title">
-                    <span>🎨</span>
-                    <h3>Live Code & Artifact Sandbox</h3>
+        <div class="artifact-studio-pane" id="canvasArtifactPanel" style="display: none;">
+            <div class="studio-header">
+                <div class="studio-title">
+                    <span>⚡</span>
+                    <h3>Live Code & Artifact Studio</h3>
                 </div>
-                <div class="canvas-actions">
-                    <button onclick="executeArtifactSandbox()" class="canvas-btn run">▶ Run Code</button>
-                    <button onclick="closeCanvasPanel()" class="canvas-btn close">✖</button>
+                <div class="studio-actions">
+                    <button onclick="executeArtifactSandbox()" class="studio-btn run">▶ Run Code</button>
+                    <button onclick="closeCanvasPanel()" class="studio-btn close">✕</button>
                 </div>
             </div>
-            <div class="canvas-editor-container">
-                <pre class="canvas-body" id="canvasArtifactContent"></pre>
+            <div class="studio-editor-wrapper">
+                <pre class="studio-code-output" id="canvasArtifactContent"></pre>
             </div>
-            <div class="canvas-footer">
-                <span id="sandboxExecutionStatus">Execution Verified | Zero Anomalies</span>
+            <div class="studio-footer">
+                <span id="sandboxExecutionStatus">Sandbox Verified | Zero Anomalies</span>
             </div>
         </div>
     </div>
