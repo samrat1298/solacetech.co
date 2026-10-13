@@ -1,9 +1,9 @@
-name = "solacetech-ai"
-main = "worker.js"
-compatibility_date = "2026-10-10"
+name = "solace-ai-apex"
+main = "src/backend/worker.js"
+compatibility_date = "2026-10-13"
 
 [assets]
-directory = "./public"
+directory = "src/frontend"
 
 [ai]
 binding = "AI"

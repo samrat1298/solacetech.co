@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolaceTech — SOLACE AI+ [Apex Enterprise]</title>
+    <link rel="stylesheet" href="./css/enterprise.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- AUTH OVERLAY -->
+    <div class="auth-screen-overlay" id="authScreenOverlay">
+        <div class="auth-box">
+            <div style="text-align: center;">
+                <span style="background:var(--gold-gradient); color:#fff; padding:3px 10px; border-radius:6px; font-size:10px; font-weight:800;">PRO APEX</span>
+                <h2 style="font-size: 26px; font-weight: 800; margin-top:10px;">SOLACE AI+</h2>
+                <p style="font-size: 13.5px; color: var(--text-muted); margin-top:4px;">Frontier Enterprise Platform Workspace</p>
+            </div>
+            <button class="btn-primary-action" id="googleLoginBtn">Sign in with Google / Gmail</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP WINDOW -->
+    <div class="app-window">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="appSidebar">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div onclick="createNewThread()" style="font-weight:800; font-size:16px; cursor:pointer; color:var(--text-main);">
+                    ⚡ SOLACE AI+
+                </div>
+                <button onclick="toggleTheme()" style="background:none; border:none; color:var(--text-main); cursor:pointer;">🌙</button>
+            </div>
+
+            <button class="btn-primary-action" onclick="createNewThread()">+ New Thread</button>
+
+            <div style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:4px;" id="chatHistoryList"></div>
+
+            <div style="padding-top:12px; border-top:1px solid var(--border-color); display:flex; flex-direction:column; gap:8px;">
+                <div style="font-size:12px; font-weight:700; color:var(--text-main);" id="userNameDisplay">Samrat Chaudhary</div>
+                <button onclick="handleLogout()" style="background:none; border:none; color:#ef4444; font-size:12px; font-weight:700; cursor:pointer; text-align:left;">Log Out</button>
+            </div>
+        </aside>
+
+        <!-- WORKSPACE SPLIT -->
+        <div class="workspace-split" id="workspaceSplit">
+            <main class="main-chat-container">
+                <div class="chat-topbar">
+                    <span style="font-weight:800; font-size:14px;" id="currentThreadTitle">Workspace</span>
+                    <span style="background:rgba(245,158,11,0.15); color:#f59e0b; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; border:1px solid rgba(245,158,11,0.3);">
+                        ⚡ Llama 3.2 3B [Apex Engine]
+                    </span>
+                </div>
+
+                <div class="chat-messages-wrapper" id="chatMessagesWrapper"></div>
+
+                <!-- FLOATING INPUT -->
+                <div class="input-floating-container">
+                    <div class="input-floating-bar">
+                        <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:6px;">
+                            <button onclick="applyPreset('RAG Query: Summarize EMEA financial records across internal DBs')" style="background:var(--bg-card); border:1px solid var(--border-color); padding:4px 10px; border-radius:12px; font-size:11px; color:var(--text-muted); cursor:pointer;">🔍 RAG Query</button>
+                            <button onclick="applyPreset('Write Python Scraper for product pricing extraction')" style="background:var(--bg-card); border:1px solid var(--border-color); padding:4px 10px; border-radius:12px; font-size:11px; color:var(--text-muted); cursor:pointer;">🕷️ Web Scraper</button>
+                            <button onclick="applyPreset('Generate Chart.js analytics preview for Q3 sales trends')" style="background:var(--bg-card); border:1px solid var(--border-color); padding:4px 10px; border-radius:12px; font-size:11px; color:var(--text-muted); cursor:pointer;">📊 Analytics Chart</button>
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <textarea class="chat-textarea" id="userChatInput" placeholder="Ask anything, query vector RAG, or generate artifacts..." rows="1" onkeydown="handleKeyPress(event)"></textarea>
+                            <button class="btn-send-pill" onclick="sendUserMessage()">➤</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- CANVAS PANEL -->
+            <aside class="canvas-artifact-panel" id="canvasArtifactPanel">
+                <div class="canvas-header">
+                    <span>🎨 Canvas Studio [Apex Pro]</span>
+                    <button onclick="closeCanvasPanel()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:700;">✕</button>
+                </div>
+
+                <div class="canvas-tabs">
+                    <div class="canvas-tab active" id="tabCodeBtn" onclick="switchCanvasTab('code')">💻 Code</div>
+                    <div class="canvas-tab" id="tabPreviewBtn" onclick="switchCanvasTab('preview')">👁️ Live Preview</div>
+                    <div class="canvas-tab" id="tabChartBtn" onclick="switchCanvasTab('chart')">📊 Chart Analytics</div>
+                </div>
+
+                <div class="canvas-body">
+                    <div class="canvas-content" id="canvasArtifactContent">// Code loads here...</div>
+                    <iframe id="canvasPreviewFrame" style="width:100%; height:100%; border:none; display:none; background:#fff;"></iframe>
+                    <div id="canvasChartContainer" style="padding:20px; display:none; height:100%;">
+                        <canvas id="canvasChartElement"></canvas>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>

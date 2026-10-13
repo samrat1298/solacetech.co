@@ -1,6 +1,7 @@
-/**
- * SOLACE AI+ [PRO] - Enterprise Cloudflare Worker Engine
- */
+import { handleRAGQuery } from './services/ragEngine.js';
+import { handleWebScraperGenerator } from './services/webScraper.js';
+import { handleSEOPipeline } from './services/seoEngine.js';
+import { handleHREngine } from './services/hrEngine.js';
 
 export default {
   async fetch(request, env) {
@@ -28,35 +29,27 @@ export default {
         const { messages, model = "@cf/meta/llama-3.2-3b-instruct", prompt, feature } = body;
         const userPrompt = prompt || messages?.[messages.length - 1]?.content || "";
 
-        if (feature === "rag" || userPrompt.toLowerCase().includes("rag query") || userPrompt.toLowerCase().includes("internal database")) {
-          return handleRAGQuery(userPrompt, env, corsHeaders);
+        let responseText = "";
+        if (feature === "rag" || userPrompt.toLowerCase().includes("rag query")) {
+          responseText = handleRAGQuery(userPrompt);
+        } else if (feature === "scraper" || userPrompt.toLowerCase().includes("scrape")) {
+          responseText = handleWebScraperGenerator();
+        } else if (feature === "seo" || userPrompt.toLowerCase().includes("seo")) {
+          responseText = handleSEOPipeline();
+        } else if (feature === "hr" || userPrompt.toLowerCase().includes("hr")) {
+          responseText = handleHREngine();
+        } else {
+          if (!env.AI) {
+            responseText = "⚠️ Cloudflare Workers AI binding (`env.AI`) is not attached.";
+          } else {
+            const aiResponse = await env.AI.run(model, {
+              messages: messages || [{ role: "user", content: userPrompt }]
+            });
+            responseText = aiResponse.response || aiResponse.result?.response || JSON.stringify(aiResponse);
+          }
         }
 
-        if (feature === "scraper" || userPrompt.toLowerCase().includes("web scraper") || userPrompt.toLowerCase().includes("scrape")) {
-          return handleWebScraperGenerator(userPrompt, corsHeaders);
-        }
-
-        if (feature === "seo" || userPrompt.toLowerCase().includes("seo keyword") || userPrompt.toLowerCase().includes("sitemap")) {
-          return handleSEOPipeline(userPrompt, corsHeaders);
-        }
-
-        if (feature === "hr" || userPrompt.toLowerCase().includes("job description") || userPrompt.toLowerCase().includes("interview rubric")) {
-          return handleHREngine(userPrompt, corsHeaders);
-        }
-
-        if (!env.AI) {
-          return new Response(JSON.stringify({
-            response: "⚠️ Cloudflare Workers AI binding (`env.AI`) is not attached."
-          }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-        }
-
-        const aiResponse = await env.AI.run(model, {
-          messages: messages || [{ role: "user", content: userPrompt }]
-        });
-
-        const textOutput = aiResponse.response || aiResponse.result?.response || JSON.stringify(aiResponse);
-
-        return new Response(JSON.stringify({ response: textOutput }), {
+        return new Response(JSON.stringify({ response: responseText }), {
           status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" }
         });
@@ -72,43 +65,3 @@ export default {
     return new Response("Not Found", { status: 404, headers: corsHeaders });
   }
 };
-
-function handleRAGQuery(query, env, headers) {
-  const responseText = "🔍 [SOLACE Enterprise RAG Engine Results]\n\nQuery Analyzed: \"" + query + "\"\nVector DB Latency: 18ms | Cosine Similarity Score: 0.96\n\nRetrieved Intelligence:\nEMEA quarterly revenue reached €14.8M (+18% YoY). Enterprise Direct Sales contributed €9.2M. Cloud Services yielded €5.6M.\n\nSource Attributions:\n- Document ID: DOC-2026-001\n- Title: Q3 2026 EMEA Financial Performance\n- Vector Confidence: 96.0%";
-
-  return new Response(JSON.stringify({ response: responseText }), {
-    status: 200,
-    headers: { ...headers, "Content-Type": "application/json" }
-  });
-}
-
-function handleWebScraperGenerator(query, headers) {
-  const codeSnippet = "import requests\nfrom bs4 import BeautifulSoup\n\ndef run_scraper(url):\n    res = requests.get(url)\n    soup = BeautifulSoup(res.text, 'html.parser')\n    return [item.text for item in soup.select('.title')]";
-  
-  const responseText = "🕷️ [SOLACE Web Scraper Generator]\n\n```python\n" + codeSnippet + "\n```";
-
-  return new Response(JSON.stringify({ response: responseText }), {
-    status: 200,
-    headers: { ...headers, "Content-Type": "application/json" }
-  });
-}
-
-function handleSEOPipeline(query, headers) {
-  const xmlSnippet = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <url>\n    <loc>https://solacetech.co/</loc>\n    <priority>1.0</priority>\n  </url>\n</urlset>";
-  
-  const responseText = "📈 [SOLACE SEO & Sitemap Generator]\n\n```xml\n" + xmlSnippet + "\n```";
-
-  return new Response(JSON.stringify({ response: responseText }), {
-    status: 200,
-    headers: { ...headers, "Content-Type": "application/json" }
-  });
-}
-
-function handleHREngine(query, headers) {
-  const responseText = "👥 [SOLACE HR Evaluation Engine]\n\nRole: Principal AI Systems Engineer\n- Design low-latency RAG vector search.\n- Build autonomous multi-agent pipelines.";
-
-  return new Response(JSON.stringify({ response: responseText }), {
-    status: 200,
-    headers: { ...headers, "Content-Type": "application/json" }
-  });
-}
