@@ -1,6 +1,6 @@
 /**
  * SOLACE AGI Core - Production Enterprise Controller
- * Theme-Aware Unlimited Viewport 3D Particle Wave Engine + 6.4B Context Window
+ * Theme-Aware Unlimited Viewport 3D Particle Wave Engine + 6.4 Billion Token Context Engine
  */
 
 let agenticModeEnabled = true;
@@ -71,7 +71,6 @@ function init3DParticleFlowBackground() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Expanded grid density for unlimited edge-to-edge coverage
     const numX = 140;
     const numZ = 140;
     const count = numX * numZ;
