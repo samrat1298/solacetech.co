@@ -3,201 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLACE AGI Core - Multimodal 6.4B Neural Workspace</title>
-    <link rel="stylesheet" href="/css/enterprise.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>SOLACE AGI - Autonomous Intelligence Platform</title>
+    <link rel="stylesheet" href="css/enterprise.css">
+    <!-- Three.js CDN for unlimited 3D Background -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-
-    <!-- Dynamic Unlimited 3D Background Canvas -->
+    <!-- Unlimited Borderless Viewport-Spanning 3D Background Canvas -->
     <canvas id="bg3dCanvas"></canvas>
 
-    <!-- App Layout Structure -->
-    <div class="app-layout">
-
-        <!-- Sidebar Navigation Pane -->
-        <aside class="sidebar-pane glass-panel" id="appSidebar">
-            <div class="sidebar-header">
-                <div class="logo-container">
-                    <span class="logo-spark">✦</span>
-                    <span>SOLACE AI+</span>
-                </div>
-                <button class="btn-new-session" onclick="createNewThread()">
-                    <span>+</span> New Session
-                </button>
-            </div>
-
-            <!-- Quick Enterprise Tools Grid -->
-            <div class="sidebar-tools-grid">
-                <button class="tool-chip" onclick="clearCurrentChat()">🧹 Clear Chat</button>
-                <button class="tool-chip" onclick="exportCurrentChat()">💾 Export JSON</button>
-                <button class="tool-chip plugin" onclick="triggerPlugin('Code Optimizer')">⚡ Code Opt</button>
-                <button class="tool-chip plugin" onclick="triggerPlugin('Deep Research')">🔍 Deep Search</button>
-            </div>
-
-            <div class="sidebar-section-title">ACTIVE NEURAL SESSIONS</div>
-
-            <!-- Session History List -->
-            <div class="chat-history-list" id="chatHistoryList">
-                <!-- Dynamically populated via app.js -->
-            </div>
-
-            <!-- Sidebar Footer User Profile -->
-            <div class="sidebar-footer">
-                <div class="user-pill" onclick="openAuthModal()">
-                    <div class="user-avatar" id="sidebarUserAvatar">SC</div>
-                    <div class="user-details">
-                        <span class="user-name" id="userNameDisplay">Samrat Chaudhary</span>
-                        <span class="user-role" id="userRoleDisplay">Enterprise Node</span>
-                    </div>
-                </div>
-                <button class="icon-action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme">
-                    <span id="themeToggleIcon">🌙</span>
-                </button>
-            </div>
-        </aside>
-
-        <!-- Sidebar Collapse Toggle Button -->
-        <button class="sidebar-edge-toggle" id="sidebarEdgeToggleBtn" onclick="toggleSidebar()" title="Toggle Sidebar">⟨</button>
-
-        <!-- Main Workspace Pane -->
-        <main class="main-content-pane">
-            <!-- Top Navigation Bar -->
-            <header class="workspace-topbar glass-panel">
-                <div class="topbar-left">
-                    <h2 id="currentThreadTitle">Neural Session</h2>
-                    <div class="sync-status">
-                        <span class="pulse-dot"></span> 6.4 Billion Token Multimodal Stream Active
-                    </div>
-                </div>
-                <div class="topbar-right">
-                    <span class="model-pill">SOLACE-6.4B-Multimodal</span>
-                    <button class="agent-pill-btn active" id="agentToggleBtn" onclick="toggleAgenticMode()">
-                        <span>🤖</span> Empathy & Wit: ON
-                    </button>
-                </div>
-            </header>
-
-            <!-- Workspace Split Container (Chat + Studio) -->
-            <div class="workspace-split" id="workspaceSplit" style="display: flex; flex: 1; overflow: hidden; position: relative;">
-                
-                <!-- Chat Messages Stream -->
-                <div class="chat-stream-container" id="chatMessagesWrapper">
-                    <div class="hero-node-banner">
-                        <div>
-                            <h2 style="font-size:16px; font-weight:800;">SOLACE AI+ [Singularity Core $\Omega$]</h2>
-                            <p style="font-size:12.5px; color:var(--text-secondary); margin-top:2px;">Context Capacity: 6,400,000,000 Tokens (6.4 Billion)</p>
-                        </div>
-                        <div id="threeCanvasContainer" style="width:100px; height:100px; border-radius:14px; overflow:hidden;"></div>
-                    </div>
-
-                    <div class="message-card">
-                        <div class="ai-response-box">
-                            <div class="ai-badge-label">✦ SOLACE Intelligence</div>
-                            <div>Hello! I am your autonomous neural operating system, powered by a massive <strong>6.4 Billion Token Context Window</strong>. Upload files safely without hanging, or use the quick generation buttons below to create Images, PDFs, PPTs, and Videos instantly.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Canvas Artifact Studio Pane (Right Side Drawer) -->
-                <aside class="artifact-studio-pane" id="canvasArtifactPanel" style="display: none;">
-                    <div class="studio-header">
-                        <div class="studio-title">
-                            <span>⚡</span> Interactive Artifact Studio
-                        </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="studio-btn run" onclick="executeArtifactSandbox()">▶ Run Code</button>
-                            <button class="studio-btn close" onclick="closeCanvasPanel()">✕</button>
-                        </div>
-                    </div>
-                    <div class="studio-code-output" id="canvasArtifactContent" contenteditable="true" spellcheck="false">// Artifact output stream...</div>
-                    <div class="studio-footer">Status: Sandbox Isolated | Context Scope: 6.4B Tokens</div>
-                </aside>
-
-            </div>
-
-            <!-- Input Dock Container -->
-            <div class="input-dock-container">
-                <div class="input-dock-box">
-                    <!-- Multimodal Generator Quick Bar -->
-                    <div style="display: flex; gap: 6px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); overflow-x: auto;">
-                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('image')" style="background:rgba(37,99,235,0.08); color:var(--accent-blue);">🖼️ Generate Image</button>
-                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('pdf')" style="background:rgba(124,58,237,0.08); color:var(--accent-purple);">📄 Generate PDF</button>
-                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('ppt')" style="background:rgba(5,150,105,0.08); color:var(--accent-green);">📊 Generate PPT</button>
-                        <button class="dock-tool-btn" onclick="triggerMultimodalGenerator('video')" style="background:rgba(8,145,178,0.08); color:var(--accent-cyan);">🎥 Generate Video</button>
-                    </div>
-
-                    <div class="file-preview-badge" id="attachedFileIndicator" style="display: none;">
-                        <span>📎 <span id="attachedFileName">document.txt</span></span>
-                        <button class="badge-close-btn" onclick="removeAttachedFile()">✕</button>
-                    </div>
-
-                    <textarea id="userChatInput" placeholder="Ask SOLACE or describe an Image, PDF, PPT, or Video to generate..." onkeydown="handleKeyPress(event)"></textarea>
-
-                    <div class="dock-actions-row">
-                        <div class="dock-tools-left">
-                            <input type="file" id="fileUploadInput" style="display: none;" onchange="handleFileUpload(event)">
-                            <button class="dock-tool-btn" onclick="document.getElementById('fileUploadInput').click()">📎 Attach File</button>
-                            <button class="dock-tool-btn" id="micBtn" onclick="toggleVoiceInput()">🎙️ Voice</button>
-                        </div>
-                        <button class="execute-btn" onclick="sendUserMessage()">
-                            <span>Execute</span>
-                            <span>➔</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-    </div>
-
-    <!-- Production Google Auth Modal -->
-    <div class="auth-overlay" id="authScreenOverlay" style="display: none;">
+    <!-- Authentication Modal Overlay -->
+    <div id="authScreenOverlay" class="auth-overlay" style="display: none;">
         <div class="auth-modal-card glass-panel">
-            <div class="brand-badge-lg">✦</div>
+            <div class="brand-badge-lg">⚡</div>
             <div class="auth-modal-header">
-                <h2>SOLACE Enterprise Gateway</h2>
-                <p>Sign in with your Google Workspace identity to sync your 6.4B token sessions across enterprise nodes.</p>
+                <h2>Connect Enterprise Node</h2>
+                <p>Authenticate with Google Workspace or your neural credentials to access the 6.4B token core.</p>
             </div>
-
             <div class="auth-field-group">
-                <button class="enterprise-auth-btn google" onclick="handleRealGoogleLogin()">
-                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.29v3.15C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.29C.47 8.21 0 10.05 0 12s.47 3.79 1.29 5.42l3.99-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.58l3.99 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+                <button onclick="handleRealGoogleLogin()" class="enterprise-auth-btn google">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.1 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.4 0 10.6 0 13s.6 4.6 1.6 6.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5.3L1.6 15C3.5 18.8 7.4 23 12 23z"/></svg>
                     Continue with Google Workspace
                 </button>
+                <div class="auth-divider">OR SECURE CREDENTIALS</div>
+                <input type="email" id="inputAuthEmail" placeholder="Enterprise Email (e.g. samrat@solacetech.ai)" class="enterprise-input">
+                <input type="password" id="inputAuthPassword" placeholder="Neural Access Password" class="enterprise-input" style="margin-top: 8px;">
             </div>
-
-            <div class="auth-divider">OR ENTERPRISE CREDENTIALS</div>
-
-            <div class="auth-field-group">
-                <input type="email" id="inputAuthEmail" class="enterprise-input" placeholder="enterprise@solacetech.ai">
-                <input type="password" id="inputAuthPassword" class="enterprise-input" placeholder="••••••••••••">
-            </div>
-
             <div class="auth-action-grid">
-                <button class="enterprise-auth-btn primary" onclick="handleRealEmailLogin()">Sign In</button>
-                <button class="enterprise-auth-btn secondary" onclick="handleRealEmailSignup()">Register Node</button>
+                <button onclick="handleRealEmailLogin()" class="enterprise-auth-btn primary">Sign In</button>
+                <button onclick="handleRealEmailSignup()" class="enterprise-auth-btn secondary">Register Node</button>
             </div>
-
-            <button class="auth-dismiss-link" onclick="dismissAuthModal()">Continue as Guest Workspace ➔</button>
+            <button onclick="dismissAuthModal()" class="auth-dismiss-link">Return to Guest Workspace</button>
         </div>
     </div>
 
-    <!-- Custom Closable Dialog Overlay -->
-    <div class="solace-dialog-overlay" id="solaceDialogOverlay" style="display: none;">
+    <!-- Interactive Custom Dialog Overlay -->
+    <div id="solaceDialogOverlay" class="solace-dialog-overlay" style="display: none;">
         <div class="solace-dialog-card glass-panel">
-            <div class="dialog-icon" id="solaceDialogIcon">✦</div>
-            <h3 id="solaceDialogTitle">SOLACE System Notice</h3>
-            <p id="solaceDialogMessage">Message details will appear here.</p>
-            <div class="dialog-actions" id="solaceDialogActions">
+            <div id="solaceDialogIcon" class="dialog-icon">✦</div>
+            <h3 id="solaceDialogTitle">Notice</h3>
+            <p id="solaceDialogMessage">Message details go here.</p>
+            <div id="solaceDialogActions" class="dialog-actions">
                 <button onclick="closeSolaceDialog()" class="dialog-btn primary">Understood</button>
             </div>
         </div>
     </div>
 
-    <script src="/js/app.js"></script>
+    <div class="app-layout">
+        <!-- Sidebar Navigation Pane -->
+        <aside id="appSidebar" class="sidebar-pane glass-panel">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <span class="logo-spark">⚡</span> SOLACE AI+ <span class="logo-tier">v2.6</span>
+                </div>
+                <button onclick="createNewThread()" class="btn-new-session" title="New Neural Session">+ New</button>
+            </div>
+            
+            <div class="sidebar-tools-grid">
+                <button onclick="clearCurrentChat()" class="tool-chip">⚡ Clear</button>
+                <button onclick="exportCurrentChat()" class="tool-chip">📦 Export</button>
+                <button onclick="triggerPlugin('codeOpt')" class="tool-chip plugin">🧠 Code Opt</button>
+                <button onclick="triggerPlugin('deepSearch')" class="tool-chip plugin">🔍 Deep Search</button>
+            </div>
+
+            <div class="sidebar-section-title">ACTIVE NEURAL SESSIONS</div>
+            <div id="chatHistoryList" class="chat-history-list">
+                <!-- Dynamically populated thread list -->
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-pill" onclick="openAuthModal()">
+                    <div id="sidebarUserAvatar" class="user-avatar">SC</div>
+                    <div class="user-details">
+                        <span id="userNameDisplay" class="user-name">Samrat Chaudhary</span>
+                        <span id="userRoleDisplay" class="user-role">Enterprise Node</span>
+                    </div>
+                </div>
+                <button id="themeToggleIcon" onclick="toggleTheme()" class="icon-action-btn" title="Toggle Theme">☀️</button>
+            </div>
+        </aside>
+
+        <button id="sidebarEdgeToggleBtn" onclick="toggleSidebar()" class="sidebar-edge-toggle" title="Toggle Sidebar">⟨</button>
+
+        <!-- Main Workspace Pane -->
+        <main class="main-content-pane">
+            <header class="workspace-topbar glass-panel">
+                <div class="topbar-left">
+                    <h2>Neural Core & Chat</h2>
+                    <div class="sync-status">
+                        <div class="pulse-dot"></div> 6.4B Token Stream Active
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="model-pill">openrouter/free</div>
+                    <button onclick="triggerPlugin('agentOrchestrator')" class="agent-pill-btn">🤖 Agent Mode: ON</button>
+                </div>
+            </header>
+
+            <!-- Chat Stream Feed -->
+            <div id="chatStreamContainer" class="chat-stream-container">
+                <!-- Initial Hero Welcome Card -->
+                <div class="hero-node-banner glass-panel">
+                    <div>
+                        <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 4px;">SOLACE AI+ [Singularity Core $Omega$]</h3>
+                        <p style="font-size: 12.5px; color: var(--text-secondary);">Context Capacity: 6,400,000,000 Tokens | Unlimited 3D Background Node Active</p>
+                    </div>
+                    <div style="font-size: 24px;">🌐</div>
+                </div>
+            </div>
+
+            <!-- Input Dock -->
+            <div class="input-dock-container">
+                <div class="input-dock-box glass-panel">
+                    <div id="filePreviewBadge" class="file-preview-badge" style="display: none;">
+                        <span id="attachedFileNameText">Attachment attached</span>
+                        <button onclick="removeAttachment()" class="badge-close-btn">✕</button>
+                    </div>
+                    <textarea id="userPromptInput" placeholder="Ask SOLACE anything or execute multi-modal commands..." rows="1" onkeydown="handleInputKeyDown(event)"></textarea>
+                    <div class="dock-actions-row">
+                        <div class="dock-tools-left">
+                            <label class="dock-tool-btn" style="cursor: pointer;">
+                                📎 Attach File <input type="file" id="fileUploadInput" onchange="handleFileAttachment(event)" style="display: none;">
+                            </label>
+                            <button onclick="triggerVoiceInput()" class="dock-tool-btn">🎤 Voice</button>
+                        </div>
+                        <button onclick="sendUserPrompt()" class="execute-btn">Execute →</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
 </body>
 </html>
