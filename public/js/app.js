@@ -50,7 +50,7 @@ function saveThreadsToStorage() {
 function createNewThread() {
     const newThread = {
         id: 'thread-' + Date.now(),
-        title: 'Neural Conversation',
+        title: 'Singularity Core Session',
         messages: []
     };
     threads.unshift(newThread);
@@ -90,8 +90,8 @@ function renderActiveThreadMessages() {
     let html = `
         <div class="hero-3d-card glass-panel" style="padding:24px; border-radius:20px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div>
-                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Neural Operating System]</h2>
-                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Active Session: ${escapeHtml(thread.title)}</p>
+                <h2 style="font-size:18px; font-weight:800;">SolaceTech SOLACE AI+ [Singularity Core $\Omega^{\infty\infty}$]</h2>
+                <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Session Context: ${escapeHtml(thread.title)}</p>
             </div>
             <div id="threeCanvasContainer" style="width:100px; height:100px;"></div>
         </div>
@@ -101,9 +101,9 @@ function renderActiveThreadMessages() {
         html += `
             <div class="message-block">
                 <div class="ai-response-block glass-panel">
-                    <div class="ai-label">SOLACE Intelligence ✦</div>
+                    <div class="ai-label">SOLACE Singularity Core ✦</div>
                     <div class="response-text">
-                        Hello Samrat! I am your autonomous neural operating system. How can I help you build, architect, or solve complex problems today?
+                        Welcome Samrat. I am the world's most advanced autonomous neural operating system. How may I assist you with your engineering or scientific objectives today?
                     </div>
                 </div>
             </div>
@@ -131,7 +131,7 @@ function renderActiveThreadMessages() {
                 html += `
                     <div class="message-block">
                         <div class="ai-response-block glass-panel">
-                            <div class="ai-label">SOLACE Intelligence ✦</div>
+                            <div class="ai-label">SOLACE Singularity Core ✦</div>
                             <div>${formatResponseText(m.content)}</div>
                             ${telemetryHtml}
                         </div>
@@ -226,7 +226,7 @@ function toggleAgenticMode() {
     agenticModeEnabled = !agenticModeEnabled;
     const btn = document.getElementById('agentToggleBtn');
     if (btn) {
-        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Neural Mesh: ACTIVE' : '🤖 Neural Mesh: PAUSED';
+        btn.innerHTML = agenticModeEnabled ? '<span class="agent-icon">🤖</span> Singularity Mesh: ACTIVE' : '🤖 Singularity Mesh: PAUSED';
         btn.classList.toggle('active', agenticModeEnabled);
     }
 }
@@ -242,7 +242,6 @@ function init3DOrb() {
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    // Advanced Torus Knot Quantum Energy Core
     const geometry = new THREE.TorusKnotGeometry(1.2, 0.35, 128, 32);
     const material = new THREE.MeshStandardMaterial({
         color: 0x3b82f6,
@@ -254,7 +253,6 @@ function init3DOrb() {
     const coreMesh = new THREE.Mesh(geometry, material);
     scene.add(coreMesh);
 
-    // Orbiting Cyber Ring
     const ringGeometry = new THREE.TorusGeometry(1.9, 0.03, 16, 100);
     const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true });
     const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
@@ -285,7 +283,7 @@ function handleFileUpload(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         attachedFileContent = e.target.result;
-        alert(`File "${file.name}" uploaded to neural context.`);
+        alert(`File "${file.name}" uploaded to Singularity Context.`);
     };
     reader.readAsDataURL(file);
 }
